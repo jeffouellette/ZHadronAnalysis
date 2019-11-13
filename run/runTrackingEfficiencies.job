@@ -6,11 +6,11 @@ GetEnv = True
 InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run
 accounting_group = group_atlas.boulder
 
-systematicFlags = false false false false false false false false
-#systematicFlags = false false false false false false true false
+#systematicFlags = false false false false false false false false
+systematicFlags = false false false false false false true false
 #systematicFlags = false false false false false false false true
 
-#Arguments = false TrackingEfficiency hijing_037 0 true PbPb18 $(systematicFlags) 1 10000 user.jeouelle.21.2.82.ztrack.037.mc16_valid.PbPb.Hijing.361106.Zee.recon.AOD.e4916_s2873_r11092_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/hijing2018_eventWeightsFile.root
+#Arguments = false TrackingEfficiency hijing_037 0 true PbPb18 $(systematicFlags) 1 10000 user.jeouelle.21.2.82.ztrack.037.mc16_valid.PbPb.Hijing.361106.Zee.recon.AOD.e4916_s2873_r11092_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_037/hijing2018_eventWeightsFile.root
 #Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_Zee_Hijing.err
 #Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_Zee_Hijing.log
 #Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_Zee_Hijing.out
@@ -181,16 +181,16 @@ Queue 1
 
 
 
-# 2018 PbPb Hijing sample
-Arguments = false TrackingEfficiency hijing_037 0 true PbPb18 $(systematicFlags) 1 100000 user.jeouelle.21.2.82.minbias.037.mc16_5TeV.PbPb.420000.Hijing.Flow_JJFV6.recon.AOD.e4962_a882_s3136_r11157_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_037/hijing2018_eventWeightsFile.root
-Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_Hijing_18.err
-Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_Hijing_18.log
-Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_Hijing_18.out
-Queue 1
-
-# 2015 PbPb Hijing sample
-Arguments = false TrackingEfficiency hijing_037 0 true PbPb15 $(systematicFlags) 1 1000000 user.jeouelle.21.2.82.minbias.037.mc16_5TeV.PbPb.420000.Hijing.Flow_JJFV6.recon.AOD.e4962_a884_s3136_r11318_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_037/hijing2015_eventWeightsFile.root
-Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_Hijing_15.err
-Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_Hijing_15.log
-Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_Hijing_15.out
-Queue 1
+## 2018 PbPb Hijing sample
+#Arguments = false TrackingEfficiency hijing_037 0 true PbPb18 $(systematicFlags) 1 100000 user.jeouelle.21.2.82.minbias.037.mc16_5TeV.PbPb.420000.Hijing.Flow_JJFV6.recon.AOD.e4962_a882_s3136_r11157_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_037/hijing2018_eventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_Hijing_18.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_Hijing_18.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_Hijing_18.out
+#Queue 1
+#
+## 2015 PbPb Hijing sample
+#Arguments = false TrackingEfficiency hijing_037 0 true PbPb15 $(systematicFlags) 1 1000000 user.jeouelle.21.2.82.minbias.037.mc16_5TeV.PbPb.420000.Hijing.Flow_JJFV6.recon.AOD.e4962_a884_s3136_r11318_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_037/hijing2015_eventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_Hijing_15.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_Hijing_15.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_Hijing_15.out
+#Queue 1

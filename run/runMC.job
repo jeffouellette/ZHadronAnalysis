@@ -180,17 +180,17 @@ Queue 1
 
 
 
-## background samples, ttbar & Ztautau
-#Arguments = false TreeMaker mc_036 0 true PbPb18 $(systematicFlags) 1 67734 user.jeouelle.21.2.82.ztrack.036.mc16_5TeV.PbPb.410000.ttbar.recon.AOD.e4917_d1521_r11472_r11217_myOutput.root 
-#Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_pp_ttbar.err
-#Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_pp_ttbar.log
-#Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_pp_ttbar.out
-#Queue 1
-#Arguments = false TreeMaker mc_036 0 true PbPb18 $(systematicFlags) 1 193395 
-#Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_pp_Ztautau.err
-#Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_pp_Ztautau.log
-#Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_pp_Ztautau.out
-#Queue 1
+# background samples, ttbar & Ztautau
+Arguments = false TreeMaker mc_dvp_000 0 true PbPb18 $(systematicFlags) 0.54439 67734 user.jeouelle.21.2.82.ztrack.036.mc16_5TeV.PbPb.410000.ttbar.recon.AOD.e4917_d1521_r11472_r11217_myOutput.root 
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_pp_ttbar.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_pp_ttbar.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_pp_ttbar.out
+Queue 1
+Arguments = false TreeMaker mc_dvp_000 0 true PbPb18 $(systematicFlags) 1 193395 user.dvp.21.2.82.ztrack.000.mc16_5TeV.PbPb.361108.pp_Ztautau.recon.AOD.e4916_d1521_r11472_r11217_myOutput.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/PbPb_pp_Ztautau.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/PbPb_pp_Ztautau.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/PbPb_pp_Ztautau.out
+Queue 1
 
 
 

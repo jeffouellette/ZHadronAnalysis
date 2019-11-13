@@ -41,6 +41,8 @@ float l1_trk_phi = 0;
 float l1_pt_sys = 0;
 float l1_eta_sys = 0;
 float l1_phi_sys = 0;
+float l1_d0sig = 0;
+float l1_z0 = 0;
 
 float l2_pt = 0;
 float l2_eta = 0;
@@ -52,6 +54,8 @@ int   l2_charge = 0;
 float l2_pt_sys = 0;
 float l2_eta_sys = 0;
 float l2_phi_sys = 0;
+float l2_d0sig = 0;
+float l2_z0 = 0;
 
 int ntrk_all = 0;
 int ntrk = 0;
@@ -60,6 +64,7 @@ vector<float> trk_eta (0);
 vector<float> trk_phi (0);
 vector<float> trk_charge (0);
 vector<float> trk_z0 (0);
+vector<bool> trk_truth_matched (0);
 //vector<bool>  trk_hiloose (0);
 //vector<bool>  trk_hitight (0);
 
@@ -128,6 +133,9 @@ struct OutTree {
       tree->Branch ("l1_pt_sys",     &l1_pt_sys,     "l1_pt_sys/F");
       tree->Branch ("l1_eta_sys",    &l1_eta_sys,    "l1_eta_sys/F");
       tree->Branch ("l1_phi_sys",    &l1_phi_sys,    "l1_phi_sys/F");
+      tree->Branch ("l1_d0sig",      &l1_d0sig,      "l1_d0sig/F");
+      tree->Branch ("l1_z0",         &l1_z0,         "l1_z0/F");
+
       tree->Branch ("l2_pt",         &l2_pt,         "l2_pt/F");
       tree->Branch ("l2_eta",        &l2_eta,        "l2_eta/F");
       tree->Branch ("l2_phi",        &l2_phi,        "l2_phi/F");
@@ -138,6 +146,8 @@ struct OutTree {
       tree->Branch ("l2_pt_sys",     &l2_pt_sys,     "l2_pt_sys/F");
       tree->Branch ("l2_eta_sys",    &l2_eta_sys,    "l2_eta_sys/F");
       tree->Branch ("l2_phi_sys",    &l2_phi_sys,    "l2_phi_sys/F");
+      tree->Branch ("l2_d0sig",      &l2_d0sig,      "l2_d0sig/F");
+      tree->Branch ("l2_z0",         &l2_z0,         "l2_z0/F");
     }
     if (branchZs) {
       tree->Branch ("z_pt",          &z_pt,          "z_pt/F");
@@ -165,6 +175,7 @@ struct OutTree {
       tree->Branch ("trk_eta",       &trk_eta);
       tree->Branch ("trk_phi",       &trk_phi);
       tree->Branch ("trk_charge",    &trk_charge);
+      tree->Branch ("trk_truth_matched", &trk_truth_matched);
       //tree->Branch ("trk_hiloose",   &trk_hiloose);
       //tree->Branch ("trk_hitight",   &trk_hitight);
     }

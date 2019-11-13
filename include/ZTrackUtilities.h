@@ -89,6 +89,18 @@ bool InEMCal (const float eta);
  */
 bool InHadCal (const float eta, const float R = 0.4);
 
+
+/**
+ * Returns the energy scale correction factor for this electron as derived in MC between pp and Pb+Pb.
+ */
+float GetZmassSF_MC (const float fcal_et, const float eta);
+
+
+/**
+ * Returns the energy scale correction factor for the electron as derived in Pb+Pb between data and MC.
+ */
+float GetZmassSF_PbPb (const float fcal_et, const float eta);
+
 } // end namespace
 
 #endif

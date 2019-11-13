@@ -1,3 +1,6 @@
+#ifndef __TruthTreeMaker_cxx__
+#define __TruthTreeMaker_cxx__
+
 #include "TruthTreeMaker.h"
 #include "Params.h"
 #include "TreeVariables.h"
@@ -365,3 +368,5 @@ bool TruthTreeMaker (const char* directory,
 }
 
 } // end namespace
+
+#endif

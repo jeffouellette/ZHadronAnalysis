@@ -1,3 +1,6 @@
+#ifndef __MinbiasTreeMaker_cxx__
+#define __MinbiasTreeMaker_cxx__
+
 #include "MinbiasTreeMaker.h"
 #include "Params.h"
 #include "TreeVariables.h"
@@ -58,10 +61,13 @@ bool MinbiasTreeMaker (const char* directory,
     return false;
   }
 
-  TH1D* h_zdcCuts = GetZdcCuts ();
-  if (h_zdcCuts == nullptr) {
-    cout << "Error: In TreeMaker.cxx: Zdc in-time pile-up cuts not found. Quitting." << endl;
-    return false;
+  TH1D* h_zdcCuts = nullptr;
+  if (isPbPb) {
+    h_zdcCuts = GetZdcCuts ();
+    if (h_zdcCuts == nullptr) {
+      cout << "Error: In MinbiasTreeMaker.cxx: Zdc in-time pile-up cuts not found. Quitting." << endl;
+      return false;
+    }
   }
 
   // Incoming branches
@@ -113,9 +119,9 @@ bool MinbiasTreeMaker (const char* directory,
   tree->SetBranchAddress ("vert_ntrk",      vert_ntrk);
   tree->SetBranchAddress ("vert_type",      vert_type);
 
+  tree->SetBranchAddress ("fcalA_et",         &fcalA_et);
+  tree->SetBranchAddress ("fcalC_et",         &fcalC_et);
   if (isPbPb) {
-    tree->SetBranchAddress ("fcalA_et",         &fcalA_et);
-    tree->SetBranchAddress ("fcalC_et",         &fcalC_et);
     tree->SetBranchAddress ("fcalA_et_Cos",     &fcalA_et_Cos);
     tree->SetBranchAddress ("fcalC_et_Cos",     &fcalC_et_Cos);
     tree->SetBranchAddress ("fcalA_et_Sin",     &fcalA_et_Sin);
@@ -125,8 +131,8 @@ bool MinbiasTreeMaker (const char* directory,
       tree->SetBranchAddress ("ZdcCalibEnergy_C", &ZdcCalibEnergy_C);
     }
   } else {
-    tree->SetBranchStatus ("fcalA_et",      0); 
-    tree->SetBranchStatus ("fcalC_et",      0); 
+    //tree->SetBranchStatus ("fcalA_et",      0); 
+    //tree->SetBranchStatus ("fcalC_et",      0); 
     tree->SetBranchStatus ("fcalA_et_Cos",  0); 
     tree->SetBranchStatus ("fcalC_et_Cos",  0); 
     tree->SetBranchStatus ("fcalA_et_Sin",  0); 
@@ -161,8 +167,8 @@ bool MinbiasTreeMaker (const char* directory,
   outTree->Branch ("lumi_block",    &lumi_block);
   outTree->Branch ("passes_toroid", &passes_toroid);
   outTree->Branch ("vz",            &vz);
+  outTree->Branch ("fcal_et",   &fcal_et);
   if (isPbPb) {
-    outTree->Branch ("fcal_et",   &fcal_et);
     outTree->Branch ("zdcEnergy", &zdcEnergy);
     outTree->Branch ("q2",        &q2);
     outTree->Branch ("psi2",      &psi2);
@@ -214,8 +220,8 @@ bool MinbiasTreeMaker (const char* directory,
     if (!hasPrimaryVert)
       continue;
 
+    fcal_et = fcalA_et + fcalC_et;
     if (isPbPb) {
-      fcal_et = fcalA_et + fcalC_et;
       if (fcal_et < 50)
         continue; // loose cut on "noise" events
 
@@ -269,3 +275,5 @@ bool MinbiasTreeMaker (const char* directory,
 }
 
 } // end namespace
+
+#endif

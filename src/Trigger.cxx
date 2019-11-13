@@ -1,3 +1,6 @@
+#ifndef __Trigger_cxx__
+#define __Trigger_cxx__
+
 #include "Trigger.h"
 
 /**
@@ -55,3 +58,5 @@ Trigger::Trigger(const Trigger* t) {
   isBootstrapped = t->isBootstrapped;
   referenceTrigger = t->referenceTrigger;
 }
+
+#endif

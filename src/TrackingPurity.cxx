@@ -1,3 +1,6 @@
+#ifndef __TrackingPurity_cxx__
+#define __TrackingPurity_cxx__
+
 #include "TrackingPurity.h"
 #include "Params.h"
 #include "TreeVariables.h"
@@ -104,7 +107,7 @@ bool TrackingPurity (const char* directory,
   const double etaTrkBins[6] = {0, 0.5, 1.0, 1.5, 2.0, 2.5};
   const int numEtaTrkBins = sizeof (etaTrkBins) / sizeof (etaTrkBins[0]) - 1;
 
-  const double ptTrkBins[13] = {0.5, 0.7, 1, 1.5, 2, 3, 4, 6, 8, 10, 15, 30, 60};
+  const double ptTrkBins[11] = {0.5, 0.7, 1, 1.5, 2, 3, 4, 6, 8, 10, 60};
   const int numPtTrkBins = sizeof (ptTrkBins) / sizeof (ptTrkBins[0]) - 1;
 
   //const int numPtTrkBins = 20;
@@ -268,3 +271,5 @@ bool TrackingPurity (const char* directory,
 }
 
 } // end namespace
+
+#endif

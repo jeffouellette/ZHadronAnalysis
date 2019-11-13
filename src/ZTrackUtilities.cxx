@@ -1,3 +1,6 @@
+#ifndef __ZTrackUtilities_cxx__
+#define __ZTrackUtilities_cxx__
+
 #include "ZTrackUtilities.h"
 #include "Params.h"
 
@@ -186,6 +189,10 @@ TString GetIdentifier (const int dataSet, const char* directory, const char* inF
     id = id + "_nn_Zmumu";
   else if (TString (inFileName).Contains ("Zmumu"))
     id = id + "_Zmumu";
+  else if (TString (inFileName).Contains ("Ztautau"))
+    id = id + "_Ztautau";
+  else if (TString (inFileName).Contains ("ttbar"))
+    id = id + "_ttbar";
   
 
   if (TString (inFileName).Contains ("Hijing")) {
@@ -310,4 +317,40 @@ bool InHadCal (const float eta, const float R) {
   return fabs(eta) <= 4.9 - R;
 }
 
+
+/**
+ * Returns the energy scale correction factor for this electron as derived in MC between pp and Pb+Pb.
+ */
+float GetZmassSF_MC (const float fcal_et, const float eta) {
+  if (fcal_et < 66.402)
+    return 1;
+  else if (66.402 <= fcal_et && fcal_et < 1378.92)
+    return (fabs (eta) > 1 ? 1.0162 : 1.00327);
+  else if (1378.92 <= fcal_et && fcal_et < 2995.94)
+    return (fabs (eta) > 1 ? 1.02528 : 1.01058);
+  else if (2995.94 <= fcal_et && fcal_et < 5000) 
+    return (fabs (eta) > 1 ? 1.03133 : 1.01624);
+  else
+    return 1;
+}
+
+
+/**
+ * Returns the energy scale correction factor for the electron as derived in Pb+Pb between data and MC.
+ */
+float GetZmassSF_PbPb (const float fcal_et, const float eta) {
+  if (fcal_et < 66.402)
+    return 1;
+  else if (66.402 <= fcal_et && fcal_et < 1378.92)
+    return (fabs (eta) > 1 ? 0.991796 : 0.996473);
+  else if (1378.92 <= fcal_et && fcal_et < 2995.94)
+    return (fabs (eta) > 1 ? 0.991246 : 1.00095);
+  else if (2995.94 <= fcal_et && fcal_et < 5000) 
+    return (fabs (eta) > 1 ? 0.993157 : 0.995561);
+  else
+    return 1;
+}
+
 } // end namespace
+
+#endif

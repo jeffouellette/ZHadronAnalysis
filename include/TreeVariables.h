@@ -26,6 +26,7 @@ struct TreeVariables {
     bool getZdc = false;
     bool getTracks = false;
     bool getElectrons = false;
+    bool getClusters = false;
     bool getMuons = false;
     bool getJets = false;
     bool getTruthTracks = false;
@@ -51,6 +52,7 @@ struct TreeVariables {
     void SetGetTracks             (const bool _getTracks = true);
     void SetGetTruthTracks        (const bool _getTruthTracks = true);
     void SetGetElectrons          (const bool _getElectrons = true);
+    void SetGetClusters           (const bool _getClusters = true);
     void SetGetTruthElectrons     (const bool _getTruthElectrons = true);
     void SetGetMuons              (const bool _getMuons = true);
     void SetGetTruthMuons         (const bool _getTruthMuons = true);
@@ -155,6 +157,21 @@ struct TreeVariables {
     float   electron_eta_sys[40];
     float   electron_phi_sys[40];
 
+    // egamma calo cluster info, see https://ucatlas.github.io/RootCoreDocumentation/2.4.28/dc/d4b/CaloCluster__v1_8h_source.html
+    int             Cluster_n         = 0;
+    vector<float>*  Cluster_pt        = nullptr;  
+    vector<float>*  Cluster_et        = nullptr;
+    vector<float>*  Cluster_eta       = nullptr;
+    vector<float>*  Cluster_phi       = nullptr;
+    vector<float>*  Cluster_energyBE  = nullptr;
+    vector<float>*  Cluster_etaBE     = nullptr;
+    vector<float>*  Cluster_phiBE     = nullptr;
+    vector<float>*  Cluster_calE      = nullptr;
+    vector<float>*  Cluster_calEta    = nullptr;
+    vector<float>*  Cluster_calPhi    = nullptr;
+    vector<int>*    Cluster_size      = nullptr;
+    vector<int>*    Cluster_status    = nullptr;
+
     int     muon_n = 0;
     float   muon_pt_precalib[40];
     float   muon_pt[40];
@@ -189,6 +206,9 @@ struct TreeVariables {
     float   muon_id_track_z0[40];
     float   muon_id_track_vz[40];
     float   muon_id_track_theta[40];
+    bool    muon_id_track_tightprimary[40];
+    bool    muon_id_track_hiloose[40];
+    bool    muon_id_track_hitight[40];
     float   muon_pt_sys[40];
     float   muon_eta_sys[40];
     float   muon_phi_sys[40];

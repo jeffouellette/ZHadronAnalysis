@@ -1,3 +1,6 @@
+#ifndef __Cuts_cxx__
+#define __Cuts_cxx__
+
 #include "Cuts.h"
 #include "Params.h"
 #include "TreeVariables.h"
@@ -49,3 +52,5 @@ bool IsMuonTrack (TreeVariables* t, const int iTrk, const int iM1, const int iM2
 }
 
 } // end namespace
+
+#endif

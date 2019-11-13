@@ -1,3 +1,6 @@
+#ifndef __TrackingEfficiency_cxx__
+#define __TrackingEfficiency_cxx__
+
 #include "TrackingEfficiency.h"
 #include "Params.h"
 #include "TreeVariables.h"
@@ -115,6 +118,8 @@ bool TrackingEfficiency (const char* directory,
   //const int numPtTrkBins = 20;
   //const double* ptTrkBins = logspace (0.5, 65, numPtTrkBins);
 
+  TH1D*  h_truth_matching_prob = new TH1D (Form ("h_truth_matching_prob_%s", isPbPb ? "PbPb" : "pp"), ";Truth matching prob.;N_{ch}^{rec}", 200, 0, 1);
+  h_truth_matching_prob->Sumw2 ();
   TH2D** h_truth_matched_reco_tracks = new TH2D*[numCentBins];
   TH2D** h_truth_tracks = new TH2D*[numCentBins];
   TH1D** h_num = new TH1D*[numCentBins];
@@ -187,11 +192,13 @@ bool TrackingEfficiency (const char* directory,
       else if (!doHITightVar && !t->trk_HIloose[iTrk])
         continue; // track selection criteria
 
-      if (t->trk_prob_truth[iTrk] < 0.5)
-        continue; // select non-fake tracks
+      h_truth_matching_prob->Fill (t->trk_prob_truth[iTrk]);
 
       if (t->trk_truth_barcode[iTrk] <= 0 || 200000 < t->trk_truth_barcode[iTrk])
         continue; // select primary tracks
+
+      if (t->trk_prob_truth[iTrk] < 0.5)
+        continue; // select non-fake tracks
 
       if (0 == t->trk_truth_charge[iTrk])
         continue;
@@ -201,6 +208,8 @@ bool TrackingEfficiency (const char* directory,
         continue;
       if (doPionsOnlyVar && fabs (t->trk_truth_pdgid[iTrk]) != 211)
         continue; //just pions
+      //if (fabs (t->trk_truth_pdgid[iTrk]) != 211)
+      //  continue; //just pions
 
       //h_truth_matched_reco_tracks[iCent]->Fill (t->trk_eta[iTrk], t->trk_truth_pt[iTrk], 1);
       h_truth_matched_reco_tracks[iCent]->Fill (t->trk_truth_eta[iTrk], t->trk_truth_pt[iTrk], eventWeight);
@@ -220,6 +229,8 @@ bool TrackingEfficiency (const char* directory,
         continue;
       if (doPionsOnlyVar && fabs (t->truth_trk_pdgid[iTTrk]) != 211)
         continue; //just pions
+      //if (fabs (t->truth_trk_pdgid[iTTrk]) != 211)
+      //  continue; //just pions
 
       //h_truth_tracks[iCent]->Fill (t->truth_trk_eta[iTTrk], t->truth_trk_pt[iTTrk], 1);
       h_truth_tracks[iCent]->Fill (t->truth_trk_eta[iTTrk], t->truth_trk_pt[iTTrk], eventWeight);
@@ -293,6 +304,7 @@ bool TrackingEfficiency (const char* directory,
   outFile->Close ();
   SaferDelete (outFile);
 
+  h_truth_matching_prob->Write ();
 
   for (int iCent = 0; iCent < numCentBins; iCent++) {
     h_truth_matched_reco_tracks[iCent]->Write ();
@@ -319,3 +331,5 @@ bool TrackingEfficiency (const char* directory,
 }
 
 } // end namespace
+
+#endif

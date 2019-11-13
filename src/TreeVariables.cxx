@@ -1,3 +1,6 @@
+#ifndef __TreeVariables_cxx__
+#define __TreeVariables_cxx__
+
 #include "TreeVariables.h"
 #include "ZTrackUtilities.h"
 
@@ -174,14 +177,6 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchAddress ("electron_id_track_z0",         electron_id_track_z0);
     tree->SetBranchAddress ("electron_id_track_vz",         electron_id_track_vz);
     tree->SetBranchAddress ("electron_id_track_theta",      electron_id_track_theta);
-    //tree->SetBranchAddress ("electron_track_pt",         electron_id_track_pt);
-    //tree->SetBranchAddress ("electron_track_eta",        electron_id_track_eta);
-    //tree->SetBranchAddress ("electron_track_phi",        electron_id_track_phi);
-    //tree->SetBranchAddress ("electron_track_charge",     electron_id_track_charge);
-    //tree->SetBranchAddress ("electron_track_d0sig",      electron_id_track_d0sig);
-    //tree->SetBranchAddress ("electron_track_z0",         electron_id_track_z0);
-    //tree->SetBranchAddress ("electron_track_vz",         electron_id_track_vz);
-    //tree->SetBranchAddress ("electron_track_theta",      electron_id_track_theta);
     tree->SetBranchAddress ("electron_pt_sys",              electron_pt_sys);
     tree->SetBranchAddress ("electron_eta_sys",             electron_eta_sys);
     tree->SetBranchAddress ("electron_phi_sys",             electron_phi_sys);
@@ -205,14 +200,6 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchStatus ("electron_topoetcone30",       0);
     tree->SetBranchStatus ("electron_topoetcone40",       0);
     tree->SetBranchStatus ("electron_ntrk",               0);
-    //tree->SetBranchStatus ("electron_track_pt",        0);
-    //tree->SetBranchStatus ("electron_track_eta",       0);
-    //tree->SetBranchStatus ("electron_track_phi",       0);
-    //tree->SetBranchStatus ("electron_track_charge",    0);
-    //tree->SetBranchStatus ("electron_track_d0sig",     0);
-    //tree->SetBranchStatus ("electron_track_z0",        0);
-    //tree->SetBranchStatus ("electron_track_vz",        0);
-    //tree->SetBranchStatus ("electron_track_theta",     0);
     tree->SetBranchStatus ("electron_id_track_pt",        0);
     tree->SetBranchStatus ("electron_id_track_eta",       0);
     tree->SetBranchStatus ("electron_id_track_phi",       0);
@@ -226,98 +213,118 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchStatus ("electron_phi_sys",            0);
   }
 
-  if (getMuons) {
-    tree->SetBranchAddress ("muon_n",                 &muon_n);
-    tree->SetBranchAddress ("muon_pt_precalib",       muon_pt_precalib);
-    tree->SetBranchAddress ("muon_pt",                muon_pt);
-    tree->SetBranchAddress ("muon_ms_pt_precalib",    muon_ms_pt_precalib);
-    tree->SetBranchAddress ("muon_ms_pt",             muon_ms_pt);
-    tree->SetBranchAddress ("muon_eta",               muon_eta);
-    tree->SetBranchAddress ("muon_phi",               muon_phi);
-    tree->SetBranchAddress ("muon_charge",            muon_charge);
-    tree->SetBranchAddress ("muon_tight",             muon_tight);
-    tree->SetBranchAddress ("muon_medium",            muon_medium);
-    tree->SetBranchAddress ("muon_loose",             muon_loose);
-    tree->SetBranchAddress ("muon_matched",           muon_matched);
-    tree->SetBranchAddress ("muon_etcone20",          muon_etcone20);
-    tree->SetBranchAddress ("muon_etcone30",          muon_etcone30);
-    tree->SetBranchAddress ("muon_etcone40",          muon_etcone40);
-    tree->SetBranchAddress ("muon_topoetcone20",      muon_topoetcone20);
-    tree->SetBranchAddress ("muon_topoetcone30",      muon_topoetcone30);
-    tree->SetBranchAddress ("muon_topoetcone40",      muon_topoetcone40);
-    //tree->SetBranchAddress ("muon_track_pt",       muon_id_track_pt);
-    //tree->SetBranchAddress ("muon_track_eta",      muon_id_track_eta);
-    //tree->SetBranchAddress ("muon_track_phi",      muon_id_track_phi);
-    //tree->SetBranchAddress ("muon_track_charge",   muon_id_track_charge);
-    //tree->SetBranchAddress ("muon_track_d0sig",    muon_id_track_d0sig);
-    //tree->SetBranchAddress ("muon_track_z0",       muon_id_track_z0);
-    //tree->SetBranchAddress ("muon_track_vz",       muon_id_track_vz);
-    //tree->SetBranchAddress ("muon_track_theta",    muon_id_track_theta);
-    tree->SetBranchAddress ("muon_id_track_pt",       muon_id_track_pt);
-    tree->SetBranchAddress ("muon_id_track_eta",      muon_id_track_eta);
-    tree->SetBranchAddress ("muon_id_track_phi",      muon_id_track_phi);
-    tree->SetBranchAddress ("muon_id_track_charge",   muon_id_track_charge);
-    tree->SetBranchAddress ("muon_id_track_d0sig",    muon_id_track_d0sig);
-    tree->SetBranchAddress ("muon_id_track_z0",       muon_id_track_z0);
-    tree->SetBranchAddress ("muon_id_track_vz",       muon_id_track_vz);
-    tree->SetBranchAddress ("muon_id_track_theta",    muon_id_track_theta);
-    tree->SetBranchAddress ("muon_ms_track_pt",       muon_ms_track_pt);
-    tree->SetBranchAddress ("muon_ms_track_eta",      muon_ms_track_eta);
-    tree->SetBranchAddress ("muon_ms_track_phi",      muon_ms_track_phi);
-    tree->SetBranchAddress ("muon_ms_track_charge",   muon_ms_track_charge);
-    tree->SetBranchAddress ("muon_ms_track_d0sig",    muon_ms_track_d0sig);
-    tree->SetBranchAddress ("muon_ms_track_z0",       muon_ms_track_z0);
-    tree->SetBranchAddress ("muon_ms_track_vz",       muon_ms_track_vz);
-    tree->SetBranchAddress ("muon_ms_track_theta",    muon_ms_track_theta);
-    tree->SetBranchAddress ("muon_pt_sys",            muon_pt_sys);
-    tree->SetBranchAddress ("muon_eta_sys",           muon_eta_sys);
-    tree->SetBranchAddress ("muon_phi_sys",           muon_phi_sys);
+  if (getClusters) {
+    tree->SetBranchAddress ("Cluster_n",        &Cluster_n);
+    tree->SetBranchAddress ("Cluster_pt",       &Cluster_pt);
+    tree->SetBranchAddress ("Cluster_et",       &Cluster_et);
+    tree->SetBranchAddress ("Cluster_eta",      &Cluster_eta);
+    tree->SetBranchAddress ("Cluster_phi",      &Cluster_phi);
+    tree->SetBranchAddress ("Cluster_energyBE", &Cluster_energyBE);
+    tree->SetBranchAddress ("Cluster_etaBE",    &Cluster_etaBE);
+    tree->SetBranchAddress ("Cluster_phiBE",    &Cluster_phiBE);
+    tree->SetBranchAddress ("Cluster_calE",     &Cluster_calE);
+    tree->SetBranchAddress ("Cluster_calEta",   &Cluster_calEta);
+    tree->SetBranchAddress ("Cluster_calPhi",   &Cluster_calPhi);
+    tree->SetBranchAddress ("Cluster_size",     &Cluster_size);
+    tree->SetBranchAddress ("Cluster_status",   &Cluster_status);
   } else {
-    tree->SetBranchStatus ("muon_n",                0);
-    tree->SetBranchStatus ("muon_pt_precalib",      0);
-    tree->SetBranchStatus ("muon_pt",               0);
-    tree->SetBranchStatus ("muon_ms_pt_precalib",   0);
-    tree->SetBranchStatus ("muon_ms_pt",            0);
-    tree->SetBranchStatus ("muon_eta",              0);
-    tree->SetBranchStatus ("muon_phi",              0);
-    tree->SetBranchStatus ("muon_charge",           0);
-    tree->SetBranchStatus ("muon_tight",            0);
-    tree->SetBranchStatus ("muon_medium",           0);
-    tree->SetBranchStatus ("muon_loose",            0);
-    tree->SetBranchStatus ("muon_matched",          0);
-    tree->SetBranchStatus ("muon_etcone20",         0);
-    tree->SetBranchStatus ("muon_etcone30",         0);
-    tree->SetBranchStatus ("muon_etcone40",         0);
-    tree->SetBranchStatus ("muon_topoetcone20",     0);
-    tree->SetBranchStatus ("muon_topoetcone30",     0);
-    tree->SetBranchStatus ("muon_topoetcone40",     0);
-    //tree->SetBranchStatus ("muon_track_pt",      0);
-    //tree->SetBranchStatus ("muon_track_eta",     0);
-    //tree->SetBranchStatus ("muon_track_phi",     0);
-    //tree->SetBranchStatus ("muon_track_charge",  0);
-    //tree->SetBranchStatus ("muon_track_d0",      0);
-    //tree->SetBranchStatus ("muon_track_z0",      0);
-    //tree->SetBranchStatus ("muon_track_vz",      0);
-    //tree->SetBranchStatus ("muon_track_theta",   0);
-    tree->SetBranchStatus ("muon_id_track_pt",      0);
-    tree->SetBranchStatus ("muon_id_track_eta",     0);
-    tree->SetBranchStatus ("muon_id_track_phi",     0);
-    tree->SetBranchStatus ("muon_id_track_charge",  0);
-    tree->SetBranchStatus ("muon_id_track_d0",      0);
-    tree->SetBranchStatus ("muon_id_track_z0",      0);
-    tree->SetBranchStatus ("muon_id_track_vz",      0);
-    tree->SetBranchStatus ("muon_id_track_theta",   0);
-    tree->SetBranchStatus ("muon_ms_track_pt",      0);
-    tree->SetBranchStatus ("muon_ms_track_eta",     0);
-    tree->SetBranchStatus ("muon_ms_track_phi",     0);
-    tree->SetBranchStatus ("muon_ms_track_charge",  0);
-    tree->SetBranchStatus ("muon_ms_track_d0",      0);
-    tree->SetBranchStatus ("muon_ms_track_z0",      0);
-    tree->SetBranchStatus ("muon_ms_track_vz",      0);
-    tree->SetBranchStatus ("muon_ms_track_theta",   0);
-    tree->SetBranchStatus ("muon_pt_sys",           0);
-    tree->SetBranchStatus ("muon_eta_sys",          0);
-    tree->SetBranchStatus ("muon_phi_sys",          0);
+    tree->SetBranchStatus ("Cluster_n",         0);
+    tree->SetBranchStatus ("Cluster_pt",        0);
+    tree->SetBranchStatus ("Cluster_et",        0);
+    tree->SetBranchStatus ("Cluster_eta",       0);
+    tree->SetBranchStatus ("Cluster_phi",       0);
+    tree->SetBranchStatus ("Cluster_energyBE",  0);
+    tree->SetBranchStatus ("Cluster_etaBE",     0);
+    tree->SetBranchStatus ("Cluster_phiBE",     0);
+    tree->SetBranchStatus ("Cluster_calE",      0);
+    tree->SetBranchStatus ("Cluster_calEta",    0);
+    tree->SetBranchStatus ("Cluster_calPhi",    0);
+    tree->SetBranchStatus ("Cluster_size",      0);
+    tree->SetBranchStatus ("Cluster_status",    0);
+  }
+
+  if (getMuons) {
+    tree->SetBranchAddress ("muon_n",                       &muon_n);
+    tree->SetBranchAddress ("muon_pt_precalib",             muon_pt_precalib);
+    tree->SetBranchAddress ("muon_pt",                      muon_pt);
+    tree->SetBranchAddress ("muon_ms_pt_precalib",          muon_ms_pt_precalib);
+    tree->SetBranchAddress ("muon_ms_pt",                   muon_ms_pt);
+    tree->SetBranchAddress ("muon_eta",                     muon_eta);
+    tree->SetBranchAddress ("muon_phi",                     muon_phi);
+    tree->SetBranchAddress ("muon_charge",                  muon_charge);
+    tree->SetBranchAddress ("muon_tight",                   muon_tight);
+    tree->SetBranchAddress ("muon_medium",                  muon_medium);
+    tree->SetBranchAddress ("muon_loose",                   muon_loose);
+    tree->SetBranchAddress ("muon_matched",                 muon_matched);
+    tree->SetBranchAddress ("muon_etcone20",                muon_etcone20);
+    tree->SetBranchAddress ("muon_etcone30",                muon_etcone30);
+    tree->SetBranchAddress ("muon_etcone40",                muon_etcone40);
+    tree->SetBranchAddress ("muon_topoetcone20",            muon_topoetcone20);
+    tree->SetBranchAddress ("muon_topoetcone30",            muon_topoetcone30);
+    tree->SetBranchAddress ("muon_topoetcone40",            muon_topoetcone40);
+    tree->SetBranchAddress ("muon_id_track_pt",             muon_id_track_pt);
+    tree->SetBranchAddress ("muon_id_track_eta",            muon_id_track_eta);
+    tree->SetBranchAddress ("muon_id_track_phi",            muon_id_track_phi);
+    tree->SetBranchAddress ("muon_id_track_charge",         muon_id_track_charge);
+    tree->SetBranchAddress ("muon_id_track_d0sig",          muon_id_track_d0sig);
+    tree->SetBranchAddress ("muon_id_track_z0",             muon_id_track_z0);
+    tree->SetBranchAddress ("muon_id_track_vz",             muon_id_track_vz);
+    tree->SetBranchAddress ("muon_id_track_theta",          muon_id_track_theta);
+    tree->SetBranchAddress ("muon_id_track_tightprimary",   muon_id_track_tightprimary);
+    tree->SetBranchAddress ("muon_id_track_hiloose",        muon_id_track_hiloose);
+    tree->SetBranchAddress ("muon_id_track_hitight",        muon_id_track_hitight);
+    tree->SetBranchAddress ("muon_ms_track_pt",             muon_ms_track_pt);
+    tree->SetBranchAddress ("muon_ms_track_eta",            muon_ms_track_eta);
+    tree->SetBranchAddress ("muon_ms_track_phi",            muon_ms_track_phi);
+    tree->SetBranchAddress ("muon_ms_track_charge",         muon_ms_track_charge);
+    tree->SetBranchAddress ("muon_ms_track_d0sig",          muon_ms_track_d0sig);
+    tree->SetBranchAddress ("muon_ms_track_z0",             muon_ms_track_z0);
+    tree->SetBranchAddress ("muon_ms_track_vz",             muon_ms_track_vz);
+    tree->SetBranchAddress ("muon_ms_track_theta",          muon_ms_track_theta);
+    tree->SetBranchAddress ("muon_pt_sys",                  muon_pt_sys);
+    tree->SetBranchAddress ("muon_eta_sys",                 muon_eta_sys);
+    tree->SetBranchAddress ("muon_phi_sys",                 muon_phi_sys);
+  } else {
+    tree->SetBranchStatus ("muon_n",                      0);
+    tree->SetBranchStatus ("muon_pt_precalib",            0);
+    tree->SetBranchStatus ("muon_pt",                     0);
+    tree->SetBranchStatus ("muon_ms_pt_precalib",         0);
+    tree->SetBranchStatus ("muon_ms_pt",                  0);
+    tree->SetBranchStatus ("muon_eta",                    0);
+    tree->SetBranchStatus ("muon_phi",                    0);
+    tree->SetBranchStatus ("muon_charge",                 0);
+    tree->SetBranchStatus ("muon_tight",                  0);
+    tree->SetBranchStatus ("muon_medium",                 0);
+    tree->SetBranchStatus ("muon_loose",                  0);
+    tree->SetBranchStatus ("muon_matched",                0);
+    tree->SetBranchStatus ("muon_etcone20",               0);
+    tree->SetBranchStatus ("muon_etcone30",               0);
+    tree->SetBranchStatus ("muon_etcone40",               0);
+    tree->SetBranchStatus ("muon_topoetcone20",           0);
+    tree->SetBranchStatus ("muon_topoetcone30",           0);
+    tree->SetBranchStatus ("muon_topoetcone40",           0);
+    tree->SetBranchStatus ("muon_id_track_pt",            0);
+    tree->SetBranchStatus ("muon_id_track_eta",           0);
+    tree->SetBranchStatus ("muon_id_track_phi",           0);
+    tree->SetBranchStatus ("muon_id_track_charge",        0);
+    tree->SetBranchStatus ("muon_id_track_d0",            0);
+    tree->SetBranchStatus ("muon_id_track_z0",            0);
+    tree->SetBranchStatus ("muon_id_track_vz",            0);
+    tree->SetBranchStatus ("muon_id_track_theta",         0);
+    tree->SetBranchStatus ("muon_id_track_tightprimary",  0);
+    tree->SetBranchStatus ("muon_id_track_hiloose",       0);
+    tree->SetBranchStatus ("muon_id_track_hitight",       0);
+    tree->SetBranchStatus ("muon_ms_track_pt",            0);
+    tree->SetBranchStatus ("muon_ms_track_eta",           0);
+    tree->SetBranchStatus ("muon_ms_track_phi",           0);
+    tree->SetBranchStatus ("muon_ms_track_charge",        0);
+    tree->SetBranchStatus ("muon_ms_track_d0",            0);
+    tree->SetBranchStatus ("muon_ms_track_z0",            0);
+    tree->SetBranchStatus ("muon_ms_track_vz",            0);
+    tree->SetBranchStatus ("muon_ms_track_theta",         0);
+    tree->SetBranchStatus ("muon_pt_sys",                 0);
+    tree->SetBranchStatus ("muon_eta_sys",                0);
+    tree->SetBranchStatus ("muon_phi_sys",                0);
   }
 
   if (getJets) {
@@ -519,17 +526,20 @@ void TreeVariables :: PrintAll (const long long entry) {
 }
 
 /** Setter functions **/
-void TreeVariables :: SetGetCollisionRateInfo (const bool _getCollisionRateInfo)  { getCollisionRateInfo = _getCollisionRateInfo; }
-void TreeVariables :: SetGetVertices          (const bool _getVertices)           { getVertices = _getVertices; }
-void TreeVariables :: SetGetFCals             (const bool _getFCals)              { getFCals = _getFCals; }
-void TreeVariables :: SetGetZdc               (const bool _getZdc)                { getZdc = _getZdc; }
-void TreeVariables :: SetGetTracks            (const bool _getTracks)             { getTracks = _getTracks; }
-void TreeVariables :: SetGetElectrons         (const bool _getElectrons)          { getElectrons = _getElectrons; }
-void TreeVariables :: SetGetMuons             (const bool _getMuons)              { getMuons = _getMuons; }
-void TreeVariables :: SetGetJets              (const bool _getJets)               { getJets = _getJets; }
-void TreeVariables :: SetGetTruthTracks       (const bool _getTruthTracks)        { getTruthTracks = _getTruthTracks; }
-void TreeVariables :: SetGetTruthElectrons    (const bool _getTruthElectrons)     { getTruthElectrons = _getTruthElectrons; }
-void TreeVariables :: SetGetTruthMuons        (const bool _getTruthMuons)         { getTruthMuons = _getTruthMuons; }
-void TreeVariables :: SetGetTruthJets         (const bool _getTruthJets)          { getTruthJets = _getTruthJets; }
+void TreeVariables :: SetGetCollisionRateInfo (const bool _getCollisionRateInfo)  { getCollisionRateInfo  = _getCollisionRateInfo;  }
+void TreeVariables :: SetGetVertices          (const bool _getVertices)           { getVertices           = _getVertices;           }
+void TreeVariables :: SetGetFCals             (const bool _getFCals)              { getFCals              = _getFCals;              }
+void TreeVariables :: SetGetZdc               (const bool _getZdc)                { getZdc                = _getZdc;                }
+void TreeVariables :: SetGetTracks            (const bool _getTracks)             { getTracks             = _getTracks;             }
+void TreeVariables :: SetGetElectrons         (const bool _getElectrons)          { getElectrons          = _getElectrons;          }
+void TreeVariables :: SetGetClusters          (const bool _getClusters)           { getClusters           = _getClusters;           }
+void TreeVariables :: SetGetMuons             (const bool _getMuons)              { getMuons              = _getMuons;              }
+void TreeVariables :: SetGetJets              (const bool _getJets)               { getJets               = _getJets;               }
+void TreeVariables :: SetGetTruthTracks       (const bool _getTruthTracks)        { getTruthTracks        = _getTruthTracks;        }
+void TreeVariables :: SetGetTruthElectrons    (const bool _getTruthElectrons)     { getTruthElectrons     = _getTruthElectrons;     }
+void TreeVariables :: SetGetTruthMuons        (const bool _getTruthMuons)         { getTruthMuons         = _getTruthMuons;         }
+void TreeVariables :: SetGetTruthJets         (const bool _getTruthJets)          { getTruthJets          = _getTruthJets;          }
 
 } // end namespace
+
+#endif
