@@ -98,29 +98,29 @@ void TreeVariables :: SetBranchAddresses () {
 
   if (getTracks) {
     tree->SetBranchAddress ("ntrk",               &ntrk);
-    tree->SetBranchAddress ("trk_pt",             trk_pt);
-    tree->SetBranchAddress ("trk_eta",            trk_eta);
-    tree->SetBranchAddress ("trk_phi",            trk_phi);
-    tree->SetBranchAddress ("trk_charge",         trk_charge);
-    tree->SetBranchAddress ("trk_HItight",        trk_HItight);
-    tree->SetBranchAddress ("trk_HIloose",        trk_HIloose);
-    tree->SetBranchAddress ("trk_d0",             trk_d0);
-    tree->SetBranchAddress ("trk_z0",             trk_z0);
-    tree->SetBranchAddress ("trk_vz",             trk_vz);
-    tree->SetBranchAddress ("trk_theta",          trk_theta);
+    tree->SetBranchAddress ("trk_pt",             &trk_pt);
+    tree->SetBranchAddress ("trk_eta",            &trk_eta);
+    tree->SetBranchAddress ("trk_phi",            &trk_phi);
+    tree->SetBranchAddress ("trk_charge",         &trk_charge);
+    tree->SetBranchAddress ("trk_HItight",        &trk_HItight);
+    tree->SetBranchAddress ("trk_HIloose",        &trk_HIloose);
+    tree->SetBranchAddress ("trk_d0",             &trk_d0);
+    tree->SetBranchAddress ("trk_z0",             &trk_z0);
+    tree->SetBranchAddress ("trk_vz",             &trk_vz);
+    tree->SetBranchAddress ("trk_theta",          &trk_theta);
     if (isMC) {
-      tree->SetBranchAddress ("trk_prob_truth",     trk_prob_truth);
-      tree->SetBranchAddress ("trk_truth_pt",       trk_truth_pt);
-      tree->SetBranchAddress ("trk_truth_eta",      trk_truth_eta);
-      tree->SetBranchAddress ("trk_truth_phi",      trk_truth_phi);
-      tree->SetBranchAddress ("trk_truth_charge",   trk_truth_charge);
-      tree->SetBranchAddress ("trk_truth_type",     trk_truth_type);
-      tree->SetBranchAddress ("trk_truth_orig",     trk_truth_orig);
-      tree->SetBranchAddress ("trk_truth_barcode",  trk_truth_barcode);
-      tree->SetBranchAddress ("trk_truth_pdgid",    trk_truth_pdgid);
-      tree->SetBranchAddress ("trk_truth_vz",       trk_truth_vz);
-      tree->SetBranchAddress ("trk_truth_nIn",      trk_truth_nIn);
-      tree->SetBranchAddress ("trk_truth_isHadron", trk_truth_isHadron);
+      tree->SetBranchAddress ("trk_prob_truth",     &trk_prob_truth);
+      tree->SetBranchAddress ("trk_truth_pt",       &trk_truth_pt);
+      tree->SetBranchAddress ("trk_truth_eta",      &trk_truth_eta);
+      tree->SetBranchAddress ("trk_truth_phi",      &trk_truth_phi);
+      tree->SetBranchAddress ("trk_truth_charge",   &trk_truth_charge);
+      tree->SetBranchAddress ("trk_truth_type",     &trk_truth_type);
+      tree->SetBranchAddress ("trk_truth_orig",     &trk_truth_orig);
+      tree->SetBranchAddress ("trk_truth_barcode",  &trk_truth_barcode);
+      tree->SetBranchAddress ("trk_truth_pdgid",    &trk_truth_pdgid);
+      tree->SetBranchAddress ("trk_truth_vz",       &trk_truth_vz);
+      tree->SetBranchAddress ("trk_truth_nIn",      &trk_truth_nIn);
+      tree->SetBranchAddress ("trk_truth_isHadron", &trk_truth_isHadron);
     }
   } else {
     tree->SetBranchStatus ("ntrk",                0);
@@ -152,34 +152,34 @@ void TreeVariables :: SetBranchAddresses () {
 
   if (getElectrons) {
     tree->SetBranchAddress ("electron_n",                   &electron_n);
-    tree->SetBranchAddress ("electron_pt_precalib",         electron_pt_precalib);
-    tree->SetBranchAddress ("electron_pt",                  electron_pt);
-    tree->SetBranchAddress ("electron_eta",                 electron_eta);
-    tree->SetBranchAddress ("electron_phi",                 electron_phi);
-    tree->SetBranchAddress ("electron_charge",              electron_charge);
-    tree->SetBranchAddress ("electron_lhtight",             electron_lhtight);
-    tree->SetBranchAddress ("electron_lhmedium",            electron_lhmedium);
-    tree->SetBranchAddress ("electron_lhloose",             electron_lhloose);
-    tree->SetBranchAddress ("electron_lhmedium_hi",         electron_lhmedium_hi);
-    tree->SetBranchAddress ("electron_lhloose_hi",          electron_lhloose_hi);
-    tree->SetBranchAddress ("electron_matched",             electron_matched);
-    tree->SetBranchAddress ("electron_etcone20",            electron_etcone20);
-    tree->SetBranchAddress ("electron_etcone30",            electron_etcone30);
-    tree->SetBranchAddress ("electron_etcone40",            electron_etcone40);
-    tree->SetBranchAddress ("electron_topoetcone20",        electron_topoetcone20);
-    tree->SetBranchAddress ("electron_topoetcone30",        electron_topoetcone30);
-    tree->SetBranchAddress ("electron_topoetcone40",        electron_topoetcone40);
-    tree->SetBranchAddress ("electron_id_track_pt",         electron_id_track_pt);
-    tree->SetBranchAddress ("electron_id_track_eta",        electron_id_track_eta);
-    tree->SetBranchAddress ("electron_id_track_phi",        electron_id_track_phi);
-    tree->SetBranchAddress ("electron_id_track_charge",     electron_id_track_charge);
-    tree->SetBranchAddress ("electron_id_track_d0sig",      electron_id_track_d0sig);
-    tree->SetBranchAddress ("electron_id_track_z0",         electron_id_track_z0);
-    tree->SetBranchAddress ("electron_id_track_vz",         electron_id_track_vz);
-    tree->SetBranchAddress ("electron_id_track_theta",      electron_id_track_theta);
-    tree->SetBranchAddress ("electron_pt_sys",              electron_pt_sys);
-    tree->SetBranchAddress ("electron_eta_sys",             electron_eta_sys);
-    tree->SetBranchAddress ("electron_phi_sys",             electron_phi_sys);
+    tree->SetBranchAddress ("electron_pt_precalib",         &electron_pt_precalib);
+    tree->SetBranchAddress ("electron_pt",                  &electron_pt);
+    tree->SetBranchAddress ("electron_eta",                 &electron_eta);
+    tree->SetBranchAddress ("electron_phi",                 &electron_phi);
+    tree->SetBranchAddress ("electron_charge",              &electron_charge);
+    tree->SetBranchAddress ("electron_lhtight",             &electron_lhtight);
+    tree->SetBranchAddress ("electron_lhmedium",            &electron_lhmedium);
+    tree->SetBranchAddress ("electron_lhloose",             &electron_lhloose);
+    tree->SetBranchAddress ("electron_lhmedium_hi",         &electron_lhmedium_hi);
+    tree->SetBranchAddress ("electron_lhloose_hi",          &electron_lhloose_hi);
+    tree->SetBranchAddress ("electron_matched",             &electron_matched);
+    tree->SetBranchAddress ("electron_etcone20",            &electron_etcone20);
+    tree->SetBranchAddress ("electron_etcone30",            &electron_etcone30);
+    tree->SetBranchAddress ("electron_etcone40",            &electron_etcone40);
+    tree->SetBranchAddress ("electron_topoetcone20",        &electron_topoetcone20);
+    tree->SetBranchAddress ("electron_topoetcone30",        &electron_topoetcone30);
+    tree->SetBranchAddress ("electron_topoetcone40",        &electron_topoetcone40);
+    tree->SetBranchAddress ("electron_id_track_pt",         &electron_id_track_pt);
+    tree->SetBranchAddress ("electron_id_track_eta",        &electron_id_track_eta);
+    tree->SetBranchAddress ("electron_id_track_phi",        &electron_id_track_phi);
+    tree->SetBranchAddress ("electron_id_track_charge",     &electron_id_track_charge);
+    tree->SetBranchAddress ("electron_id_track_d0sig",      &electron_id_track_d0sig);
+    tree->SetBranchAddress ("electron_id_track_z0",         &electron_id_track_z0);
+    tree->SetBranchAddress ("electron_id_track_vz",         &electron_id_track_vz);
+    tree->SetBranchAddress ("electron_id_track_theta",      &electron_id_track_theta);
+    tree->SetBranchAddress ("electron_pt_sys",              &electron_pt_sys);
+    tree->SetBranchAddress ("electron_eta_sys",             &electron_eta_sys);
+    tree->SetBranchAddress ("electron_phi_sys",             &electron_phi_sys);
   } else {
     tree->SetBranchStatus ("electron_n",                  0);
     tree->SetBranchStatus ("electron_pt_precalib",        0);
@@ -245,45 +245,45 @@ void TreeVariables :: SetBranchAddresses () {
 
   if (getMuons) {
     tree->SetBranchAddress ("muon_n",                       &muon_n);
-    tree->SetBranchAddress ("muon_pt_precalib",             muon_pt_precalib);
-    tree->SetBranchAddress ("muon_pt",                      muon_pt);
-    tree->SetBranchAddress ("muon_ms_pt_precalib",          muon_ms_pt_precalib);
-    tree->SetBranchAddress ("muon_ms_pt",                   muon_ms_pt);
-    tree->SetBranchAddress ("muon_eta",                     muon_eta);
-    tree->SetBranchAddress ("muon_phi",                     muon_phi);
-    tree->SetBranchAddress ("muon_charge",                  muon_charge);
-    tree->SetBranchAddress ("muon_tight",                   muon_tight);
-    tree->SetBranchAddress ("muon_medium",                  muon_medium);
-    tree->SetBranchAddress ("muon_loose",                   muon_loose);
-    tree->SetBranchAddress ("muon_matched",                 muon_matched);
-    tree->SetBranchAddress ("muon_etcone20",                muon_etcone20);
-    tree->SetBranchAddress ("muon_etcone30",                muon_etcone30);
-    tree->SetBranchAddress ("muon_etcone40",                muon_etcone40);
-    tree->SetBranchAddress ("muon_topoetcone20",            muon_topoetcone20);
-    tree->SetBranchAddress ("muon_topoetcone30",            muon_topoetcone30);
-    tree->SetBranchAddress ("muon_topoetcone40",            muon_topoetcone40);
-    tree->SetBranchAddress ("muon_id_track_pt",             muon_id_track_pt);
-    tree->SetBranchAddress ("muon_id_track_eta",            muon_id_track_eta);
-    tree->SetBranchAddress ("muon_id_track_phi",            muon_id_track_phi);
-    tree->SetBranchAddress ("muon_id_track_charge",         muon_id_track_charge);
-    tree->SetBranchAddress ("muon_id_track_d0sig",          muon_id_track_d0sig);
-    tree->SetBranchAddress ("muon_id_track_z0",             muon_id_track_z0);
-    tree->SetBranchAddress ("muon_id_track_vz",             muon_id_track_vz);
-    tree->SetBranchAddress ("muon_id_track_theta",          muon_id_track_theta);
-    tree->SetBranchAddress ("muon_id_track_tightprimary",   muon_id_track_tightprimary);
-    tree->SetBranchAddress ("muon_id_track_hiloose",        muon_id_track_hiloose);
-    tree->SetBranchAddress ("muon_id_track_hitight",        muon_id_track_hitight);
-    tree->SetBranchAddress ("muon_ms_track_pt",             muon_ms_track_pt);
-    tree->SetBranchAddress ("muon_ms_track_eta",            muon_ms_track_eta);
-    tree->SetBranchAddress ("muon_ms_track_phi",            muon_ms_track_phi);
-    tree->SetBranchAddress ("muon_ms_track_charge",         muon_ms_track_charge);
-    tree->SetBranchAddress ("muon_ms_track_d0sig",          muon_ms_track_d0sig);
-    tree->SetBranchAddress ("muon_ms_track_z0",             muon_ms_track_z0);
-    tree->SetBranchAddress ("muon_ms_track_vz",             muon_ms_track_vz);
-    tree->SetBranchAddress ("muon_ms_track_theta",          muon_ms_track_theta);
-    tree->SetBranchAddress ("muon_pt_sys",                  muon_pt_sys);
-    tree->SetBranchAddress ("muon_eta_sys",                 muon_eta_sys);
-    tree->SetBranchAddress ("muon_phi_sys",                 muon_phi_sys);
+    tree->SetBranchAddress ("muon_pt_precalib",             &muon_pt_precalib);
+    tree->SetBranchAddress ("muon_pt",                      &muon_pt);
+    tree->SetBranchAddress ("muon_ms_pt_precalib",          &muon_ms_pt_precalib);
+    tree->SetBranchAddress ("muon_ms_pt",                   &muon_ms_pt);
+    tree->SetBranchAddress ("muon_eta",                     &muon_eta);
+    tree->SetBranchAddress ("muon_phi",                     &muon_phi);
+    tree->SetBranchAddress ("muon_charge",                  &muon_charge);
+    tree->SetBranchAddress ("muon_tight",                   &muon_tight);
+    tree->SetBranchAddress ("muon_medium",                  &muon_medium);
+    tree->SetBranchAddress ("muon_loose",                   &muon_loose);
+    tree->SetBranchAddress ("muon_matched",                 &muon_matched);
+    tree->SetBranchAddress ("muon_etcone20",                &muon_etcone20);
+    tree->SetBranchAddress ("muon_etcone30",                &muon_etcone30);
+    tree->SetBranchAddress ("muon_etcone40",                &muon_etcone40);
+    tree->SetBranchAddress ("muon_topoetcone20",            &muon_topoetcone20);
+    tree->SetBranchAddress ("muon_topoetcone30",            &muon_topoetcone30);
+    tree->SetBranchAddress ("muon_topoetcone40",            &muon_topoetcone40);
+    tree->SetBranchAddress ("muon_id_track_pt",             &muon_id_track_pt);
+    tree->SetBranchAddress ("muon_id_track_eta",            &muon_id_track_eta);
+    tree->SetBranchAddress ("muon_id_track_phi",            &muon_id_track_phi);
+    tree->SetBranchAddress ("muon_id_track_charge",         &muon_id_track_charge);
+    tree->SetBranchAddress ("muon_id_track_d0sig",          &muon_id_track_d0sig);
+    tree->SetBranchAddress ("muon_id_track_z0",             &muon_id_track_z0);
+    tree->SetBranchAddress ("muon_id_track_vz",             &muon_id_track_vz);
+    tree->SetBranchAddress ("muon_id_track_theta",          &muon_id_track_theta);
+    tree->SetBranchAddress ("muon_id_track_tightprimary",   &muon_id_track_tightprimary);
+    tree->SetBranchAddress ("muon_id_track_hiloose",        &muon_id_track_hiloose);
+    tree->SetBranchAddress ("muon_id_track_hitight",        &muon_id_track_hitight);
+    tree->SetBranchAddress ("muon_ms_track_pt",             &muon_ms_track_pt);
+    tree->SetBranchAddress ("muon_ms_track_eta",            &muon_ms_track_eta);
+    tree->SetBranchAddress ("muon_ms_track_phi",            &muon_ms_track_phi);
+    tree->SetBranchAddress ("muon_ms_track_charge",         &muon_ms_track_charge);
+    tree->SetBranchAddress ("muon_ms_track_d0sig",          &muon_ms_track_d0sig);
+    tree->SetBranchAddress ("muon_ms_track_z0",             &muon_ms_track_z0);
+    tree->SetBranchAddress ("muon_ms_track_vz",             &muon_ms_track_vz);
+    tree->SetBranchAddress ("muon_ms_track_theta",          &muon_ms_track_theta);
+    tree->SetBranchAddress ("muon_pt_sys",                  &muon_pt_sys);
+    tree->SetBranchAddress ("muon_eta_sys",                 &muon_eta_sys);
+    tree->SetBranchAddress ("muon_phi_sys",                 &muon_phi_sys);
   } else {
     tree->SetBranchStatus ("muon_n",                      0);
     tree->SetBranchStatus ("muon_pt_precalib",            0);
@@ -329,10 +329,10 @@ void TreeVariables :: SetBranchAddresses () {
 
   if (getJets) {
     tree->SetBranchAddress ("akt4emtopo_jet_n",   &akt4emtopo_jet_n);
-    tree->SetBranchAddress ("akt4emtopo_jet_pt",  akt4emtopo_jet_pt);
-    tree->SetBranchAddress ("akt4emtopo_jet_eta", akt4emtopo_jet_eta);
-    tree->SetBranchAddress ("akt4emtopo_jet_phi", akt4emtopo_jet_phi);
-    tree->SetBranchAddress ("akt4emtopo_jet_e",   akt4emtopo_jet_e);
+    tree->SetBranchAddress ("akt4emtopo_jet_pt",  &akt4emtopo_jet_pt);
+    tree->SetBranchAddress ("akt4emtopo_jet_eta", &akt4emtopo_jet_eta);
+    tree->SetBranchAddress ("akt4emtopo_jet_phi", &akt4emtopo_jet_phi);
+    tree->SetBranchAddress ("akt4emtopo_jet_e",   &akt4emtopo_jet_e);
   } else {
     tree->SetBranchStatus ("akt4emtopo_jet_n",    0);
     tree->SetBranchStatus ("akt4emtopo_jet_pt",   0);
@@ -345,11 +345,11 @@ void TreeVariables :: SetBranchAddresses () {
 
     if (getTruthElectrons) {
       tree->SetBranchAddress ("truth_electron_n",       &truth_electron_n);
-      tree->SetBranchAddress ("truth_electron_pt",      truth_electron_pt);
-      tree->SetBranchAddress ("truth_electron_eta",     truth_electron_eta);
-      tree->SetBranchAddress ("truth_electron_phi",     truth_electron_phi);
-      tree->SetBranchAddress ("truth_electron_charge",  truth_electron_charge);
-      tree->SetBranchAddress ("truth_electron_barcode", truth_electron_barcode);
+      tree->SetBranchAddress ("truth_electron_pt",      &truth_electron_pt);
+      tree->SetBranchAddress ("truth_electron_eta",     &truth_electron_eta);
+      tree->SetBranchAddress ("truth_electron_phi",     &truth_electron_phi);
+      tree->SetBranchAddress ("truth_electron_charge",  &truth_electron_charge);
+      tree->SetBranchAddress ("truth_electron_barcode", &truth_electron_barcode);
     } else {
       tree->SetBranchStatus ("truth_electron_n",        0);
       tree->SetBranchStatus ("truth_electron_pt",       0);
@@ -361,11 +361,11 @@ void TreeVariables :: SetBranchAddresses () {
 
     if (getTruthMuons) {
       tree->SetBranchAddress ("truth_muon_n",       &truth_muon_n);
-      tree->SetBranchAddress ("truth_muon_pt",      truth_muon_pt);
-      tree->SetBranchAddress ("truth_muon_eta",     truth_muon_eta);
-      tree->SetBranchAddress ("truth_muon_phi",     truth_muon_phi);
-      tree->SetBranchAddress ("truth_muon_charge",  truth_muon_charge);
-      tree->SetBranchAddress ("truth_muon_barcode", truth_muon_barcode);
+      tree->SetBranchAddress ("truth_muon_pt",      &truth_muon_pt);
+      tree->SetBranchAddress ("truth_muon_eta",     &truth_muon_eta);
+      tree->SetBranchAddress ("truth_muon_phi",     &truth_muon_phi);
+      tree->SetBranchAddress ("truth_muon_charge",  &truth_muon_charge);
+      tree->SetBranchAddress ("truth_muon_barcode", &truth_muon_barcode);
     } else {
       tree->SetBranchStatus ("truth_muon_n",        0);
       tree->SetBranchStatus ("truth_muon_pt",       0);
@@ -377,13 +377,13 @@ void TreeVariables :: SetBranchAddresses () {
 
     if (getTruthTracks) {
       tree->SetBranchAddress ("truth_trk_n",        &truth_trk_n);
-      tree->SetBranchAddress ("truth_trk_pt",       truth_trk_pt);
-      tree->SetBranchAddress ("truth_trk_eta",      truth_trk_eta);
-      tree->SetBranchAddress ("truth_trk_phi",      truth_trk_phi);
-      tree->SetBranchAddress ("truth_trk_charge",   truth_trk_charge);
-      tree->SetBranchAddress ("truth_trk_pdgid",    truth_trk_pdgid);
-      tree->SetBranchAddress ("truth_trk_barcode",  truth_trk_barcode);
-      tree->SetBranchAddress ("truth_trk_isHadron", truth_trk_isHadron);
+      tree->SetBranchAddress ("truth_trk_pt",       &truth_trk_pt);
+      tree->SetBranchAddress ("truth_trk_eta",      &truth_trk_eta);
+      tree->SetBranchAddress ("truth_trk_phi",      &truth_trk_phi);
+      tree->SetBranchAddress ("truth_trk_charge",   &truth_trk_charge);
+      tree->SetBranchAddress ("truth_trk_pdgid",    &truth_trk_pdgid);
+      tree->SetBranchAddress ("truth_trk_barcode",  &truth_trk_barcode);
+      tree->SetBranchAddress ("truth_trk_isHadron", &truth_trk_isHadron);
     } else {
       tree->SetBranchStatus ("truth_trk_n",         0);
       tree->SetBranchStatus ("truth_trk_pt",        0);
@@ -397,10 +397,10 @@ void TreeVariables :: SetBranchAddresses () {
 
     if (getTruthJets) {
       tree->SetBranchAddress ("akt4_truth_jet_n",   &truth_jet_n);
-      tree->SetBranchAddress ("akt4_truth_jet_pt",  truth_jet_pt);
-      tree->SetBranchAddress ("akt4_truth_jet_eta", truth_jet_eta);
-      tree->SetBranchAddress ("akt4_truth_jet_phi", truth_jet_phi);
-      tree->SetBranchAddress ("akt4_truth_jet_e",   truth_jet_e);
+      tree->SetBranchAddress ("akt4_truth_jet_pt",  &truth_jet_pt);
+      tree->SetBranchAddress ("akt4_truth_jet_eta", &truth_jet_eta);
+      tree->SetBranchAddress ("akt4_truth_jet_phi", &truth_jet_phi);
+      tree->SetBranchAddress ("akt4_truth_jet_e",   &truth_jet_e);
     } else {
       tree->SetBranchStatus ("akt4_truth_jet_n",   0);
       tree->SetBranchStatus ("akt4_truth_jet_pt",  0);

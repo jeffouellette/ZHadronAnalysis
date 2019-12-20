@@ -7,10 +7,10 @@ InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run
 accounting_group = group_atlas.boulder
 
 dataFlag = data_dvp_000
-systematicFlags = false false false false false false false false
+#systematicFlags = false false false false false false false false
 #systematicFlags = false false true false false false false false
 #systematicFlags = false false false true false false false false 
-#systematicFlags = false false false false false false true false
+systematicFlags = false false false false false false true false
 
 Arguments = false TreeMaker $(dataFlag) 365502 false PbPb18 $(systematicFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/365502.err

@@ -4,6 +4,7 @@
 #include "TrackingEfficiency.h"
 #include "TrackingPurity.h"
 #include "TagAndProbe.h"
+#include "FCalCalibration.h"
 #include "Params.h"
 
 #include <string>
@@ -122,6 +123,10 @@ int main (int argc, char** argv) {
   else if (alg == "TagAndProbe") {
     cout << "Info: In run.cxx: Running TagAndProbe algorithm..." << endl;
     success = TagAndProbe (subdir, dataSet, inFileName);
+  }
+  else if (alg == "FCalCalibration") {
+    cout << "Info: In run.cxx: Running FCalCalibration algorithm..." << endl;
+    success = FCalCalibration (subdir, dataSet, inFileName);
   }
   else {
     cout << "Error: In run.cxx: Failed to recognize algorithm! Quitting." << endl;

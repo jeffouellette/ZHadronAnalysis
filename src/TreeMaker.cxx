@@ -150,13 +150,11 @@ bool TreeMaker (const char* directory,
   //h_electronIDEff_fcal_PbPb18->Fit (f_electronIDEff_fcal_PbPb18, "RN0Q");
 
 
-
-
+  // Input tree
   TreeVariables* t = new TreeVariables (tree, isMC);
   t->SetGetFCals ();
   t->SetGetVertices ();
   t->SetGetElectrons ();
-  t->SetGetClusters ();
   t->SetGetMuons ();
   t->SetGetTracks ();
   if (!isPbPb) t->SetGetJets ();
@@ -206,17 +204,38 @@ bool TreeMaker (const char* directory,
     }
   }
 
-  TFile* outFile = new TFile (Form ("%s/%s.root", rootPath.Data (), identifier.Data ()), "recreate");
 
-  const char* outTreeName = isPbPb ? "PbPbZTrackTree" : "ppZTrackTree";
-  outFile->Delete (Form ("%s;*", outTreeName));
-  OutTree* outTree = new OutTree (outTreeName, outFile);
-  outTree->SetBranchEventInfo ();
-  outTree->SetBranchLeptons ();
-  outTree->SetBranchZs ();
-  if (!isPbPb) outTree->SetBranchJets ();
-  outTree->SetBranchTracks ();
-  outTree->SetBranches ();
+  // Load files for output
+  TFile* outFiles[numFileCentBins];
+  OutTree* outTrees[numFileCentBins];
+  if (isPbPb) {
+    const TString runGroup = (isMC ? "mc" : GetRunGroupTString (dataSet));
+    for (int iCent = 1; iCent < numFileCentBins; iCent++) {
+      outFiles[iCent] = new TFile (Form ("%s/%s/%s_iCent%i.root", rootPath.Data (), runGroup.Data (), identifier.Data (), iCent), "recreate");
+      const char* outTreeName = "PbPbZTrackTree";
+      outFiles[iCent]->Delete (Form ("%s;*", outTreeName));
+      outTrees[iCent] = new OutTree (outTreeName, outFiles[iCent]);
+      outTrees[iCent]->SetBranchEventInfo ();
+      outTrees[iCent]->SetBranchLeptons ();
+      outTrees[iCent]->SetBranchZs ();
+      if (!isPbPb) outTrees[iCent]->SetBranchJets ();
+      outTrees[iCent]->SetBranchTracks ();
+      outTrees[iCent]->SetBranches ();
+    }
+  }
+  else {
+    outFiles[0] = new TFile (Form ("%s/%s.root", rootPath.Data (), identifier.Data ()), "recreate");
+    const char* outTreeName = "ppZTrackTree";
+    outFiles[0]->Delete (Form ("%s;*", outTreeName));
+    outTrees[0] = new OutTree (outTreeName, outFiles[0]);
+    outTrees[0]->SetBranchEventInfo ();
+    outTrees[0]->SetBranchLeptons ();
+    outTrees[0]->SetBranchZs ();
+    if (!isPbPb) outTrees[0]->SetBranchJets ();
+    outTrees[0]->SetBranchTracks ();
+    outTrees[0]->SetBranches ();
+  }
+
 
   const int nEvts = tree->GetEntries ();
   TLorentzVector l1, l2;
@@ -253,7 +272,7 @@ bool TreeMaker (const char* directory,
       //  hasPileupVert = true;
       //}
     }
-    if (!hasPrimaryVert)// || hasPileupVert)
+    if (!hasPrimaryVert || fabs (vz) > 150)
       continue;
 
     event_weight = -1;
@@ -268,22 +287,31 @@ bool TreeMaker (const char* directory,
       continue; // trigger requirement
 
     fcal_et = t->fcalA_et + t->fcalC_et;
-    if (isPbPb) {
-      if (fcal_et < 40)
-        continue; // loose cut on "noise" events
-      const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
-      const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
-      if (fcal_et > 0)
-        q2 = sqrt (qx*qx + qy*qy) / fcal_et;
-      else
-        q2 = 0;
-      psi2 = 0.5 * atan2 (qy, qx);
+    qx_a = t->fcalA_et_Cos;
+    qy_a = t->fcalA_et_Sin;
+    qx_c = t->fcalC_et_Cos;
+    qy_c = t->fcalC_et_Sin;
+    const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
+    const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
+    if (fcal_et > 0)
+      q2 = sqrt (qx*qx + qy*qy) / fcal_et;
+    else
+      q2 = 0;
+    psi2 = 0.5 * atan2 (qy, qx);
 
+    if (isPbPb) {
       zdcEnergy = t->ZdcCalibEnergy_A + t->ZdcCalibEnergy_C; // gets zdc energy in TeV
       const float nNeutrons = (zdcEnergy) / (2.51);
       const int bin = h_zdcCuts->FindFixBin (fcal_et * 1e-3); // gets x-axis bin corresponding to Fcal Sum Et in TeV
       if (bin < 1 || h_zdcCuts->GetNbinsX () < bin || (is2015data ? nNeutrons : zdcEnergy) > h_zdcCuts->GetBinContent (bin))
         continue; // Zdc-based in-time pile-up cut
+    }
+
+    short iCent = 0;
+    if (isPbPb) {
+      iCent = GetFileCentBin (fcal_et);
+      if (iCent < 1 || iCent > numFileCentBins-1)
+        continue;
     }
 
     const float _event_weight = event_weight; // for storage, in case of multiple Z's in one event
@@ -312,8 +340,6 @@ bool TreeMaker (const char* directory,
         continue; // basic electron pT cut
       if (!InEMCal (l1_eta))
         continue; // reject electrons reconstructed outside the EMCal
-      //if (t->electron_topoetcone20[iE1] / l1_pt > 0.2)
-      //  continue; // isolation cut for electrons
 
       if (!doElectronLHMediumVar) {
         if (!isPbPb && !t->electron_lhloose[iE1])
@@ -371,8 +397,6 @@ bool TreeMaker (const char* directory,
           continue; // basic electron pT cut
         if (!InEMCal (l2_eta))
           continue; // reject electrons reconstructed outside the EMCal
-        //if (t->electron_topoetcone20[iE2] / l2_pt > 0.2)
-        //  continue; // isolation cut for electrons
 
         if (!doElectronLHMediumVar) {
           if (!isPbPb && !t->electron_lhloose[iE2])
@@ -455,13 +479,6 @@ bool TreeMaker (const char* directory,
 
         ntrk_all = 0;
         ntrk = 0;
-        trk_pt.clear ();
-        trk_eta.clear ();
-        trk_phi.clear ();
-        trk_charge.clear ();
-        trk_truth_matched.clear ();
-        //trk_hiloose.clear ();
-        //trk_hitight.clear ();
 
         for (int iTrk = 0; iTrk < t->ntrk; iTrk++) {
           //if (!t->trk_HItight[iTrk] && !t->trk_HIloose[iTrk])
@@ -476,31 +493,21 @@ bool TreeMaker (const char* directory,
           if (t->trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
 
-          //if (doTrkD0Var && t->trk_d0[iTrk] > 1.0)
-          //  continue;
-          //if (doTrkZ0Var && fabs (t->trk_z0[iTrk] * sin (t->trk_theta[iTrk])) > 1.0) 
-          //  continue;
-
           if (IsElectronTrack (t, iTrk, iE1, iE2))
             continue;
 
-          trk_pt.push_back (t->trk_pt[iTrk]);
-          trk_eta.push_back (t->trk_eta[iTrk]);
-          trk_phi.push_back (t->trk_phi[iTrk]);
-          trk_charge.push_back (t->trk_charge[iTrk]);
+          trk_pt[ntrk] = t->trk_pt[iTrk];
+          trk_eta[ntrk] = t->trk_eta[iTrk];
+          trk_phi[ntrk] = t->trk_phi[iTrk];
+          trk_charge[ntrk] = t->trk_charge[iTrk];
+
           if (isMC)
-            trk_truth_matched.push_back (t->trk_prob_truth[iTrk] > 0.5);
-          //trk_hitight.push_back (t->trk_HItight[iTrk]);
-          //trk_hiloose.push_back (t->trk_HIloose[iTrk]);
+            trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
           ntrk++;
         } // end loop over tracks
 
         if (!isPbPb) {
           njet = 0;
-          jet_pt.clear ();
-          jet_eta.clear ();
-          jet_phi.clear ();
-          jet_e.clear ();
           for (int iJet = 0; iJet < t->akt4emtopo_jet_n; iJet++) {
             float _jpt = t->akt4emtopo_jet_pt[iJet];
             float _jeta = t->akt4emtopo_jet_eta[iJet];
@@ -514,15 +521,15 @@ bool TreeMaker (const char* directory,
             if (DeltaR (_jeta, l2_eta, _jphi, l2_phi) < 0.2)
               continue;
 
-            jet_pt.push_back (_jpt);
-            jet_eta.push_back (_jeta);
-            jet_phi.push_back (_jphi);
-            jet_e.push_back (_je);
+            jet_pt[njet] = _jpt;
+            jet_eta[njet] = _jeta;
+            jet_phi[njet] = _jphi;
+            jet_e[njet] = _je;
             njet++;
           }
         }
 
-        outTree->Fill ();
+        outTrees[iCent]->Fill ();
         
       } // end iE2 loop
     } // end iE1 loop
@@ -563,7 +570,7 @@ bool TreeMaker (const char* directory,
       //else if (t->vert_type[iVert] == 3)
       //  hasPileupVert = true;
     }
-    if (!hasPrimaryVert)// || hasPileupVert)
+    if (!hasPrimaryVert || fabs (vz) > 150)
       continue; // check for primary vertex
 
     event_weight = -1;
@@ -578,22 +585,31 @@ bool TreeMaker (const char* directory,
       continue; // trigger requirement
 
     fcal_et = t->fcalA_et + t->fcalC_et;
-    if (isPbPb) {
-      if (fcal_et < 40)
-        continue; // loose cut on "noise" events
-      const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
-      const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
-      if (fcal_et > 0)
-        q2 = sqrt (qx*qx + qy*qy) / fcal_et;
-      else
-        q2 = 0;
-      psi2 = 0.5 * atan2 (qy, qx);
+    qx_a = t->fcalA_et_Cos;
+    qy_a = t->fcalA_et_Sin;
+    qx_c = t->fcalC_et_Cos;
+    qy_c = t->fcalC_et_Sin;
+    const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
+    const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
+    if (fcal_et > 0)
+      q2 = sqrt (qx*qx + qy*qy) / fcal_et;
+    else
+      q2 = 0;
+    psi2 = 0.5 * atan2 (qy, qx);
 
+    if (isPbPb) {
       zdcEnergy = t->ZdcCalibEnergy_A + t->ZdcCalibEnergy_C; // gets zdc energy in TeV
       const float nNeutrons = (zdcEnergy) / (2.51);
       const int bin = h_zdcCuts->FindFixBin (fcal_et * 1e-3); // gets x-axis bin corresponding to Fcal Sum Et in TeV
       if (bin < 1 || h_zdcCuts->GetNbinsX () < bin || (is2015data ? nNeutrons : zdcEnergy) > h_zdcCuts->GetBinContent (bin))
         continue; // Zdc-based in-time pile-up cut
+    }
+
+    short iCent = 0;
+    if (isPbPb) {
+      iCent = GetFileCentBin (fcal_et);
+      if (iCent < 1 || iCent > numFileCentBins-1)
+        continue;
     }
 
     const float _event_weight = event_weight; // for storage, in case of multiple Z's in one event
@@ -715,8 +731,8 @@ bool TreeMaker (const char* directory,
           trigEff2 = (isMC ? 1 : h2_muonTrigEff_eta_phi_PbPb18->GetBinContent (h2_muonTrigEff_eta_phi_PbPb18->FindFixBin (l2_eta, InTwoPi (l2_phi))));
 
           const float fcalEff = (isMC ? 1 : f_muonIDEff_fcal_PbPb18->Eval (fcal_et * 1e-3));
-          recoEff1 = h2_muonIDEff_eta_phi_PbPb18->GetBinContent (h2_muonIDEff_eta_phi_PbPb18->FindFixBin (l1_eta, InTwoPi (l1_phi)));
-          recoEff2 = h2_muonIDEff_eta_phi_PbPb18->GetBinContent (h2_muonIDEff_eta_phi_PbPb18->FindFixBin (l2_eta, InTwoPi (l2_phi)));
+          recoEff1 = fcalEff * h2_muonIDEff_eta_phi_PbPb18->GetBinContent (h2_muonIDEff_eta_phi_PbPb18->FindFixBin (l1_eta, InTwoPi (l1_phi)));
+          recoEff2 = fcalEff * h2_muonIDEff_eta_phi_PbPb18->GetBinContent (h2_muonIDEff_eta_phi_PbPb18->FindFixBin (l2_eta, InTwoPi (l2_phi)));
         }
 
         trigEff = (1.-(1.-trigEff1)*(1.-trigEff2));
@@ -734,17 +750,8 @@ bool TreeMaker (const char* directory,
 
         ntrk_all = 0;
         ntrk = 0;
-        trk_pt.clear ();
-        trk_eta.clear ();
-        trk_phi.clear ();
-        trk_charge.clear ();
-        trk_truth_matched.clear ();
-        //trk_hiloose.clear ();
-        //trk_hitight.clear ();
 
         for (int iTrk = 0; iTrk < t->ntrk; iTrk++) {
-          //if (!t->trk_HItight[iTrk] && !t->trk_HIloose[iTrk])
-          //  continue;
           if (doHITightVar && !t->trk_HItight[iTrk])
             continue;
           else if (!doHITightVar && !t->trk_HIloose[iTrk])
@@ -755,31 +762,21 @@ bool TreeMaker (const char* directory,
           if (t->trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
 
-          //if (doTrkD0Var && t->trk_d0[iTrk] > 1.0)
-          //  continue;
-          //if (doTrkZ0Var && fabs (t->trk_z0[iTrk] * sin (t->trk_theta[iTrk])) > 1.0) 
-          //  continue;
-
           if (IsMuonTrack (t, iTrk, iM1, iM2))
             continue;
 
-          trk_pt.push_back (t->trk_pt[iTrk]);
-          trk_eta.push_back (t->trk_eta[iTrk]);
-          trk_phi.push_back (t->trk_phi[iTrk]);
-          trk_charge.push_back (t->trk_charge[iTrk]);
+          trk_pt[ntrk] = t->trk_pt[iTrk];
+          trk_eta[ntrk] = t->trk_eta[iTrk];
+          trk_phi[ntrk] = t->trk_phi[iTrk];
+          trk_charge[ntrk] = t->trk_charge[iTrk];
+
           if (isMC)
-            trk_truth_matched.push_back (t->trk_prob_truth[iTrk] > 0.5);
-          //trk_hitight.push_back (t->trk_HItight[iTrk]);
-          //trk_hiloose.push_back (t->trk_HIloose[iTrk]);
+            trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
           ntrk++;
         } // end loop over tracks
 
         if (!isPbPb) {
           njet = 0;
-          jet_pt.clear ();
-          jet_eta.clear ();
-          jet_phi.clear ();
-          jet_e.clear ();
           for (int iJet = 0; iJet < t->akt4emtopo_jet_n; iJet++) {
             float _jpt = t->akt4emtopo_jet_pt[iJet];
             float _jeta = t->akt4emtopo_jet_eta[iJet];
@@ -793,15 +790,15 @@ bool TreeMaker (const char* directory,
             if (DeltaR (_jeta, l2_eta, _jphi, l2_phi) < 0.2)
               continue;
 
-            jet_pt.push_back (_jpt);
-            jet_eta.push_back (_jeta);
-            jet_phi.push_back (_jphi);
-            jet_e.push_back (_je);
+            jet_pt[njet] = _jpt;
+            jet_eta[njet] = _jeta;
+            jet_phi[njet] = _jphi;
+            jet_e[njet] = _je;
             njet++;
           }
         }
 
-        outTree->Fill ();
+        outTrees[iCent]->Fill ();
         
       } // end iM2 loop
     } // end iM1 loop
@@ -814,9 +811,17 @@ bool TreeMaker (const char* directory,
 
   SaferDelete (t);
 
-  outFile->Write (0, TObject::kOverwrite);
-  outFile->Close ();
-  SaferDelete (outFile);
+  if (isPbPb) {
+    for (int iCent = 1; iCent < numFileCentBins; iCent++) {
+      outFiles[iCent]->Write (0, TObject::kOverwrite);
+      outFiles[iCent]->Close ();
+      SaferDelete (outFiles[iCent]);
+    }
+  } else {
+    outFiles[0]->Write (0, TObject::kOverwrite);
+    outFiles[0]->Close ();
+    SaferDelete (outFiles[0]);
+  }
 
   SaferDelete (h_zdcCuts);
 

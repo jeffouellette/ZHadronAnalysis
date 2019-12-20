@@ -195,34 +195,26 @@ bool TruthTreeMaker (const char* directory,
           continue; // require Z to be in mass window
 
         ntrk = 0;
-        trk_pt.clear ();
-        trk_eta.clear ();
-        trk_phi.clear ();
-        trk_charge.clear ();
         for (int iTrk = 0; iTrk < t->truth_trk_n; iTrk++) {
           if (t->truth_trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
 
-          trk_pt.push_back (t->truth_trk_pt[iTrk]);
-          trk_eta.push_back (t->truth_trk_eta[iTrk]);
-          trk_phi.push_back (t->truth_trk_phi[iTrk]);
-          trk_charge.push_back (t->truth_trk_charge[iTrk]);
+          trk_pt[ntrk] = t->truth_trk_pt[iTrk];
+          trk_eta[ntrk] = t->truth_trk_eta[iTrk];
+          trk_phi[ntrk] = t->truth_trk_phi[iTrk];
+          trk_charge[ntrk] = t->truth_trk_charge[iTrk];
           ntrk++;
         } // end loop over tracks
 
         truth_jet_n = 0;
-        truth_jet_pt.clear ();
-        truth_jet_eta.clear ();
-        truth_jet_phi.clear ();
-        truth_jet_e.clear ();
         for (int iJet = 0; iJet < t->truth_jet_n; iJet++) {
           if (t->truth_jet_pt[iJet] < jet_pt_cut)
             continue; // jet minimum pT
 
-          truth_jet_pt.push_back (t->truth_jet_pt[iJet]);
-          truth_jet_eta.push_back (t->truth_jet_eta[iJet]);
-          truth_jet_phi.push_back (t->truth_jet_phi[iJet]);
-          truth_jet_e.push_back (t->truth_jet_e[iJet]);
+          truth_jet_pt[truth_jet_n] = t->truth_jet_pt[iJet];
+          truth_jet_eta[truth_jet_n] = t->truth_jet_eta[iJet];
+          truth_jet_phi[truth_jet_n] = t->truth_jet_phi[iJet];
+          truth_jet_e[truth_jet_n] = t->truth_jet_e[iJet];
           truth_jet_n++;
         } // end loop over truth jets
 
@@ -319,34 +311,26 @@ bool TruthTreeMaker (const char* directory,
           continue; // require Z to be in mass window
 
         ntrk = 0;
-        trk_pt.clear ();
-        trk_eta.clear ();
-        trk_phi.clear ();
-        trk_charge.clear ();
         for (int iTrk = 0; iTrk < t->truth_trk_n; iTrk++) {
           if (t->truth_trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
 
-          trk_pt.push_back (t->truth_trk_pt[iTrk]);
-          trk_eta.push_back (t->truth_trk_eta[iTrk]);
-          trk_phi.push_back (t->truth_trk_phi[iTrk]);
-          trk_charge.push_back (t->truth_trk_charge[iTrk]);
+          trk_pt[ntrk] = t->truth_trk_pt[iTrk];
+          trk_eta[ntrk] = t->truth_trk_eta[iTrk];
+          trk_phi[ntrk] = t->truth_trk_phi[iTrk];
+          trk_charge[ntrk] = t->truth_trk_charge[iTrk];
           ntrk++;
         } // end loop over tracks
 
         truth_jet_n = 0;
-        truth_jet_pt.clear ();
-        truth_jet_eta.clear ();
-        truth_jet_phi.clear ();
-        truth_jet_e.clear ();
         for (int iJet = 0; iJet < t->truth_jet_n; iJet++) {
           if (t->truth_jet_pt[iJet] < jet_pt_cut)
             continue; // jet minimum pT
 
-          truth_jet_pt.push_back (t->truth_jet_pt[iJet]);
-          truth_jet_eta.push_back (t->truth_jet_eta[iJet]);
-          truth_jet_phi.push_back (t->truth_jet_phi[iJet]);
-          truth_jet_e.push_back (t->truth_jet_e[iJet]);
+          truth_jet_pt[truth_jet_n] = t->truth_jet_pt[iJet];
+          truth_jet_eta[truth_jet_n] = t->truth_jet_eta[iJet];
+          truth_jet_phi[truth_jet_n] = t->truth_jet_phi[iJet];
+          truth_jet_e[truth_jet_n] = t->truth_jet_e[iJet];
           truth_jet_n++;
         } // end loop over truth jets
 

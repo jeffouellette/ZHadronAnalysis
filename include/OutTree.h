@@ -17,6 +17,10 @@ unsigned int run_number = 0;
 
 float fcal_et = 0;
 float zdcEnergy = 0;
+float qx_a = 0;
+float qy_a = 0;
+float qx_c = 0;
+float qy_c = 0;
 float q2 = 0;
 float psi2 = 0;
 float vz = 0;
@@ -59,26 +63,38 @@ float l2_z0 = 0;
 
 int ntrk_all = 0;
 int ntrk = 0;
-vector<float> trk_pt (0);
-vector<float> trk_eta (0);
-vector<float> trk_phi (0);
-vector<float> trk_charge (0);
-vector<float> trk_z0 (0);
-vector<bool> trk_truth_matched (0);
-//vector<bool>  trk_hiloose (0);
-//vector<bool>  trk_hitight (0);
+float trk_pt[10000];
+float trk_eta[10000];
+float trk_phi[10000];
+float trk_charge[10000];
+float trk_z0[10000];
+bool  trk_truth_matched[10000];
+//vector<float> trk_pt (0);
+//vector<float> trk_eta (0);
+//vector<float> trk_phi (0);
+//vector<float> trk_charge (0);
+//vector<float> trk_z0 (0);
+//vector<bool> trk_truth_matched (0);
 
 int njet = 0;
-vector<float> jet_pt (0);
-vector<float> jet_eta (0);
-vector<float> jet_phi (0);
-vector<float> jet_e (0);
+float jet_pt[40];
+float jet_eta[40];
+float jet_phi[40];
+float jet_e[40];
+//vector<float> jet_pt (0);
+//vector<float> jet_eta (0);
+//vector<float> jet_phi (0);
+//vector<float> jet_e (0);
 
 int truth_jet_n = 0;
-vector<float> truth_jet_pt (0);
-vector<float> truth_jet_eta (0);
-vector<float> truth_jet_phi (0);
-vector<float> truth_jet_e (0);
+float truth_jet_pt[40];
+float truth_jet_eta[40];
+float truth_jet_phi[40];
+float truth_jet_e[40];
+//vector<float> truth_jet_pt (0);
+//vector<float> truth_jet_eta (0);
+//vector<float> truth_jet_phi (0);
+//vector<float> truth_jet_e (0);
 
 struct OutTree {
   private:
@@ -118,6 +134,10 @@ struct OutTree {
       tree->Branch ("ntrk_all",      &ntrk_all,      "ntrk_all/I");
       tree->Branch ("fcal_et",       &fcal_et,       "fcal_et/F");
       tree->Branch ("zdcEnergy",     &zdcEnergy,     "zdcEnergy/F");
+      tree->Branch ("qx_a",          &qx_a,          "qx_a/F");
+      tree->Branch ("qy_a",          &qy_a,          "qy_a/F");
+      tree->Branch ("qx_c",          &qx_c,          "qx_c/F");
+      tree->Branch ("qy_c",          &qy_c,          "qy_c/F");
       tree->Branch ("q2",            &q2,            "q2/F");
       tree->Branch ("psi2",          &psi2,          "psi2/F");
       tree->Branch ("vz",            &vz,            "vz/F");
@@ -162,29 +182,28 @@ struct OutTree {
       tree->Branch ("truth_z_m",     &truth_z_m,     "truth_z_m/F");
     }
     if (branchJets) {
-      tree->Branch ("njet",          &njet);
-      tree->Branch ("jet_pt",        &jet_pt);
-      tree->Branch ("jet_eta",       &jet_eta);
-      tree->Branch ("jet_phi",       &jet_phi);
-      tree->Branch ("jet_e",         &jet_e);
+      tree->Branch ("njet",     &njet);
+      tree->Branch ("jet_pt",   &jet_pt,  "jet_pt[njet]/F");
+      tree->Branch ("jet_eta",  &jet_eta, "jet_eta[njet]/F");
+      tree->Branch ("jet_phi",  &jet_phi, "jet_phi[njet]/F");
+      tree->Branch ("jet_e",    &jet_e,   "jet_e[njet]/F");
     }
 
     if (branchTracks) {
-      tree->Branch ("ntrk",          &ntrk,          "ntrk/I");
-      tree->Branch ("trk_pt",        &trk_pt);
-      tree->Branch ("trk_eta",       &trk_eta);
-      tree->Branch ("trk_phi",       &trk_phi);
-      tree->Branch ("trk_charge",    &trk_charge);
-      tree->Branch ("trk_truth_matched", &trk_truth_matched);
-      //tree->Branch ("trk_hiloose",   &trk_hiloose);
-      //tree->Branch ("trk_hitight",   &trk_hitight);
+      tree->Branch ("ntrk",               &ntrk,              "ntrk/I");
+      tree->Branch ("trk_pt",             &trk_pt,            "trk_pt[ntrk]/F");
+      tree->Branch ("trk_eta",            &trk_eta,           "trk_eta[ntrk]/F");
+      tree->Branch ("trk_phi",            &trk_phi,           "trk_phi[ntrk]/F");
+      tree->Branch ("trk_charge",         &trk_charge,        "trk_charge[ntrk]/F");
+      if (!isMC)
+        tree->Branch ("trk_truth_matched",  &trk_truth_matched, "trk_truth_matched[ntrk]/O");
     }
     if (branchTruthJets) {
-      tree->Branch ("truth_jet_n",   &truth_jet_n,   "truth_jet_n/I");
-      tree->Branch ("truth_jet_pt",  &truth_jet_pt);
-      tree->Branch ("truth_jet_eta", &truth_jet_eta);
-      tree->Branch ("truth_jet_phi", &truth_jet_phi);
-      tree->Branch ("truth_jet_e",   &truth_jet_e);
+      tree->Branch ("truth_jet_n",    &truth_jet_n,   "truth_jet_n/I");
+      tree->Branch ("truth_jet_pt",   &truth_jet_pt,  "truth_jet_pt[truth_jet_n]/F");
+      tree->Branch ("truth_jet_eta",  &truth_jet_eta, "truth_jet_eta[truth_jet_n]/F");
+      tree->Branch ("truth_jet_phi",  &truth_jet_phi, "truth_jet_phi[truth_jet_n]/F");
+      tree->Branch ("truth_jet_e",    &truth_jet_e,   "truth_jet_e[truth_jet_n]/F");
     }
     return;
   }

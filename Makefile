@@ -3,7 +3,7 @@ CXXFLAGS=-g -Wall -fPIC `root-config --cflags` -I${gpfs}/ZTrackAnalyzer/include
 LDFLAGS=`root-config --glibs` -L${gpfs}/ZTrackAnalyzer/lib
 
 libs = ZTrackUtilities TreeVariables Trigger Cuts
-algs = TreeMaker MinbiasTreeMaker TruthTreeMaker TrackingEfficiency TrackingPurity TagAndProbe
+algs = TreeMaker MinbiasTreeMaker TruthTreeMaker TrackingEfficiency TrackingPurity TagAndProbe FCalCalibration
 
 bins = run
 
