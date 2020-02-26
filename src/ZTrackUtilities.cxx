@@ -169,42 +169,54 @@ TString GetIdentifier (const int dataSet, const char* directory, const char* inF
   if (TString (inFileName).Contains ("Sherpa"))
     id = id + "_Sherpa";
 
-  if (TString (inFileName).Contains ("pp_Zee"))
-    id = id + "_pp_Zee";
-  else if (TString (inFileName).Contains ("pn_Zee"))
-    id = id + "_pn_Zee";
-  else if (TString (inFileName).Contains ("np_Zee"))
-    id = id + "_np_Zee";
-  else if (TString (inFileName).Contains ("nn_Zee"))
-    id = id + "_nn_Zee";
-  else if (TString (inFileName).Contains ("Zee"))
-    id = id + "_Zee";
-  else if (TString (inFileName).Contains ("pp_Zmumu"))
-    id = id + "_pp_Zmumu";
-  else if (TString (inFileName).Contains ("pn_Zmumu"))
-    id = id + "_pn_Zmumu";
-  else if (TString (inFileName).Contains ("np_Zmumu"))
-    id = id + "_np_Zmumu";
-  else if (TString (inFileName).Contains ("nn_Zmumu"))
-    id = id + "_nn_Zmumu";
-  else if (TString (inFileName).Contains ("Zmumu"))
-    id = id + "_Zmumu";
-  else if (TString (inFileName).Contains ("Ztautau"))
-    id = id + "_Ztautau";
-  else if (TString (inFileName).Contains ("ttbar"))
-    id = id + "_ttbar";
+  if (isPbPb) {
+    if (TString (inFileName).Contains ("pp_Zee"))
+      id = id + "_pp_Zee";
+    else if (TString (inFileName).Contains ("pn_Zee"))
+      id = id + "_pn_Zee";
+    else if (TString (inFileName).Contains ("np_Zee"))
+      id = id + "_np_Zee";
+    else if (TString (inFileName).Contains ("nn_Zee"))
+      id = id + "_nn_Zee";
+    else if (TString (inFileName).Contains ("Zee"))
+      id = id + "_pp_Zee";
+    else if (TString (inFileName).Contains ("pp_Zmumu"))
+      id = id + "_pp_Zmumu";
+    else if (TString (inFileName).Contains ("pn_Zmumu"))
+      id = id + "_pn_Zmumu";
+    else if (TString (inFileName).Contains ("np_Zmumu"))
+      id = id + "_np_Zmumu";
+    else if (TString (inFileName).Contains ("nn_Zmumu"))
+      id = id + "_nn_Zmumu";
+    else if (TString (inFileName).Contains ("Zmumu"))
+      id = id + "_pp_Zmumu";
+    else if (TString (inFileName).Contains ("Ztautau"))
+      id = id + "_pp_Ztautau";
+    else if (TString (inFileName).Contains ("ttbar"))
+      id = id + "_pp_ttbar";
+  } 
+  else {
+    if (TString (inFileName).Contains ("Zee"))
+      id = id + "_Zee";
+    else if (TString (inFileName).Contains ("Zmumu"))
+      id = id + "_Zmumu";
+    else if (TString (inFileName).Contains ("Ztautau"))
+      id = id + "_Ztautau";
+    else if (TString (inFileName).Contains ("ttbar"))
+      id = id + "_ttbar";
+  }
   
 
   if (TString (inFileName).Contains ("Hijing")) {
     id = id + "_Hijing";
-    if (collisionSystem == pp15 || collisionSystem == PbPb15)
-      id += "_15";
-    else if (collisionSystem == pPb16 || collisionSystem == Pbp16)
-      id += "_16";
-    else if (collisionSystem == XeXe17 || collisionSystem == pp17)
-      id += "_17";
-    else if (collisionSystem == PbPb18)
-      id += "_18";
+    //if (collisionSystem == pp15 || collisionSystem == PbPb15)
+    //  id += "_15";
+    //else if (collisionSystem == pPb16 || collisionSystem == Pbp16)
+    //  id += "_16";
+    //else if (collisionSystem == XeXe17 || collisionSystem == pp17)
+    //  id += "_17";
+    //else if (collisionSystem == PbPb18)
+    //  id += "_18";
   }
 
   if (TString (inFileName).Contains ("ptmin25")) {

@@ -1,9 +1,9 @@
 CXX=g++
-CXXFLAGS=-g -Wall -fPIC `root-config --cflags` -I${gpfs}/ZTrackAnalyzer/include
-LDFLAGS=`root-config --glibs` -L${gpfs}/ZTrackAnalyzer/lib
+CXXFLAGS=-O3 -g -Wall -fPIC `root-config --cflags` -I${gpfs}/ZTrackAnalyzer/include
+LDFLAGS=`root-config --glibs --ldflags` -L${gpfs}/ZTrackAnalyzer/lib
 
 libs = ZTrackUtilities TreeVariables Trigger Cuts
-algs = TreeMaker MinbiasTreeMaker TruthTreeMaker TrackingEfficiency TrackingPurity TagAndProbe FCalCalibration
+algs = TreeMaker MinbiasTreeMaker TruthTreeMaker TrackingEfficiency TrackingPurity TagAndProbe FCalCalibration BkgEstimator
 
 bins = run
 
@@ -35,7 +35,7 @@ TagAndProbe : src/TagAndProbe.cxx
 
 # Main needs to be compiled into binary
 run : $(libs:%=lib/lib%.so) src/run.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(libs:%=-l%) $(algs:%=-l%) -o bin/run src/run.cxx
+	$(CXX) $(CXXFLAGS) src/run.cxx $(LDFLAGS) $(libs:%=-l%) $(algs:%=-l%) -o bin/run
 
 # Algorithms need to be compiled into object files and then migrated to a shared library
 % : obj/%.o

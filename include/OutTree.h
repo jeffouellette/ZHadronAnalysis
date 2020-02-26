@@ -9,7 +9,6 @@ using namespace std;
 namespace ZTrackAnalyzer {
 
 bool isMC = false;
-bool isEE = false;
 float event_weight = 0;
 
 unsigned int event_number = 0;
@@ -17,18 +16,28 @@ unsigned int run_number = 0;
 
 float fcal_et = 0;
 float zdcEnergy = 0;
-float qx_a = 0;
-float qy_a = 0;
-float qx_c = 0;
-float qy_c = 0;
+float q2x_a = 0;
+float q2y_a = 0;
+float q2x_c = 0;
+float q2y_c = 0;
 float q2 = 0;
 float psi2 = 0;
+float q3 = 0;
+float psi3 = 0;
+float q4 = 0;
+float psi4 = 0;
 float vz = 0;
 
+bool isEE = false;
+bool isSameSign = false;
+bool isQCDBkg = false;
 float z_pt = 0;
 float z_y = 0;
 float z_phi = 0;
 float z_m = 0;
+
+float phi_transmin = 0;
+float phi_transmax = 0;
 
 float truth_z_pt = 0;
 float truth_z_y = 0;
@@ -129,17 +138,20 @@ struct OutTree {
     if (branchEventInfo) {
       tree->Branch ("event_number",  &event_number,  "event_number/I");
       tree->Branch ("run_number",    &run_number,    "run_number/I");
-      tree->Branch ("isEE",          &isEE,          "isEE/O");
       tree->Branch ("event_weight",  &event_weight,  "event_weight/F");
       tree->Branch ("ntrk_all",      &ntrk_all,      "ntrk_all/I");
       tree->Branch ("fcal_et",       &fcal_et,       "fcal_et/F");
       tree->Branch ("zdcEnergy",     &zdcEnergy,     "zdcEnergy/F");
-      tree->Branch ("qx_a",          &qx_a,          "qx_a/F");
-      tree->Branch ("qy_a",          &qy_a,          "qy_a/F");
-      tree->Branch ("qx_c",          &qx_c,          "qx_c/F");
-      tree->Branch ("qy_c",          &qy_c,          "qy_c/F");
+      tree->Branch ("q2x_a",         &q2x_a,         "q2x_a/F");
+      tree->Branch ("q2y_a",         &q2y_a,         "q2y_a/F");
+      tree->Branch ("q2x_c",         &q2x_c,         "q2x_c/F");
+      tree->Branch ("q2y_c",         &q2y_c,         "q2y_c/F");
       tree->Branch ("q2",            &q2,            "q2/F");
       tree->Branch ("psi2",          &psi2,          "psi2/F");
+      tree->Branch ("q3",            &q3,            "q3/F");
+      tree->Branch ("psi3",          &psi3,          "psi3/F");
+      tree->Branch ("q4",            &q4,            "q4/F");
+      tree->Branch ("psi4",          &psi4,          "psi4/F");
       tree->Branch ("vz",            &vz,            "vz/F");
     }
     if (branchLeptons) {
@@ -170,10 +182,15 @@ struct OutTree {
       tree->Branch ("l2_z0",         &l2_z0,         "l2_z0/F");
     }
     if (branchZs) {
+      tree->Branch ("isEE",          &isEE,          "isEE/O");
+      tree->Branch ("isSameSign",    &isSameSign,    "isSameSign/O");
+      tree->Branch ("isQCDBkg",      &isQCDBkg,      "isQCDBkg/O");
       tree->Branch ("z_pt",          &z_pt,          "z_pt/F");
       tree->Branch ("z_y",           &z_y,           "z_y/F");
       tree->Branch ("z_phi",         &z_phi,         "z_phi/F");
       tree->Branch ("z_m",           &z_m,           "z_m/F");
+      tree->Branch ("phi_transmin",  &phi_transmin,  "phi_transmin/F");
+      tree->Branch ("phi_transmax",  &phi_transmax,  "phi_transmax/F");
     }
     if (branchTruthZs) {
       tree->Branch ("truth_z_pt",    &truth_z_pt,    "truth_z_pt/F");
@@ -195,8 +212,7 @@ struct OutTree {
       tree->Branch ("trk_eta",            &trk_eta,           "trk_eta[ntrk]/F");
       tree->Branch ("trk_phi",            &trk_phi,           "trk_phi[ntrk]/F");
       tree->Branch ("trk_charge",         &trk_charge,        "trk_charge[ntrk]/F");
-      if (!isMC)
-        tree->Branch ("trk_truth_matched",  &trk_truth_matched, "trk_truth_matched[ntrk]/O");
+      tree->Branch ("trk_truth_matched",  &trk_truth_matched, "trk_truth_matched[ntrk]/O");
     }
     if (branchTruthJets) {
       tree->Branch ("truth_jet_n",    &truth_jet_n,   "truth_jet_n/I");

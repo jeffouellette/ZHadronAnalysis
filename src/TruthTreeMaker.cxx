@@ -100,7 +100,7 @@ bool TruthTreeMaker (const char* directory,
 
   TFile* outFile = new TFile (Form ("%s/%s.root", rootPath.Data (), identifier.Data ()), "recreate");
 
-  const char* outTreeName = isPbPb ? "PbPbZTrackTree" : "ppZTrackTree";
+  const char* outTreeName = "ZTrackTree";
   outFile->Delete (Form ("%s;*", outTreeName));
   OutTree* outTree = new OutTree (outTreeName, outFile);
   outTree->SetBranchEventInfo ();
@@ -139,13 +139,29 @@ bool TruthTreeMaker (const char* directory,
       fcal_et = t->fcalA_et + t->fcalC_et;
       if (fcal_et < 50)
         continue; // loose cut on "noise" events
-      const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
-      const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
-      if (fcal_et > 0)
-        q2 = sqrt (qx*qx + qy*qy) / fcal_et;
-      else
-        q2 = 0;
-      psi2 = 0.5 * atan2 (qy, qx);
+      q2x_a = t->fcalA_et_Cos2;
+      q2y_a = t->fcalA_et_Sin2;
+      q2x_c = t->fcalC_et_Cos2;
+      q2y_c = t->fcalC_et_Sin2;
+      const double q2x = q2x_a + q2x_c;
+      const double q2y = q2y_a + q2y_c;
+      const double q3x = t->fcalA_et_Cos3 + t->fcalC_et_Cos3;
+      const double q3y = t->fcalA_et_Sin3 + t->fcalC_et_Sin3;
+      const double q4x = t->fcalA_et_Cos4 + t->fcalC_et_Cos4;
+      const double q4y = t->fcalA_et_Sin4 + t->fcalC_et_Sin4;
+      if (fcal_et > 0) {
+        q2 = sqrt (q2x*q2x + q2y*q2y) / fcal_et;
+        q3 = sqrt (q3x*q3x + q3y*q3y) / fcal_et;
+        q4 = sqrt (q4x*q4x + q4y*q4y) / fcal_et;
+      }
+      else {
+        q2 = 0.;
+        q3 = 0.;
+        q4 = 0.;
+      }
+      psi2 = atan2 (q2y, q2x) / 2.;
+      psi3 = atan2 (q3y, q3x) / 3.;
+      psi4 = atan2 (q4y, q4x) / 4.;
 
       //zdcEnergy = t->ZdcCalibEnergy_A + t->ZdcCalibEnergy_C;
       //const float nNeutrons = (zdcEnergy) / (2.51);
@@ -255,13 +271,29 @@ bool TruthTreeMaker (const char* directory,
       fcal_et = t->fcalA_et + t->fcalC_et;
       if (fcal_et < 50)
         continue; // loose cut on "noise" events
-      const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
-      const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
-      if (fcal_et > 0)
-        q2 = sqrt (qx*qx + qy*qy) / fcal_et;
-      else
-        q2 = 0;
-      psi2 = 0.5 * atan2 (qy, qx);
+      q2x_a = t->fcalA_et_Cos2;
+      q2y_a = t->fcalA_et_Sin2;
+      q2x_c = t->fcalC_et_Cos2;
+      q2y_c = t->fcalC_et_Sin2;
+      const double q2x = q2x_a + q2x_c;
+      const double q2y = q2y_a + q2y_c;
+      const double q3x = t->fcalA_et_Cos3 + t->fcalC_et_Cos3;
+      const double q3y = t->fcalA_et_Sin3 + t->fcalC_et_Sin3;
+      const double q4x = t->fcalA_et_Cos4 + t->fcalC_et_Cos4;
+      const double q4y = t->fcalA_et_Sin4 + t->fcalC_et_Sin4;
+      if (fcal_et > 0) {
+        q2 = sqrt (q2x*q2x + q2y*q2y) / fcal_et;
+        q3 = sqrt (q3x*q3x + q3y*q3y) / fcal_et;
+        q4 = sqrt (q4x*q4x + q4y*q4y) / fcal_et;
+      }
+      else {
+        q2 = 0.;
+        q3 = 0.;
+        q4 = 0.;
+      }
+      psi2 = atan2 (q2y, q2x) / 2.;
+      psi3 = atan2 (q3y, q3x) / 3.;
+      psi4 = atan2 (q4y, q4x) / 4.;
 
       //zdcEnergy = t->ZdcCalibEnergy_A + t->ZdcCalibEnergy_C;
       //const float nNeutrons = (zdcEnergy) / (2.51);

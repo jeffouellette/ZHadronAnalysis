@@ -53,19 +53,35 @@ void TreeVariables :: SetBranchAddresses () {
   }
 
   if (getFCals) {
-    tree->SetBranchAddress ("fcalA_et",     &fcalA_et);
-    tree->SetBranchAddress ("fcalC_et",     &fcalC_et);
-    tree->SetBranchAddress ("fcalA_et_Cos", &fcalA_et_Cos);
-    tree->SetBranchAddress ("fcalC_et_Cos", &fcalC_et_Cos);
-    tree->SetBranchAddress ("fcalA_et_Sin", &fcalA_et_Sin);
-    tree->SetBranchAddress ("fcalC_et_Sin", &fcalC_et_Sin);
+    tree->SetBranchAddress ("fcalA_et",       &fcalA_et);
+    tree->SetBranchAddress ("fcalC_et",       &fcalC_et);
+    tree->SetBranchAddress ("fcalA_et_Cos2",  &fcalA_et_Cos2);
+    tree->SetBranchAddress ("fcalC_et_Cos2",  &fcalC_et_Cos2);
+    tree->SetBranchAddress ("fcalA_et_Sin2",  &fcalA_et_Sin2);
+    tree->SetBranchAddress ("fcalC_et_Sin2",  &fcalC_et_Sin2);
+    tree->SetBranchAddress ("fcalA_et_Cos3",  &fcalA_et_Cos3);
+    tree->SetBranchAddress ("fcalC_et_Cos3",  &fcalC_et_Cos3);
+    tree->SetBranchAddress ("fcalA_et_Sin3",  &fcalA_et_Sin3);
+    tree->SetBranchAddress ("fcalC_et_Sin3",  &fcalC_et_Sin3);
+    tree->SetBranchAddress ("fcalA_et_Cos4",  &fcalA_et_Cos4);
+    tree->SetBranchAddress ("fcalC_et_Cos4",  &fcalC_et_Cos4);
+    tree->SetBranchAddress ("fcalA_et_Sin4",  &fcalA_et_Sin4);
+    tree->SetBranchAddress ("fcalC_et_Sin4",  &fcalC_et_Sin4);
   } else {
-    tree->SetBranchStatus ("fcalA_et",     0);
-    tree->SetBranchStatus ("fcalC_et",     0);
-    tree->SetBranchStatus ("fcalA_et_Cos", 0);
-    tree->SetBranchStatus ("fcalC_et_Cos", 0);
-    tree->SetBranchStatus ("fcalA_et_Sin", 0);
-    tree->SetBranchStatus ("fcalC_et_Sin", 0);
+    tree->SetBranchStatus ("fcalA_et",      0);
+    tree->SetBranchStatus ("fcalC_et",      0);
+    tree->SetBranchStatus ("fcalA_et_Cos2", 0);
+    tree->SetBranchStatus ("fcalC_et_Cos2", 0);
+    tree->SetBranchStatus ("fcalA_et_Sin2", 0);
+    tree->SetBranchStatus ("fcalC_et_Sin2", 0);
+    tree->SetBranchStatus ("fcalA_et_Cos3", 0);
+    tree->SetBranchStatus ("fcalC_et_Cos3", 0);
+    tree->SetBranchStatus ("fcalA_et_Sin3", 0);
+    tree->SetBranchStatus ("fcalC_et_Sin3", 0);
+    tree->SetBranchStatus ("fcalA_et_Cos4", 0);
+    tree->SetBranchStatus ("fcalC_et_Cos4", 0);
+    tree->SetBranchStatus ("fcalA_et_Sin4", 0);
+    tree->SetBranchStatus ("fcalC_et_Sin4", 0);
   }
 
   if (getZdc) {
@@ -162,7 +178,8 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchAddress ("electron_lhloose",             &electron_lhloose);
     tree->SetBranchAddress ("electron_lhmedium_hi",         &electron_lhmedium_hi);
     tree->SetBranchAddress ("electron_lhloose_hi",          &electron_lhloose_hi);
-    tree->SetBranchAddress ("electron_matched",             &electron_matched);
+    if (!isMC)
+      tree->SetBranchAddress ("electron_matched",           &electron_matched);
     tree->SetBranchAddress ("electron_etcone20",            &electron_etcone20);
     tree->SetBranchAddress ("electron_etcone30",            &electron_etcone30);
     tree->SetBranchAddress ("electron_etcone40",            &electron_etcone40);
@@ -192,7 +209,8 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchStatus ("electron_lhloose",            0);
     tree->SetBranchStatus ("electron_lhmedium_hi",        0);
     tree->SetBranchStatus ("electron_lhloose_hi",         0);
-    tree->SetBranchStatus ("electron_matched",            0);
+    if (!isMC)
+      tree->SetBranchStatus ("electron_matched",          0);
     tree->SetBranchStatus ("electron_etcone20",           0);
     tree->SetBranchStatus ("electron_etcone30",           0);
     tree->SetBranchStatus ("electron_etcone40",           0);
@@ -255,7 +273,8 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchAddress ("muon_tight",                   &muon_tight);
     tree->SetBranchAddress ("muon_medium",                  &muon_medium);
     tree->SetBranchAddress ("muon_loose",                   &muon_loose);
-    tree->SetBranchAddress ("muon_matched",                 &muon_matched);
+    if (!isMC)
+      tree->SetBranchAddress ("muon_matched",               &muon_matched);
     tree->SetBranchAddress ("muon_etcone20",                &muon_etcone20);
     tree->SetBranchAddress ("muon_etcone30",                &muon_etcone30);
     tree->SetBranchAddress ("muon_etcone40",                &muon_etcone40);
@@ -296,7 +315,8 @@ void TreeVariables :: SetBranchAddresses () {
     tree->SetBranchStatus ("muon_tight",                  0);
     tree->SetBranchStatus ("muon_medium",                 0);
     tree->SetBranchStatus ("muon_loose",                  0);
-    tree->SetBranchStatus ("muon_matched",                0);
+    if (!isMC)
+      tree->SetBranchStatus ("muon_matched",              0);
     tree->SetBranchStatus ("muon_etcone20",               0);
     tree->SetBranchStatus ("muon_etcone30",               0);
     tree->SetBranchStatus ("muon_etcone40",               0);

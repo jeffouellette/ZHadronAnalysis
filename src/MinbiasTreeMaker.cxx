@@ -36,30 +36,24 @@ bool MinbiasTreeMaker (const char* directory,
   cout << "Info: In MinbiasTreeMaker.cxx: File Identifier: " << identifier << endl;
   cout << "Info: In MinbiasTreeMaker.cxx: Saving output to " << rootPath << endl;
 
-  TTree* tree = nullptr;
-  if (isMC) {
-    TFile* file = GetFile (directory, dataSet, inFileName);
-    tree = (TTree*) file->Get ("bush");
+  TChain* tree = new TChain ("bush", "bush");
+  TString pattern = "*.root";
+  auto dir = gSystem->OpenDirectory (dataPath + directory);
+  while (const char* f = gSystem->GetDirEntry (dir)) {
+    TString file = TString (f);
+    if (!file.Contains (Form ("%i", dataSet)))
+      continue;
+    cout << "Adding " << dataPath + directory + "/" + file + "/*.root" << " to TChain" << endl;
+    tree->Add (dataPath + directory + "/" + file + "/*.root");
+    break;
   }
-  else {
-    TChain* c = new TChain ("bush", "bush");
-    TString pattern = "*.root";
-    auto dir = gSystem->OpenDirectory (dataPath + directory);
-    while (const char* f = gSystem->GetDirEntry (dir)) {
-      TString file = TString (f);
-      if (!file.Contains (Form ("%i", dataSet)))
-        continue;
-      cout << "Adding " << dataPath + directory + "/" + file + "/*.root" << " to TChain" << endl;
-      c->Add (dataPath + directory + "/" + file + "/*.root");
-      break;
-    }
-    cout << "Chain has " << c->GetListOfFiles ()->GetEntries () << " files, " << c->GetEntries () << " entries" << endl;
-    tree = c;
-  }
+
   if (tree == nullptr) {
     cout << "Error: In MinbiasTreeMaker.cxx: TChain not obtained for given data set. Quitting." << endl;
     return false;
   }
+
+  cout << "Chain has " << tree->GetListOfFiles ()->GetEntries () << " files, " << tree->GetEntries () << " entries" << endl;
 
   TH1D* h_zdcCuts = nullptr;
   if (isPbPb) {
@@ -76,19 +70,19 @@ bool MinbiasTreeMaker (const char* directory,
   t->SetGetFCals ();
   t->SetGetVertices ();
   t->SetGetTracks ();
-  if (isPbPb) t->SetGetZdc ();
+  if (isPbPb && !isMC) t->SetGetZdc ();
   t->SetBranchAddresses ();
 
   bool HLT_mb_sptrk = false;
   bool HLT_mb_sptrk_L1ZDC_A_C_VTE50 = false;
   bool HLT_noalg_pc_L1TE50_VTE600_0ETA49 = false;
   bool HLT_noalg_cc_L1TE600_0ETA49 = false;
-  if (isPbPb) {
+  if (isPbPb && !isMC) {
     tree->SetBranchAddress ("HLT_mb_sptrk_L1ZDC_A_C_VTE50",       &HLT_mb_sptrk_L1ZDC_A_C_VTE50);
     tree->SetBranchAddress ("HLT_noalg_pc_L1TE50_VTE600.0ETA49",  &HLT_noalg_pc_L1TE50_VTE600_0ETA49);
     tree->SetBranchAddress ("HLT_noalg_cc_L1TE600_0ETA49",        &HLT_noalg_cc_L1TE600_0ETA49);
   }
-  else {
+  else if (!isPbPb && !isMC) {
     tree->SetBranchAddress ("HLT_mb_sptrk",                       &HLT_mb_sptrk);
   }
 
@@ -96,11 +90,11 @@ bool MinbiasTreeMaker (const char* directory,
   // Load files for output
   TFile* outFiles[numFileCentBins];
   OutTree* outTrees[numFileCentBins];
+  const char* outTreeName = (isPbPb ? "PbPbTrackTree" : "ppTrackTree");
   if (isPbPb) {
-    const TString runGroup = (isMC ? "mc" : GetRunGroupTString (dataSet));
+    const TString runGroup = (isMC ? "Hijing" : GetRunGroupTString (dataSet));
     for (int iCent = 1; iCent < numFileCentBins; iCent++) {
       outFiles[iCent] = new TFile (Form ("%s/%s/%s_iCent%i.root", rootPath.Data (), runGroup.Data (), identifier.Data (), iCent), "recreate");
-      const char* outTreeName = "PbPbZTrackTree";
       outFiles[iCent]->Delete (Form ("%s;*", outTreeName));
       outTrees[iCent] = new OutTree (outTreeName, outFiles[iCent]);
       outTrees[iCent]->SetBranchEventInfo ();
@@ -113,7 +107,6 @@ bool MinbiasTreeMaker (const char* directory,
   }
   else {
     outFiles[0] = new TFile (Form ("%s/%s.root", rootPath.Data (), identifier.Data ()), "recreate");
-    const char* outTreeName = "ppZTrackTree";
     outFiles[0]->Delete (Form ("%s;*", outTreeName));
     outTrees[0] = new OutTree (outTreeName, outFiles[0]);
     outTrees[0]->SetBranchEventInfo ();
@@ -160,17 +153,29 @@ bool MinbiasTreeMaker (const char* directory,
       continue;
 
     fcal_et = t->fcalA_et + t->fcalC_et;
-    qx_a = t->fcalA_et_Cos;
-    qy_a = t->fcalA_et_Sin;
-    qx_c = t->fcalC_et_Cos;
-    qy_c = t->fcalC_et_Sin;
-    const double qx = t->fcalA_et_Cos + t->fcalC_et_Cos;
-    const double qy = t->fcalA_et_Sin + t->fcalC_et_Sin;
-    if (fcal_et > 0)
-      q2 = sqrt (qx*qx + qy*qy) / fcal_et;
-    else
-      q2 = 0;
-    psi2 = 0.5 * atan2 (qy, qx);
+    q2x_a = t->fcalA_et_Cos2;
+    q2y_a = t->fcalA_et_Sin2;
+    q2x_c = t->fcalC_et_Cos2;
+    q2y_c = t->fcalC_et_Sin2;
+    const double q2x = q2x_a + q2x_c;
+    const double q2y = q2y_a + q2y_c;
+    const double q3x = t->fcalA_et_Cos3 + t->fcalC_et_Cos3;
+    const double q3y = t->fcalA_et_Sin3 + t->fcalC_et_Sin3;
+    const double q4x = t->fcalA_et_Cos4 + t->fcalC_et_Cos4;
+    const double q4y = t->fcalA_et_Sin4 + t->fcalC_et_Sin4;
+    if (fcal_et > 0) {
+      q2 = sqrt (q2x*q2x + q2y*q2y) / fcal_et;
+      q3 = sqrt (q3x*q3x + q3y*q3y) / fcal_et;
+      q4 = sqrt (q4x*q4x + q4y*q4y) / fcal_et;
+    }
+    else {
+      q2 = 0.;
+      q3 = 0.;
+      q4 = 0.;
+    }
+    psi2 = atan2 (q2y, q2x) / 2.;
+    psi3 = atan2 (q3y, q3x) / 3.;
+    psi4 = atan2 (q4y, q4x) / 4.;
 
     if (isPbPb && !isMC) {
       zdcEnergy = t->ZdcCalibEnergy_A + t->ZdcCalibEnergy_C; // gets zdc energy in TeV

@@ -5,6 +5,7 @@
 #include "TrackingPurity.h"
 #include "TagAndProbe.h"
 #include "FCalCalibration.h"
+#include "BkgEstimator.h"
 #include "Params.h"
 
 #include <string>
@@ -127,6 +128,10 @@ int main (int argc, char** argv) {
   else if (alg == "FCalCalibration") {
     cout << "Info: In run.cxx: Running FCalCalibration algorithm..." << endl;
     success = FCalCalibration (subdir, dataSet, inFileName);
+  }
+  else if (alg == "BkgEstimator") {
+    cout << "Info: In run.cxx: Running BkgEstimator algorithm..." << endl;
+    success = BkgEstimator (subdir, dataSet, inFileName);
   }
   else {
     cout << "Error: In run.cxx: Failed to recognize algorithm! Quitting." << endl;

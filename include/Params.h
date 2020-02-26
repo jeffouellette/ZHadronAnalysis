@@ -101,19 +101,35 @@ extern CollisionSystem collisionSystem;
 //}
 
 // Centrality classes for mixing events
-const float fileCentBins[13] = {
+const float fileCentBins[29] = {
     66.402, // 80%
+   148.625, // 70%
    296.17,  // 60%
-   885.172, // 40%
+   533.608, // 50%
+   659.269, // 46%
+   804.607, // 42%
+   971.487, // 38%
+  1162.33,  // 34%
   1378.92,  // 30%
-  1690.47,  // 25%
+  1497.54,  // 28%
+  1624.34,  // 26%
+  1759.06,  // 24%
+  1902.73,  // 22%
   2055.77,  // 20%
-  2484.75,  // 15%
+  2218.88,  // 18%
+  2393.11,  // 16%
+  2579.56,  // 14%
+  2779.68,  // 12%
   2995.94,  // 10%
+  3110.27,  //  9%
   3229.67,  //  8%
+  3354.66,  //  7%
   3485.57,  //  6%
+  3622.6,   //  5%
   3767.,    //  4%
+  3920.41,  //  3%
   4083.38,  //  2%
+  4263.72,  //  1%
   5000      //  0%,   entry in array is numFileCentBins-1
 };
 const int numFileCentBins = sizeof (fileCentBins) / sizeof (fileCentBins[0]);
@@ -150,7 +166,7 @@ const set<int> groupJ = {367170, 367233, 367273};
 const set<int> groupK = {367318, 367321, 367363, 367364, 367365, 367384};
 //const vector<const set<int>*> runGroups = {&group1, &group2, &group3, &group4, &group5, &groupA, &groupB, &groupC, &groupD, &groupE, &groupF, &groupG, &groupH, &groupI, &groupJ, &groupK};
 
-const set <pair <string, const set<int>*>> runGroups = {
+const vector <pair <string, const set<int>*>> runGroups = {
   //{"Group1", &group1},
   //{"Group2", &group2},
   //{"Group3", &group3},
@@ -168,6 +184,7 @@ const set <pair <string, const set<int>*>> runGroups = {
   {"GroupJ", &groupJ},
   {"GroupK", &groupK}
 };
+const int numRunGroups = runGroups.size ();
 
 
 TString GetRunGroupTString (int rn) {

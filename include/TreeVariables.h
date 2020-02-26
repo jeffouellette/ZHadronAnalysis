@@ -82,10 +82,18 @@ struct TreeVariables {
     // fcal energies
     float fcalA_et = 0;
     float fcalC_et = 0;
-    float fcalA_et_Cos = 0;
-    float fcalC_et_Cos = 0;
-    float fcalA_et_Sin = 0;
-    float fcalC_et_Sin = 0;
+    float fcalA_et_Cos2 = 0;
+    float fcalC_et_Cos2 = 0;
+    float fcalA_et_Sin2 = 0;
+    float fcalC_et_Sin2 = 0;
+    float fcalA_et_Cos3 = 0;
+    float fcalC_et_Cos3 = 0;
+    float fcalA_et_Sin3 = 0;
+    float fcalC_et_Sin3 = 0;
+    float fcalA_et_Cos4 = 0;
+    float fcalC_et_Cos4 = 0;
+    float fcalA_et_Sin4 = 0;
+    float fcalC_et_Sin4 = 0;
 
     // ZDC
     float  ZdcCalibEnergy_A   = 0;
@@ -209,9 +217,10 @@ struct TreeVariables {
     bool    muon_id_track_tightprimary[40];
     bool    muon_id_track_hiloose[40];
     bool    muon_id_track_hitight[40];
-    float   muon_pt_sys[40];
-    float   muon_eta_sys[40];
-    float   muon_phi_sys[40];
+  
+    vector <vector <double>>* muon_pt_sys;
+    vector <vector <double>>* muon_eta_sys;
+    vector <vector <double>>* muon_phi_sys;
 
     int     akt4emtopo_jet_n = 0;
     float   akt4emtopo_jet_pt[40];

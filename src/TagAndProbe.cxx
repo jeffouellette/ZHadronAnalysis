@@ -55,7 +55,7 @@ bool TagAndProbe (const char* directory,
         fileIdentifier = to_string (dataSet);
     }
     else {
-      cout << "Error: In TreeMaker.C: Cannot identify this MC file! Quitting." << endl;
+      cout << "Error: In TagAndProbe.C: Cannot identify this MC file! Quitting." << endl;
       return false;
     }
   }
@@ -84,7 +84,7 @@ bool TagAndProbe (const char* directory,
   if (isPbPb) {
     h_zdcCuts = GetZdcCuts ();
     if (h_zdcCuts == nullptr) {
-      cout << "Error: In TreeMaker.cxx: Zdc in-time pile-up cuts not found. Quitting." << endl;
+      cout << "Error: In TagAndProbe.cxx: Zdc in-time pile-up cuts not found. Quitting." << endl;
       return false;
     }
   }
