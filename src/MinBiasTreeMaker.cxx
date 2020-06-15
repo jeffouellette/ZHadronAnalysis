@@ -1,7 +1,7 @@
-#ifndef __MinbiasTreeMaker_cxx__
-#define __MinbiasTreeMaker_cxx__
+#ifndef __MinBiasTreeMaker_cxx__
+#define __MinBiasTreeMaker_cxx__
 
-#include "MinbiasTreeMaker.h"
+#include "MinBiasTreeMaker.h"
 #include "Params.h"
 #include "TreeVariables.h"
 #include "ZTrackUtilities.h"
@@ -18,30 +18,52 @@ using namespace std;
 
 namespace ZTrackAnalyzer {
 
-bool MinbiasTreeMaker (const char* directory,
+bool MinBiasTreeMaker (const char* directory,
                        const int dataSet,
                        const char* inFileName) {
 
-  cout << "Info: In MinbiasTreeMaker.cxx: Entered TreeMaker routine." << endl;
-  cout << "Info: In MinbiasTreeMaker.cxx: Printing systematic onfiguration:";
+  cout << "Info: In MinBiasTreeMaker.cxx: Entered TreeMaker routine." << endl;
+  cout << "Info: In MinBiasTreeMaker.cxx: Printing systematic onfiguration:";
   cout << "\n\tdoHITightVar: " << doHITightVar << endl;
-
-  SetupDirectories ("MinbiasAnalysis");
 
   const bool isPCStream = (strstr (directory, "pc") != NULL);
   if (isPCStream)
-    cout << "Info: In MinbiasTreeMaker.cxx: detected PC stream data, applying PC-derived prescale" << endl;
+    cout << "Info: In MinBiasTreeMaker.cxx: detected PC stream data, applying PC-derived prescale" << endl;
+  const bool isHijing = (isMC && strstr (inFileName, "PbPb") != NULL && strstr(inFileName, "Hijing") != NULL);
+  if (isHijing)
+    cout << "Info: In TreeMaker.cxx: File detected as Hijing overlay" << endl;
+
+  if (isMC && isHijing)
+    SetupDirectories ("MixingAnalysis/Hijing", false);
+  else
+    SetupDirectories ("MixingAnalysis");
 
   const TString identifier = GetIdentifier (dataSet, directory, inFileName);
-  cout << "Info: In MinbiasTreeMaker.cxx: File Identifier: " << identifier << endl;
-  cout << "Info: In MinbiasTreeMaker.cxx: Saving output to " << rootPath << endl;
+  cout << "Info: In MinBiasTreeMaker.cxx: File Identifier: " << identifier << endl;
+  cout << "Info: In MinBiasTreeMaker.cxx: Saving output to " << rootPath << endl;
+
+  TString fileIdentifier;
+  if (TString (inFileName) == "") {
+    if (!isMC) {
+      if (dataSet == 0)
+        fileIdentifier = "PhysCont.AOD.";
+      else
+        fileIdentifier = to_string (dataSet);
+    }
+    else {
+      cout << "Error: In TreeMaker.C: Cannot identify this MC file! Quitting." << endl;
+      return false;
+    }
+  }
+  else
+    fileIdentifier = inFileName;
 
   TChain* tree = new TChain ("bush", "bush");
   TString pattern = "*.root";
   auto dir = gSystem->OpenDirectory (dataPath + directory);
   while (const char* f = gSystem->GetDirEntry (dir)) {
     TString file = TString (f);
-    if (!file.Contains (Form ("%i", dataSet)))
+    if (!file.Contains (fileIdentifier))
       continue;
     cout << "Adding " << dataPath + directory + "/" + file + "/*.root" << " to TChain" << endl;
     tree->Add (dataPath + directory + "/" + file + "/*.root");
@@ -49,7 +71,7 @@ bool MinbiasTreeMaker (const char* directory,
   }
 
   if (tree == nullptr) {
-    cout << "Error: In MinbiasTreeMaker.cxx: TChain not obtained for given data set. Quitting." << endl;
+    cout << "Error: In MinBiasTreeMaker.cxx: TChain not obtained for given data set. Quitting." << endl;
     return false;
   }
 
@@ -59,7 +81,7 @@ bool MinbiasTreeMaker (const char* directory,
   if (isPbPb) {
     h_zdcCuts = GetZdcCuts ();
     if (h_zdcCuts == nullptr) {
-      cout << "Error: In MinbiasTreeMaker.cxx: Zdc in-time pile-up cuts not found. Quitting." << endl;
+      cout << "Error: In MinBiasTreeMaker.cxx: Zdc in-time pile-up cuts not found. Quitting." << endl;
       return false;
     }
   }
@@ -72,6 +94,18 @@ bool MinbiasTreeMaker (const char* directory,
   t->SetGetTracks ();
   if (isPbPb && !isMC) t->SetGetZdc ();
   t->SetBranchAddresses ();
+
+  if (isHijing) {
+    tree->SetBranchAddress ("nTruthEvt",          &(t->nTruthEvt));
+    tree->SetBranchAddress ("nPart1",             t->nPart1);
+    tree->SetBranchAddress ("nPart2",             t->nPart2);
+    tree->SetBranchAddress ("impactParameter",    t->impactParameter);
+    tree->SetBranchAddress ("nColl",              t->nColl);
+    tree->SetBranchAddress ("nSpectatorNeutrons", t->nSpectatorNeutrons);
+    tree->SetBranchAddress ("nSpectatorProtons",  t->nSpectatorProtons);
+    tree->SetBranchAddress ("eccentricity",       t->eccentricity);
+    tree->SetBranchAddress ("eventPlaneAngle",    t->eventPlaneAngle);
+  }
 
   bool HLT_mb_sptrk = false;
   bool HLT_mb_sptrk_L1ZDC_A_C_VTE50 = false;
@@ -88,12 +122,13 @@ bool MinbiasTreeMaker (const char* directory,
 
 
   // Load files for output
-  TFile* outFiles[numFileCentBins];
-  OutTree* outTrees[numFileCentBins];
+  const int numFileBins = (isHijing ? numFileIPBins : numFileCentBins);
+  TFile* outFiles[numFileBins];
+  OutTree* outTrees[numFileBins];
   const char* outTreeName = (isPbPb ? "PbPbTrackTree" : "ppTrackTree");
   if (isPbPb) {
-    const TString runGroup = (isMC ? "Hijing" : GetRunGroupTString (dataSet));
-    for (int iCent = 1; iCent < numFileCentBins; iCent++) {
+    const TString runGroup = (isMC ? identifier : GetRunGroupTString (dataSet));
+    for (int iCent = 1; iCent < numFileBins; iCent++) {
       outFiles[iCent] = new TFile (Form ("%s/%s/%s_iCent%i.root", rootPath.Data (), runGroup.Data (), identifier.Data (), iCent), "recreate");
       outFiles[iCent]->Delete (Form ("%s;*", outTreeName));
       outTrees[iCent] = new OutTree (outTreeName, outFiles[iCent]);
@@ -103,6 +138,10 @@ bool MinbiasTreeMaker (const char* directory,
       outTrees[iCent]->tree->Branch ("HLT_mb_sptrk_L1ZDC_A_C_VTE50",      &HLT_mb_sptrk_L1ZDC_A_C_VTE50,      "HLT_mb_sptrk_L1ZDC_A_C_VTE50/O");
       outTrees[iCent]->tree->Branch ("HLT_noalg_pc_L1TE50_VTE600.0ETA49", &HLT_noalg_pc_L1TE50_VTE600_0ETA49, "HLT_noalg_pc_L1TE50_VTE600.0ETA49/O");
       outTrees[iCent]->tree->Branch ("HLT_noalg_cc_L1TE600_0ETA49",       &HLT_noalg_cc_L1TE600_0ETA49,       "HLT_noalg_cc_L1TE600_0ETA49/O");
+      if (isHijing) {
+        outTrees[iCent]->tree->Branch ("impactParameter", &ip, "impactParameter/F");
+        outTrees[iCent]->tree->Branch ("eventPlane", &eventPlane, "eventPlane/F");
+      }
     }
   }
   else {
@@ -123,8 +162,8 @@ bool MinbiasTreeMaker (const char* directory,
 
   // First loop over events
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
-      cout << "Info: In MinbiasTreeMaker.cxx: Events " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
+      cout << "Info: In MinBiasTreeMaker.cxx: Events " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
 
     if (!isMC && is2015data && rndm->Rndm () > 0.3)
       continue;
@@ -140,17 +179,26 @@ bool MinbiasTreeMaker (const char* directory,
         continue;
       if (isPbPb && t->isOOTPU)
         continue;
-      if (isPCStream)
-        event_weight = 0.42391246;
     }
 
-    bool hasPrimaryVert = false;
-    for (int iVert = 0; !hasPrimaryVert && iVert < t->nvert; iVert++) {
-      hasPrimaryVert = t->vert_type[iVert] == 1;
-      vz = t->vert_z[iVert];
+    if (!isHijing) {
+      bool hasPrimary = false;
+      bool hasPileup = false;
+      vz = -999;
+      for (int iVert = 0; iVert < t->nvert; iVert++) {
+        const bool isPrimary = (t->vert_type[iVert] == 1);
+        hasPrimary = hasPrimary || isPrimary;
+        hasPileup = hasPileup || (t->vert_type[iVert] == 3);
+        if (isPrimary)
+          vz = t->vert_z[iVert];
+      }
+      if (!hasPrimary || (!isPbPb && hasPileup) || fabs (vz) > 150)
+        continue;
     }
-    if (!hasPrimaryVert || fabs (vz) > 150)
-      continue;
+    else {
+      if (t->nvert > 0) vz = t->vert_z[0];
+      else vz = 0;
+    }
 
     fcal_et = t->fcalA_et + t->fcalC_et;
     q2x_a = t->fcalA_et_Cos2;
@@ -184,15 +232,27 @@ bool MinbiasTreeMaker (const char* directory,
       if (bin < 1 || h_zdcCuts->GetNbinsX () < bin || (is2015data ? nNeutrons : zdcEnergy) > h_zdcCuts->GetBinContent (bin))
         continue; // Zdc-based in-time pile-up cut
     }
+    else if (isHijing) {
+      assert (t->nTruthEvt > 0);
+      ip = t->impactParameter[0];
+      eventPlane = t->eventPlaneAngle[0];
+    }
 
     short iCent = 0;
-    if (isPbPb) {
+    if (isPbPb && !isHijing) {
       iCent = GetFileCentBin (fcal_et);
-      if (iCent < 1 || iCent > numFileCentBins-1)
+      if (!isMC && !is2015data && !isPCStream && fcal_et < 1378.92 && rndm->Rndm () > 0.48647)
+        continue;
+      if (iCent < 1 || iCent > numFileBins-1)
+        continue;
+    }
+    else if (isPbPb && isHijing) {
+      iCent = GetFileIPBin (ip);
+      if (isPbPb && (iCent < 1 || iCent > numFileBins-1))
         continue;
     }
 
-    ntrk_all = 0;
+    ntrk_perp = 0;
     ntrk = 0;
     for (int iTrk = 0; iTrk < t->ntrk; iTrk++) {
       if (doHITightVar && !t->trk_HItight[iTrk])
@@ -200,36 +260,58 @@ bool MinbiasTreeMaker (const char* directory,
       else if (!doHITightVar && !t->trk_HIloose[iTrk])
         continue;
 
-      ntrk_all++;
+      if (isPbPb) {
+        if (fabs (t->trk_d0sig[iTrk]) > 3.0)
+          continue; // d0 significance cut in PbPb
+        if (fabs (t->trk_z0sig[iTrk]) > 3.0)
+          continue; //z0 significance cut in PbPb
+      }
 
       if (t->trk_pt[iTrk] < trk_pt_cut)
-        continue;
+        continue; // track minimum pT
+      if (fabs (t->trk_eta[iTrk]) > 2.5)
+        continue; // track maximum eta
+
+      ntrk_perp++;
 
       trk_pt[ntrk] = t->trk_pt[iTrk];
       trk_eta[ntrk] = t->trk_eta[iTrk];
       trk_phi[ntrk] = t->trk_phi[iTrk];
+      trk_charge[ntrk] = t->trk_charge[iTrk];
+      trk_d0[ntrk] = t->trk_d0[iTrk];
+      trk_z0[ntrk] = t->trk_z0[iTrk];
+
+      if (isMC)
+        trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
+
       ntrk++;
     }
 
+    //if (isPbPb && isHijing) {
+    //  iCent = GetFileNtrkBin (ntrk_perp);
+    //  if (isPbPb && (iCent < 1 || iCent > numFileBins-1))
+    //    continue;
+    //}
+
     outTrees[iCent]->Fill ();
   } // end event loop
-  cout << endl << "Info: In MinbiasTreeMaker.cxx: Finished processing events." << endl;
+  cout << endl << "Info: In MinBiasTreeMaker.cxx: Finished processing events." << endl;
 
-  SaferDelete (rndm);
+  SaferDelete (&rndm);
 
   if (isPbPb) {
-    for (int iCent = 1; iCent < numFileCentBins; iCent++) {
+    for (int iCent = 1; iCent < numFileBins; iCent++) {
       outFiles[iCent]->Write (0, TObject::kOverwrite);
       outFiles[iCent]->Close ();
-      SaferDelete (outFiles[iCent]);
+      SaferDelete (&(outFiles[iCent]));
     }
   } else {
     outFiles[0]->Write (0, TObject::kOverwrite);
     outFiles[0]->Close ();
-    SaferDelete (outFiles[0]);
+    SaferDelete (&(outFiles[0]));
   }
 
-  SaferDelete (h_zdcCuts);
+  SaferDelete (&h_zdcCuts);
 
   return true;
 }

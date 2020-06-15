@@ -10,7 +10,6 @@
 #include <TChain.h>
 #include <TSystem.h>
 #include <TH2D.h>
-#include <TLorentzVector.h>
 
 #include <iostream>
 
@@ -38,7 +37,9 @@ bool TrackingEfficiency (const char* directory,
   const bool isHijing = (isMC && strstr (inFileName, "PbPb") != NULL && strstr(inFileName, "Hijing") != NULL);
   const bool isOverlayMC = (isMC && strstr (inFileName, "PbPb") != NULL && strstr (inFileName, "Hijing") == NULL);
   if (isOverlayMC)
-    cout << "Info: In TreeMaker.cxx: Running over data overlay, will check data conditions" << endl;
+    cout << "Info: In TrackingEfficiency.cxx: Running over data overlay, will check data conditions" << endl;
+  if (isHijing)
+    cout << "Info: In TrackingEfficiency.cxx: Running over Hijing sample" << endl;
 
   const TString identifier = GetIdentifier (dataSet, directory, inFileName);
   cout << "Info: In TrackingEfficiency.cxx: File Identifier: " << identifier << endl;
@@ -46,7 +47,7 @@ bool TrackingEfficiency (const char* directory,
 
   TString fileIdentifier;
   if (TString (inFileName) == "") {
-    cout << "Error: In TreeMaker.C: Cannot identify this MC file! Quitting." << endl;
+    cout << "Error: In TrackingEfficiency.cxx: Cannot identify this MC file! Quitting." << endl;
     return false;
   }
   else
@@ -66,7 +67,7 @@ bool TrackingEfficiency (const char* directory,
   cout << "Chain has " << tree->GetListOfFiles ()->GetEntries () << " files, " << tree->GetEntries () << " entries" << endl;
 
   if (tree == nullptr) {
-    cout << "Error: In TagAndProbe.cxx: TTree not obtained for given data set. Quitting." << endl;
+    cout << "Error: In TrackingEfficiency.cxx: TTree not obtained for given data set. Quitting." << endl;
     return false;
   }
 
@@ -95,7 +96,20 @@ bool TrackingEfficiency (const char* directory,
   t->SetGetTruthTracks ();
   t->SetBranchAddresses ();
 
-  TFile* outFile = new TFile (Form ("%s/%s.root", rootPath.Data (), identifier.Data ()), "recreate");
+  if (isHijing) {
+    tree->SetBranchAddress ("nTruthEvt",          &(t->nTruthEvt));
+    tree->SetBranchAddress ("nPart1",             t->nPart1);
+    tree->SetBranchAddress ("nPart2",             t->nPart2);
+    tree->SetBranchAddress ("impactParameter",    t->impactParameter);
+    tree->SetBranchAddress ("nColl",              t->nColl);
+    tree->SetBranchAddress ("nSpectatorNeutrons", t->nSpectatorNeutrons);
+    tree->SetBranchAddress ("nSpectatorProtons",  t->nSpectatorProtons);
+    tree->SetBranchAddress ("eccentricity",       t->eccentricity);
+    tree->SetBranchAddress ("eventPlaneAngle",    t->eventPlaneAngle);
+  }
+
+  cout << "Info : In TrackingEfficiency.cxx: Saving histograms to " << Form ("%s/%s/%s.root", rootPath.Data (), isHijing ? "../Hijing/" : "", identifier.Data ()) << endl;
+  TFile* outFile = new TFile (Form ("%s/%s/%s.root", rootPath.Data (), isHijing ? "../Hijing/" : "", identifier.Data ()), "recreate");
 
   const double centBins[4] = {66.402, 1378.92, 2995.94, 5000};
   //const int centCuts[4] = {80, 30, 10, 0};
@@ -103,20 +117,28 @@ bool TrackingEfficiency (const char* directory,
   ////const int centCuts[10] = {80, 70, 60, 50, 40, 30, 20, 10, 5, 0};
   const int numCentBins = sizeof (centBins) / sizeof (centBins[0]);
 
+  const double ipBins[4] = {14.031, 8.582, 4.952, 0};
+  const int numIPBins = sizeof (ipBins) / sizeof (ipBins[0]);
+
   const float multBins[6] = {-0.5, 499.5, 699.5, 1499.5, 1799.5, 3399.5};
   const int numMultBins = sizeof (multBins) / sizeof (multBins[0]) - 1;
 
-  const int numFinerEtaTrkBins = 40;
-  const double* finerEtaTrkBins = linspace (-2.5, 2.5, numFinerEtaTrkBins);
+  const int numFinerEtachBins = 40;
+  const double* finerEtachBins = linspace (-2.5, 2.5, numFinerEtachBins);
 
-  const double etaTrkBins[6] = {0, 0.5, 1.0, 1.5, 2.0, 2.5};
-  const int numEtaTrkBins = sizeof (etaTrkBins) / sizeof (etaTrkBins[0]) - 1;
+  const double etachBins[6] = {0, 0.5, 1.0, 1.5, 2.0, 2.5};
+  const int numEtachBins = sizeof (etachBins) / sizeof (etachBins[0]) - 1;
 
-  const double ptTrkBins[13] = {0.5, 0.7, 1, 1.5, 2, 3, 4, 6, 8, 10, 15, 30, 60};
-  const int numPtTrkBins = sizeof (ptTrkBins) / sizeof (ptTrkBins[0]) - 1;
+  //const double pTchBins[13] = {0.5, 0.7, 1, 1.5, 2, 3, 4, 6, 8, 10, 15, 30, 60};
+  //const int numPtchBins = sizeof (pTchBins) / sizeof (pTchBins[0]) - 1;
 
-  //const int numPtTrkBins = 20;
-  //const double* ptTrkBins = logspace (0.5, 65, numPtTrkBins);
+  const double pTchBinsPP[30] = {0.5, 0.7, 1, 1.05, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2, 2.25, 2.5, 2.75, 3, 3.5, 4, 5, 6, 7, 8, 10, 12, 15, 20, 25, 30, 40, 60};
+  const int numPtchBinsPP = sizeof (pTchBinsPP) / sizeof (pTchBinsPP[0]) - 1;
+  const double pTchBinsPbPb[28] = {0.5, 0.7, 1, 1.05, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2, 2.25, 2.5, 2.75, 3, 3.5, 4, 5, 6, 7, 8, 10, 15, 20, 30, 40, 60};
+  const int numPtchBinsPbPb = sizeof (pTchBinsPbPb) / sizeof (pTchBinsPbPb[0]) - 1;
+
+  //const int numPtchBins = 20;
+  //const double* pTchBins = logspace (0.5, 65, numPtchBins);
 
   TH1D*  h_truth_matching_prob = new TH1D (Form ("h_truth_matching_prob_%s", isPbPb ? "PbPb" : "pp"), ";Truth matching prob.;N_{ch}^{rec}", 200, 0, 1);
   h_truth_matching_prob->Sumw2 ();
@@ -125,13 +147,11 @@ bool TrackingEfficiency (const char* directory,
   TH1D** h_num = new TH1D*[numCentBins];
   TH1D** h_den = new TH1D*[numCentBins];
 
-  TLorentzVector l1, l2;
-
   for (int iCent = 0; iCent < numCentBins; iCent++) {
-    h_truth_matched_reco_tracks[iCent] = new TH2D (Form ("h_truth_matched_reco_tracks_iCent%i", iCent), ";#eta;#it{p}_{T} [GeV]", numFinerEtaTrkBins, finerEtaTrkBins, numPtTrkBins, ptTrkBins);
+    h_truth_matched_reco_tracks[iCent] = new TH2D (Form ("h_truth_matched_reco_tracks_iCent%i", iCent), ";#eta;#it{p}_{T} [GeV]", numFinerEtachBins, finerEtachBins, (iCent == 0 ? numPtchBinsPP : numPtchBinsPbPb), (iCent == 0 ? pTchBinsPP : pTchBinsPbPb));
     h_truth_matched_reco_tracks[iCent]->Sumw2 ();
 
-    h_truth_tracks[iCent] = new TH2D (Form ("h_truth_tracks_iCent%i", iCent), ";#eta;#it{p}_{T} [GeV]", numFinerEtaTrkBins, finerEtaTrkBins, numPtTrkBins, ptTrkBins);
+    h_truth_tracks[iCent] = new TH2D (Form ("h_truth_tracks_iCent%i", iCent), ";#eta;#it{p}_{T} [GeV]", numFinerEtachBins, finerEtachBins, (iCent == 0 ? numPtchBinsPP : numPtchBinsPbPb), (iCent == 0 ? pTchBinsPP : pTchBinsPbPb));
     h_truth_tracks[iCent]->Sumw2 ();
 
   }
@@ -140,7 +160,7 @@ bool TrackingEfficiency (const char* directory,
 
   // Loop over events
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In TrackingEfficiency.cxx: Event loop " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     tree->GetEntry (iEvt);
 
@@ -152,22 +172,39 @@ bool TrackingEfficiency (const char* directory,
     }
 
     bool hasPrimary = false;
-    for (int iVert = 0; !hasPrimary && iVert < t->nvert; iVert++) {
-      hasPrimary = (t->vert_type[iVert] == 1);
+    bool hasPileup = false;
+    float vz = -999;
+    for (int iVert = 0; iVert < t->nvert; iVert++) {
+      const bool isPrimary = (t->vert_type[iVert] == 1);
+      hasPrimary = hasPrimary || isPrimary;
+      hasPileup = hasPileup || (t->vert_type[iVert] == 3);
+      if (isPrimary)
+        vz = t->vert_z[iVert];
     }
-    if (!hasPrimary)
+    if (!hasPrimary || hasPileup || fabs (vz) > 150)
+    //if (!hasPrimary || fabs (vz) > 150)
       continue;
 
     short iCent = 0;
-    if (isPbPb) {
+    if (isPbPb && !isHijing) { // for data overlay centrality is defined via FCal Et
       const float fcal_et = t->fcalA_et + t->fcalC_et;
       while (iCent < numCentBins) {
         if (fcal_et < centBins[iCent])
           break;
-        else
-          iCent++;
+        iCent++;
       }
       if (iCent < 1 || iCent > numCentBins-1)
+        continue;
+    }
+    else if (isPbPb && isHijing) { // for Hijing centrality is defined via impact parameter
+      assert (t->nTruthEvt > 0);
+      const float ip = t->impactParameter[0];
+      while (iCent < numIPBins) { 
+        if (ip > ipBins[iCent])
+          break;
+        iCent++;
+      }
+      if (iCent < 1 || iCent > numIPBins-1)
         continue;
     }
     //short iMult = 0;
@@ -183,30 +220,49 @@ bool TrackingEfficiency (const char* directory,
     //  continue;
 
     //const float eventWeight = 1;
-    //const float eventWeight = ((isPbPb && !isHijing) ? h_weights->GetBinContent (h_weights->FindFixBin (doNchWeighting ? t->ntrk : t->fcalA_et+t->fcalC_et)) : 1); // weight is 1 for pp
-    const float eventWeight = (isPbPb ? h_weights->GetBinContent (h_weights->FindFixBin (doNchWeighting ? t->ntrk : t->fcalA_et+t->fcalC_et)) : 1); // weight is 1 for pp
-
+    const float eventWeight = ((isPbPb && !isHijing) ? h_weights->GetBinContent (h_weights->FindFixBin (doNchWeighting ? t->ntrk : t->fcalA_et+t->fcalC_et)) : 1); // weight is 1 for pp
+    //const float eventWeight = (isPbPb ? h_weights->GetBinContent (h_weights->FindFixBin (doNchWeighting ? t->ntrk : t->fcalA_et+t->fcalC_et)) : 1); // weight is 1 for pp
     for (int iTrk = 0; iTrk < t->ntrk; iTrk++) {
       if (doHITightVar && !t->trk_HItight[iTrk])
         continue;
+      //else if (!doHITightVar && !t->trk_TightPrimary[iTrk])
       else if (!doHITightVar && !t->trk_HIloose[iTrk])
         continue; // track selection criteria
 
-      h_truth_matching_prob->Fill (t->trk_prob_truth[iTrk]);
+      if (isPbPb) {
+        if (fabs (t->trk_d0sig[iTrk]) > 3.0)
+          continue; // d0 significance cut in PbPb
+        if (fabs (t->trk_z0sig[iTrk]) > 3.0)
+          continue; //z0 significance cut in PbPb
+      }
+      //else {
+      //  if (fabs (t->trk_d0[iTrk]) > 0.47*exp (-0.15 * t->trk_pt[iTrk]) + 0.19*exp (0.00034 * t->trk_pt[iTrk]))
+      //    continue; // d0 cut in pp
+      //  if (t->trk_nSCTSharedHits[iTrk] > 1)
+      //    continue; // maximum no. of shared hits in pp
+      //}
 
-      if (t->trk_truth_barcode[iTrk] <= 0 || 200000 < t->trk_truth_barcode[iTrk])
-        continue; // select primary tracks
+      if (t->trk_pt[iTrk] > 1)
+        h_truth_matching_prob->Fill (t->trk_prob_truth[iTrk]);
 
-      if (t->trk_prob_truth[iTrk] < 0.5)
-        continue; // select non-fake tracks
+      const bool isTruthMatched = (t->trk_prob_truth[iTrk] > 0.5);
 
-      if (0 == t->trk_truth_charge[iTrk])
+      const bool isFake = !isTruthMatched;
+      const bool isSecondary = isTruthMatched && (t->trk_truth_barcode[iTrk] <= 0 || 200000 <= t->trk_truth_barcode[iTrk]);
+
+      // primary tracks are non-fake, non-secondary tracks. Strange baryons are excluded too.
+      const bool isPrimary = !isFake && !isSecondary && (abs (t->trk_truth_pdgid[iTrk]) != 3112 && abs (t->trk_truth_pdgid[iTrk]) != 3222 && abs (t->trk_truth_pdgid[iTrk]) != 3312 && abs (t->trk_truth_pdgid[iTrk]) != 3334);
+
+      if (!isPrimary)
+        continue; // restrict to only primary tracks
+
+      if (t->trk_truth_charge[iTrk] == 0)
         continue;
       if (fabs (t->trk_truth_eta[iTrk]) > 2.5)
         continue;
       if (!(t->trk_truth_isHadron[iTrk]))
         continue;
-      if (doPionsOnlyVar && fabs (t->trk_truth_pdgid[iTrk]) != 211)
+      if (doPionsOnlyVar && abs (t->trk_truth_pdgid[iTrk]) != 211)
         continue; //just pions
       //if (fabs (t->trk_truth_pdgid[iTrk]) != 211)
       //  continue; //just pions
@@ -218,7 +274,7 @@ bool TrackingEfficiency (const char* directory,
 
 
     for (int iTTrk = 0; iTTrk < t->truth_trk_n; iTTrk++) {
-      if (t->truth_trk_barcode[iTTrk] <= 0 || 200000 < t->truth_trk_barcode[iTTrk])
+      if (t->truth_trk_barcode[iTTrk] <= 0 || 200000 <= t->truth_trk_barcode[iTTrk] || abs (t->truth_trk_pdgid[iTTrk]) == 3112 || abs (t->truth_trk_pdgid[iTTrk]) == 3222 || abs (t->truth_trk_pdgid[iTTrk]) == 3312 || abs (t->truth_trk_pdgid[iTTrk]) == 3334)
         continue; // select primary truth particles
 
       if (fabs (t->truth_trk_pdgid[iTTrk]) == 11 || fabs (t->truth_trk_pdgid[iTTrk]) == 13)
@@ -227,7 +283,7 @@ bool TrackingEfficiency (const char* directory,
         continue;
       if (!(t->truth_trk_isHadron[iTTrk]))
         continue;
-      if (doPionsOnlyVar && fabs (t->truth_trk_pdgid[iTTrk]) != 211)
+      if (doPionsOnlyVar && abs (t->truth_trk_pdgid[iTTrk]) != 211)
         continue; //just pions
       //if (fabs (t->truth_trk_pdgid[iTTrk]) != 211)
       //  continue; //just pions
@@ -244,65 +300,61 @@ bool TrackingEfficiency (const char* directory,
     TH2D h2_num = *(h_truth_matched_reco_tracks[iCent]);
     TH2D h2_den = *(h_truth_tracks[iCent]);
 
-    h_num[iCent] = new TH1D[numEtaTrkBins];
-    h_den[iCent] = new TH1D[numEtaTrkBins];
-    for (int iEtaTrk = 0; iEtaTrk < numEtaTrkBins; iEtaTrk++) {
-      h_num[iCent][iEtaTrk] = TH1D (Form ("h_trk_eff_num_iCent%i_iEta%i", iCent, iEtaTrk), "", numPtTrkBins, ptTrkBins);
-      h_num[iCent][iEtaTrk].Sumw2 ();
-      h_den[iCent][iEtaTrk] = TH1D (Form ("h_trk_eff_den_iCent%i_iEta%i", iCent, iEtaTrk), "", numPtTrkBins, ptTrkBins);
-      h_den[iCent][iEtaTrk].Sumw2 ();
+    h_num[iCent] = new TH1D[numEtachBins];
+    h_den[iCent] = new TH1D[numEtachBins];
+    for (int iEtach = 0; iEtach < numEtachBins; iEtach++) {
+      h_num[iCent][iEtach] = TH1D (Form ("h_trk_eff_num_iCent%i_iEta%i", iCent, iEtach), "", (iCent == 0 ? numPtchBinsPP : numPtchBinsPbPb), (iCent == 0 ? pTchBinsPP : pTchBinsPbPb));
+      h_num[iCent][iEtach].Sumw2 ();
+      h_den[iCent][iEtach] = TH1D (Form ("h_trk_eff_den_iCent%i_iEta%i", iCent, iEtach), "", (iCent == 0 ? numPtchBinsPP : numPtchBinsPbPb), (iCent == 0 ? pTchBinsPP : pTchBinsPbPb));
+      h_den[iCent][iEtach].Sumw2 ();
     }
 
-    for (int iFinerEtaTrk = 0; iFinerEtaTrk < numFinerEtaTrkBins; iFinerEtaTrk++) {
-      const float binCenter = 0.5 * fabs (finerEtaTrkBins[iFinerEtaTrk] + finerEtaTrkBins[iFinerEtaTrk+1]);
+    for (int iFinerEtach = 0; iFinerEtach < numFinerEtachBins; iFinerEtach++) {
+      const float binCenter = 0.5 * fabs (finerEtachBins[iFinerEtach] + finerEtachBins[iFinerEtach+1]);
 
-      int iEtaTrk = 0;
-      while (iEtaTrk < numEtaTrkBins) {
-        if (etaTrkBins[iEtaTrk] < binCenter && binCenter < etaTrkBins[iEtaTrk+1])
+      int iEtach = 0;
+      while (iEtach < numEtachBins) {
+        if (etachBins[iEtach] < binCenter && binCenter < etachBins[iEtach+1])
           break;
-        iEtaTrk++;
+        iEtach++;
       }
 
-      for (int iPtTrk = 1; iPtTrk <= numPtTrkBins; iPtTrk++) {
-        h_num[iCent][iEtaTrk].SetBinContent (iPtTrk, h_num[iCent][iEtaTrk].GetBinContent (iPtTrk) + h2_num.GetBinContent (iFinerEtaTrk+1, iPtTrk));
-        h_num[iCent][iEtaTrk].SetBinError (iPtTrk, h_num[iCent][iEtaTrk].GetBinError (iPtTrk) + pow (h2_num.GetBinError (iFinerEtaTrk+1, iPtTrk), 2));
-        h_den[iCent][iEtaTrk].SetBinContent (iPtTrk, h_den[iCent][iEtaTrk].GetBinContent (iPtTrk) + h2_den.GetBinContent (iFinerEtaTrk+1, iPtTrk));
-        h_den[iCent][iEtaTrk].SetBinError (iPtTrk, h_den[iCent][iEtaTrk].GetBinError (iPtTrk) + pow (h2_den.GetBinError (iFinerEtaTrk+1, iPtTrk), 2));
+      for (int iPtch = 1; iPtch <= (iCent == 0 ? numPtchBinsPP : numPtchBinsPbPb); iPtch++) {
+        h_num[iCent][iEtach].SetBinContent (iPtch, h_num[iCent][iEtach].GetBinContent (iPtch) + h2_num.GetBinContent (iFinerEtach+1, iPtch));
+        h_num[iCent][iEtach].SetBinError (iPtch, h_num[iCent][iEtach].GetBinError (iPtch) + pow (h2_num.GetBinError (iFinerEtach+1, iPtch), 2));
+        h_den[iCent][iEtach].SetBinContent (iPtch, h_den[iCent][iEtach].GetBinContent (iPtch) + h2_den.GetBinContent (iFinerEtach+1, iPtch));
+        h_den[iCent][iEtach].SetBinError (iPtch, h_den[iCent][iEtach].GetBinError (iPtch) + pow (h2_den.GetBinError (iFinerEtach+1, iPtch), 2));
       }
     }
 
-    for (int iEtaTrk = 0; iEtaTrk < numEtaTrkBins; iEtaTrk++) {
-      for (int ix = 1; ix <= h_num[iCent][iEtaTrk].GetNbinsX (); ix++) {
-        if (h_num[iCent][iEtaTrk].GetBinContent (ix) > h_den[iCent][iEtaTrk].GetBinContent (ix)) {
-          cout << "Num > den at (ix, x) =" << ix << ", " << h_num[iCent][iEtaTrk].GetBinCenter (ix) << endl;
+    for (int iEtach = 0; iEtach < numEtachBins; iEtach++) {
+      for (int ix = 1; ix <= h_num[iCent][iEtach].GetNbinsX (); ix++) {
+        if (h_num[iCent][iEtach].GetBinContent (ix) > h_den[iCent][iEtach].GetBinContent (ix)) {
+          cout << "Num > den at (ix, x) =" << ix << ", " << h_num[iCent][iEtach].GetBinCenter (ix) << endl;
         }
       }
 
-      for (int iPtTrk = 1; iPtTrk <= numPtTrkBins; iPtTrk++) {
-        h_num[iCent][iEtaTrk].SetBinError (iPtTrk, sqrt (h_num[iCent][iEtaTrk].GetBinError (iPtTrk)));
-        h_den[iCent][iEtaTrk].SetBinError (iPtTrk, sqrt (h_den[iCent][iEtaTrk].GetBinError (iPtTrk)));
+      for (int iPtch = 1; iPtch <= (iCent == 0 ? numPtchBinsPP : numPtchBinsPbPb); iPtch++) {
+        h_num[iCent][iEtach].SetBinError (iPtch, sqrt (h_num[iCent][iEtach].GetBinError (iPtch)));
+        h_den[iCent][iEtach].SetBinError (iPtch, sqrt (h_den[iCent][iEtach].GetBinError (iPtch)));
       }
     }
   } 
 
 
 
-  for (int iCent = 0; iCent < numCentBins; iCent++) {
-    if ((isPbPb && iCent == 0) || (!isPbPb && iCent != 0))
-      continue;
+  //for (int iCent = 0; iCent < numCentBins; iCent++) {
+  //  if ((isPbPb && iCent == 0) || (!isPbPb && iCent != 0))
+  //    continue;
 
-    h_truth_matched_reco_tracks[iCent]->Write ();
-    h_truth_tracks[iCent]->Write ();
+  //  h_truth_matched_reco_tracks[iCent]->Write ();
+  //  h_truth_tracks[iCent]->Write ();
 
-    for (int iEta = 0; iEta < numEtaTrkBins; iEta++) {
-      h_num[iCent][iEta].Write ();
-      h_den[iCent][iEta].Write ();
-    }
-  }
-
-  outFile->Write (0, TObject::kOverwrite);
-  outFile->Close ();
-  SaferDelete (outFile);
+  //  for (int iEta = 0; iEta < numEtachBins; iEta++) {
+  //    h_num[iCent][iEta].Write ();
+  //    h_den[iCent][iEta].Write ();
+  //  }
+  //}
 
   h_truth_matching_prob->Write ();
 
@@ -315,6 +367,10 @@ bool TrackingEfficiency (const char* directory,
     delete h_truth_tracks[iCent];
     h_truth_tracks[iCent] = nullptr;
 
+    for (int iEta = 0; iEta < numEtachBins; iEta++) {
+      h_num[iCent][iEta].Write ();
+      h_den[iCent][iEta].Write ();
+    }
     delete [] h_num[iCent];
     delete [] h_den[iCent];
   }
@@ -326,6 +382,10 @@ bool TrackingEfficiency (const char* directory,
 
   delete [] h_truth_tracks;
   h_truth_tracks = nullptr;
+
+  outFile->Write (0, TObject::kOverwrite);
+  outFile->Close ();
+  SaferDelete (&outFile);
 
   return true;
 }

@@ -404,7 +404,7 @@ bool TagAndProbe (const char* directory,
 
   //// Loop over events
   //for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-  //  if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+  //  if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
   //    cout << "Info: In TagAndProbe.cxx: Event loop " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
   //  tree->GetEntry (iEvt);
 
@@ -552,7 +552,7 @@ bool TagAndProbe (const char* directory,
 
   // Loop over events
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In TagAndProbe.cxx: Event loop " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     tree->GetEntry (iEvt);
 
@@ -1239,7 +1239,7 @@ bool TagAndProbe (const char* directory,
 
   // Loop over events
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In TagAndProbe.cxx: Event loop " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     tree->GetEntry (iEvt);
   }
@@ -1283,7 +1283,7 @@ bool TagAndProbe (const char* directory,
   // Loop over events
   if (isPbPb) {
     for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-      if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+      if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
         cout << "Info: In TagAndProbe.cxx: Event loop " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
       tree->GetEntry (iEvt);
 
@@ -1549,7 +1549,7 @@ bool TagAndProbe (const char* directory,
 
   // Loop over events
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In TagAndProbe.cxx: Event loop " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     tree->GetEntry (iEvt);
 

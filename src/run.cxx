@@ -1,11 +1,13 @@
 #include "TreeMaker.h"
-#include "MinbiasTreeMaker.h"
+#include "MinBiasTreeMaker.h"
+#include "TruthSelectedTreeMaker.h"
 #include "TruthTreeMaker.h"
 #include "TrackingEfficiency.h"
 #include "TrackingPurity.h"
 #include "TagAndProbe.h"
 #include "FCalCalibration.h"
 #include "BkgEstimator.h"
+#include "EventSkimTreeMaker.h"
 #include "Params.h"
 
 #include <string>
@@ -29,6 +31,7 @@ bool doMuonTightVar = false;
 bool doHITightVar = false;
 bool doPionsOnlyVar = false;
 
+float crossSectionPicoBarns = 0;
 float mcFilterEfficiency = 0;
 int mcNumberEvents = 0;
 
@@ -70,6 +73,7 @@ int main (int argc, char** argv) {
   doPionsOnlyVar          = (argc > argn && argv[argn] ? string (argv[argn++]) == "true" : false);
 
 
+  crossSectionPicoBarns             = (argc > argn && argv[argn] ? atof (argv[argn++]) : 0);
   mcFilterEfficiency                = (argc > argn && argv[argn] ? atof (argv[argn++]) : 0);
   mcNumberEvents                    = (argc > argn && argv[argn] ? atoi (argv[argn++]) : 0);
   const char* inFileName            = (argc > argn && argv[argn] ? argv[argn++] : "");
@@ -105,9 +109,13 @@ int main (int argc, char** argv) {
     cout << "Info: In run.cxx: Running TreeMaker algorithm..." << endl;
     success = TreeMaker (subdir, dataSet, inFileName);
   }
-  else if (alg == "MinbiasTreeMaker") {
-    cout << "Info: In run.cxx: Running MinbiasTreeMaker algorithm..." << endl;
-    success = MinbiasTreeMaker (subdir, dataSet, inFileName);
+  else if (alg == "MinBiasTreeMaker") {
+    cout << "Info: In run.cxx: Running MinBiasTreeMaker algorithm..." << endl;
+    success = MinBiasTreeMaker (subdir, dataSet, inFileName);
+  }
+  else if (alg == "TruthSelectedTreeMaker") {
+    cout << "Info: In run.cxx: Running TruthSelectedTreeMaker algorithm..." << endl;
+    success = TruthSelectedTreeMaker (subdir, dataSet, inFileName);
   }
   else if (alg == "TruthTreeMaker") {
     cout << "Info: In run.cxx: Running TruthTreeMaker algorithm..." << endl;
@@ -132,6 +140,10 @@ int main (int argc, char** argv) {
   else if (alg == "BkgEstimator") {
     cout << "Info: In run.cxx: Running BkgEstimator algorithm..." << endl;
     success = BkgEstimator (subdir, dataSet, inFileName);
+  }
+  else if (alg == "EventSkimTreeMaker") {
+    cout << "Info: In run.cxx: Running EventSkimTreeMaker algorithm..." << endl;
+    success = EventSkimTreeMaker (subdir, dataSet, inFileName);
   }
   else {
     cout << "Error: In run.cxx: Failed to recognize algorithm! Quitting." << endl;

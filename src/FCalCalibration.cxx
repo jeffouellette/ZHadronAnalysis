@@ -192,9 +192,9 @@ bool FCalCalibration (const char* directory,
   h_q2yq2y_c->Write ();
 
   outFile->Close ();
-  SaferDelete (outFile);
+  SaferDelete (&outFile);
 
-  SaferDelete (h_zdcCuts);
+  SaferDelete (&h_zdcCuts);
 
   return true;
 }

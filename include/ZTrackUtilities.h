@@ -11,7 +11,7 @@ namespace ZTrackAnalyzer {
 /**
  * Establishes path variables appropriately.
  */
-void SetupDirectories (const TString dataSubDir);
+void SetupDirectories (const TString dataSubDir, const bool addSubDir = true);
 
 
 /**
@@ -36,9 +36,10 @@ TString GetIdentifier (const int dataSet, const char* directory, const char* inF
 /**
  * Safely deletes pointer T.
  */
-template <typename T> inline void SaferDelete (T* &t) {
-  if (t) { delete t; t = nullptr; }
+template <typename T> inline void SaferDelete (T** t) {
+  if (*t) { delete (*t); (*t) = nullptr; }
 }
+
 
 
 /**

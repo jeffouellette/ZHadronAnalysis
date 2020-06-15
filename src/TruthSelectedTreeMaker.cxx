@@ -1,7 +1,7 @@
-#ifndef __TruthTreeMaker_cxx__
-#define __TruthTreeMaker_cxx__
+#ifndef __TruthSelectedTreeMaker_cxx__
+#define __TruthSelectedTreeMaker_cxx__
 
-#include "TruthTreeMaker.h"
+#include "TruthSelectedTreeMaker.h"
 #include "Params.h"
 #include "TreeVariables.h"
 #include "OutTree.h"
@@ -24,33 +24,33 @@ using namespace std;
 
 namespace ZTrackAnalyzer {
 
-bool TruthTreeMaker (const char* directory,
+bool TruthSelectedTreeMaker (const char* directory,
                              const int dataSet,
                              const char* inFileName) {
  
-  cout << "Info: In TruthTreeMaker.cxx: Entered TruthTreeMaker routine." << endl;
-  cout << "Info: In TruthTreeMaker.cxx: Printing systematic onfiguration:";
+  cout << "Info: In TruthSelectedTreeMaker.cxx: Entered TruthSelectedTreeMaker routine." << endl;
+  cout << "Info: In TruthSelectedTreeMaker.cxx: Printing systematic onfiguration:";
   cout << "\n\tdoHITightVar: " << doHITightVar;
   cout << endl;
 
   const bool isHijing = (isMC && strstr (inFileName, "PbPb") != NULL && strstr(inFileName, "Hijing") != NULL);
   if (isHijing)
-    cout << "Info: In TruthTreeMaker.cxx: File detected as Hijing overlay" << endl;
+    cout << "Info: In TruthSelectedTreeMaker.cxx: File detected as Hijing overlay" << endl;
   const bool isOverlayMC = (isMC && strstr (inFileName, "PbPb") != NULL && strstr (inFileName, "Hijing") == NULL);
   if (isOverlayMC)
-    cout << "Info: In TruthTreeMaker.cxx: File detected as data overlay, will check data conditions" << endl;
+    cout << "Info: In TruthSelectedTreeMaker.cxx: File detected as data overlay, will check data conditions" << endl;
 
   if (isMC && isHijing)
-    SetupDirectories ("TruthAnalysis/Hijing", false);
+    SetupDirectories ("MCAnalysis/Hijing", false);
   else if (isMC)
-    SetupDirectories ("TruthAnalysis");
+    SetupDirectories ("MCAnalysis");
   else
     SetupDirectories ("DataAnalysis");
     
 
   const TString identifier = GetIdentifier (dataSet, directory, inFileName);
-  cout << "Info: In TruthTreeMaker.cxx: File Identifier: " << identifier << endl;
-  cout << "Info: In TruthTreeMaker.cxx: Saving output to " << rootPath << endl;
+  cout << "Info: In TruthSelectedTreeMaker.cxx: File Identifier: " << identifier << endl;
+  cout << "Info: In TruthSelectedTreeMaker.cxx: Saving output to " << rootPath << endl;
 
   TString fileIdentifier;
   if (TString (inFileName) == "") {
@@ -61,7 +61,7 @@ bool TruthTreeMaker (const char* directory,
         fileIdentifier = to_string (dataSet);
     }
     else {
-      cout << "Error: In TruthTreeMaker.C: Cannot identify this MC file! Quitting." << endl;
+      cout << "Error: In TruthSelectedTreeMaker.C: Cannot identify this MC file! Quitting." << endl;
       return false;
     }
   }
@@ -82,7 +82,7 @@ bool TruthTreeMaker (const char* directory,
   cout << "Chain has " << tree->GetListOfFiles ()->GetEntries () << " files, " << tree->GetEntries () << " entries" << endl;
 
   if (tree == nullptr) {
-    cout << "Error: In TruthTreeMaker.cxx: TTree not obtained for given data set. Quitting." << endl;
+    cout << "Error: In TruthSelectedTreeMaker.cxx: TTree not obtained for given data set. Quitting." << endl;
     return false;
   }
 
@@ -91,8 +91,11 @@ bool TruthTreeMaker (const char* directory,
   TreeVariables* t = new TreeVariables (tree, isMC);
   t->SetGetFCals ();
   t->SetGetVertices ();
+  t->SetGetElectrons ();
+  t->SetGetMuons ();
   t->SetGetTruthElectrons ();
   t->SetGetTruthMuons ();
+  t->SetGetTracks ();
   t->SetGetTruthTracks ();
   if (!isMC && isPbPb)
     t->SetGetZdc ();
@@ -126,6 +129,7 @@ bool TruthTreeMaker (const char* directory,
         outTrees[iCent]->SetBranchLeptons ();
         outTrees[iCent]->SetBranchZs ();
         outTrees[iCent]->SetBranchTracks ();
+        outTrees[iCent]->SetBranchTruthTracks ();
         outTrees[iCent]->SetBranches ();
       }
       else {
@@ -136,6 +140,7 @@ bool TruthTreeMaker (const char* directory,
         outTrees[iCent]->SetBranchLeptons ();
         outTrees[iCent]->SetBranchZs ();
         outTrees[iCent]->SetBranchTracks ();
+        outTrees[iCent]->SetBranchTruthTracks ();
         outTrees[iCent]->SetBranches ();
         outTrees[iCent]->tree->Branch ("impactParameter", &ip, "impactParameter/F");
         outTrees[iCent]->tree->Branch ("eventPlane", &eventPlane, "eventPlane/F");
@@ -150,6 +155,7 @@ bool TruthTreeMaker (const char* directory,
     outTrees[0]->SetBranchLeptons ();
     outTrees[0]->SetBranchZs ();
     outTrees[0]->SetBranchTracks ();
+    outTrees[0]->SetBranchTruthTracks ();
     outTrees[0]->SetBranches ();
   }
 
@@ -161,7 +167,7 @@ bool TruthTreeMaker (const char* directory,
   isEE = true;
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
     if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
-      cout << "Info: In TruthTreeMaker.cxx: Electrons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
+      cout << "Info: In TruthSelectedTreeMaker.cxx: Electrons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     t->GetEntry (iEvt);
 
     if (!isHijing) {
@@ -256,6 +262,14 @@ bool TruthTreeMaker (const char* directory,
 
       l1.SetPtEtaPhiM (l1_pt, l1_eta, l1_phi, electron_mass);
 
+      int iRE1 = -1;
+      for (int iRE = 0; iRE < t->electron_n; iRE++) {
+        if (DeltaR (l1_eta, t->electron_eta[iRE], l1_phi, t->electron_phi[iRE]) < 0.08) {
+          iRE1 = iRE;
+          break;
+        }
+      }
+
       for (int iE2 = 0; iE2 < iE1; iE2++) {
         if (t->truth_electron_pt[iE2] < electron_pt_cut)
           continue; // basic electron pT cut
@@ -270,6 +284,14 @@ bool TruthTreeMaker (const char* directory,
         l2_charge = t->truth_electron_charge[iE2];
 
         l2.SetPtEtaPhiM (l2_pt, l2_eta, l2_phi, electron_mass);
+
+        int iRE2 = -1;
+        for (int iRE = 0; iRE < t->electron_n; iRE++) {
+          if (DeltaR (l2_eta, t->electron_eta[iRE], l2_phi, t->electron_phi[iRE]) < 0.08) {
+            iRE2 = iRE;
+            break;
+          }
+        }
 
         const float nom_z_pt = (l1+l2).Pt ();
         const float nom_z_y = (l1+l2).Rapidity ();
@@ -302,8 +324,52 @@ bool TruthTreeMaker (const char* directory,
 
         float sumptcw = 0;
         float sumptccw = 0;
-        for (int iTrk = 0; iTrk < t->truth_trk_n; iTrk++) {
+        for (int iTrk = 0; iTrk < t->ntrk; iTrk++) {
+          if (doHITightVar && !t->trk_HItight[iTrk])
+            continue;
+          else if (!doHITightVar && !t->trk_HIloose[iTrk])
+            continue;
 
+          if (isPbPb) {
+            if (fabs (t->trk_d0sig[iTrk]) > 3.0)
+              continue; // d0 significance cut in PbPb
+            if (fabs (t->trk_z0sig[iTrk]) > 3.0)
+              continue; //z0 significance cut in PbPb
+          }
+
+          if (t->trk_pt[iTrk] < trk_pt_cut)
+            continue; // track minimum pT
+          if (fabs (t->trk_eta[iTrk]) > 2.5)
+            continue; // track maximum eta
+
+          if (IsElectronTrack (t, iTrk, iRE1, iRE2))
+            continue;
+
+          float dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, true);
+          if (pi/3. < fabs (dphi) && fabs (dphi) < 2.*pi/3.) {
+            if (dphi < 0) // then trackphi is ccw of zphi
+              sumptccw += t->trk_pt[iTrk];
+            else
+              sumptcw += t->trk_pt[iTrk];
+          }
+          dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, false);
+          if (pi/4. < dphi && dphi < 3.*pi/4.)
+            ntrk_perp++;
+
+          trk_pt[ntrk] = t->trk_pt[iTrk];
+          trk_eta[ntrk] = t->trk_eta[iTrk];
+          trk_phi[ntrk] = t->trk_phi[iTrk];
+          trk_charge[ntrk] = t->trk_charge[iTrk];
+          trk_d0[ntrk] = t->trk_d0[iTrk];
+          trk_z0[ntrk] = t->trk_z0[iTrk];
+
+          if (isMC)
+            trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
+          ntrk++;
+        } // end loop over tracks
+
+        truth_ntrk = 0;
+        for (int iTrk = 0; iTrk < t->truth_trk_n; iTrk++) {
           if (t->truth_trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
           if (fabs (t->truth_trk_eta[iTrk]) > 2.5)
@@ -317,22 +383,11 @@ bool TruthTreeMaker (const char* directory,
           if (!(t->truth_trk_isHadron[iTrk]))
             continue;
 
-          float dphi = DeltaPhi (t->truth_trk_phi[ntrk], z_phi, true);
-          if (pi/3. < fabs (dphi) && fabs (dphi) < 2.*pi/3.) {
-            if (dphi < 0) // then trackphi is ccw of zphi
-              sumptccw += t->truth_trk_pt[iTrk];
-            else
-              sumptcw += t->truth_trk_pt[iTrk];
-          }
-          dphi = DeltaPhi (t->truth_trk_phi[ntrk], z_phi, false);
-          if (pi/4. < dphi && dphi < 3.*pi/4.)
-            ntrk_perp++;
-
-          trk_pt[ntrk] = t->truth_trk_pt[iTrk];
-          trk_eta[ntrk] = t->truth_trk_eta[iTrk];
-          trk_phi[ntrk] = t->truth_trk_phi[iTrk];
-          trk_charge[ntrk] = t->truth_trk_charge[iTrk];
-          ntrk++;
+          truth_trk_pt[truth_ntrk] = t->truth_trk_pt[iTrk];
+          truth_trk_eta[truth_ntrk] = t->truth_trk_eta[iTrk];
+          truth_trk_phi[truth_ntrk] = t->truth_trk_phi[iTrk];
+          truth_trk_charge[truth_ntrk] = t->truth_trk_charge[iTrk];
+          truth_ntrk++;
         } // end loop over tracks
 
         if (sumptccw > sumptcw) {
@@ -357,14 +412,14 @@ bool TruthTreeMaker (const char* directory,
     } // end iE1 loop
 
   } // end electron selection
-  cout << endl << "Info: In TruthTreeMaker.cxx: Finished processing electrons." << endl;
+  cout << endl << "Info: In TruthSelectedTreeMaker.cxx: Finished processing electrons." << endl;
 
 
   // Now loop over events looking for Z->mumu candidates
   isEE = false;
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
     if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
-      cout << "Info: In TruthTreeMaker.cxx: Muons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
+      cout << "Info: In TruthSelectedTreeMaker.cxx: Muons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     t->GetEntry (iEvt);
 
     if (!isHijing) {
@@ -461,6 +516,14 @@ bool TruthTreeMaker (const char* directory,
 
       l1.SetPtEtaPhiM (l1_pt, l1_eta, l1_phi, muon_mass);
 
+      int iRM1 = -1;
+      for (int iRM = 0; iRM < t->muon_n; iRM++) {
+        if (DeltaR (l1_eta, t->muon_eta[iRM], l1_phi, t->muon_phi[iRM]) < 0.08) {
+          iRM1 = iRM;
+          break;
+        }
+      }
+
       for (int iM2 = 0; iM2 < iM1; iM2++) {
         if (t->truth_muon_pt[iM2] < muon_pt_cut)
           continue; // basic muon pT cut
@@ -475,6 +538,14 @@ bool TruthTreeMaker (const char* directory,
         l2_charge = t->truth_muon_charge[iM2];
 
         l2.SetPtEtaPhiM (l2_pt, l2_eta, l2_phi, muon_mass);
+
+        int iRM2 = -1;
+        for (int iRM = 0; iRM < t->muon_n; iRM++) {
+          if (DeltaR (l2_eta, t->muon_eta[iRM], l2_phi, t->muon_phi[iRM]) < 0.08) {
+            iRM2 = iRM;
+            break;
+          }
+        }
 
         const float nom_z_pt = (l1+l2).Pt ();
         const float nom_z_y = (l1+l2).Rapidity ();
@@ -507,6 +578,51 @@ bool TruthTreeMaker (const char* directory,
 
         float sumptcw = 0;
         float sumptccw = 0;
+        for (int iTrk = 0; iTrk < t->ntrk; iTrk++) {
+          if (doHITightVar && !t->trk_HItight[iTrk])
+            continue;
+          else if (!doHITightVar && !t->trk_HIloose[iTrk])
+            continue;
+
+          if (isPbPb) {
+            if (fabs (t->trk_d0sig[iTrk]) > 3.0)
+              continue; // d0 significance cut in PbPb
+            if (fabs (t->trk_z0sig[iTrk]) > 3.0)
+              continue; //z0 significance cut in PbPb
+          }
+
+          if (t->trk_pt[iTrk] < trk_pt_cut)
+            continue; // track minimum pT
+          if (fabs (t->trk_eta[iTrk]) > 2.5)
+            continue; // track maximum eta
+
+          if (IsMuonTrack (t, iTrk, iRM1, iRM2))
+            continue;
+
+          float dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, true);
+          if (pi/3. < fabs (dphi) && fabs (dphi) < 2.*pi/3.) {
+            if (dphi < 0) // then trackphi is ccw of zphi
+              sumptccw += t->trk_pt[iTrk];
+            else
+              sumptcw += t->trk_pt[iTrk];
+          }
+          dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, false);
+          if (pi/4. < dphi && dphi < 3.*pi/4.)
+            ntrk_perp++;
+
+          trk_pt[ntrk] = t->trk_pt[iTrk];
+          trk_eta[ntrk] = t->trk_eta[iTrk];
+          trk_phi[ntrk] = t->trk_phi[iTrk];
+          trk_charge[ntrk] = t->trk_charge[iTrk];
+          trk_d0[ntrk] = t->trk_d0[iTrk];
+          trk_z0[ntrk] = t->trk_z0[iTrk];
+
+          if (isMC)
+            trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
+          ntrk++;
+        } // end loop over tracks
+
+        truth_ntrk = 0;
         for (int iTrk = 0; iTrk < t->truth_trk_n; iTrk++) {
           if (t->truth_trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
@@ -521,22 +637,11 @@ bool TruthTreeMaker (const char* directory,
           if (!(t->truth_trk_isHadron[iTrk]))
             continue;
 
-          float dphi = DeltaPhi (t->truth_trk_phi[ntrk], z_phi, true);
-          if (pi/3. < fabs (dphi) && fabs (dphi) < 2.*pi/3.) {
-            if (dphi < 0) // then trackphi is ccw of zphi
-              sumptccw += t->truth_trk_pt[iTrk];
-            else
-              sumptcw += t->truth_trk_pt[iTrk];
-          }
-          dphi = DeltaPhi (t->truth_trk_phi[ntrk], z_phi, false);
-          if (pi/4. < dphi && dphi < 3.*pi/4.)
-            ntrk_perp++;
-
-          trk_pt[ntrk] = t->truth_trk_pt[iTrk];
-          trk_eta[ntrk] = t->truth_trk_eta[iTrk];
-          trk_phi[ntrk] = t->truth_trk_phi[iTrk];
-          trk_charge[ntrk] = t->truth_trk_charge[iTrk];
-          ntrk++;
+          truth_trk_pt[truth_ntrk] = t->truth_trk_pt[iTrk];
+          truth_trk_eta[truth_ntrk] = t->truth_trk_eta[iTrk];
+          truth_trk_phi[truth_ntrk] = t->truth_trk_phi[iTrk];
+          truth_trk_charge[truth_ntrk] = t->truth_trk_charge[iTrk];
+          truth_ntrk++;
         } // end loop over tracks
 
         if (sumptccw > sumptcw) {
@@ -561,7 +666,7 @@ bool TruthTreeMaker (const char* directory,
     } // end iM1 loop
 
   } // end muon selection
-  cout << endl << "Info: In TruthTreeMaker.cxx: Finished processing muons." << endl;
+  cout << endl << "Info: In TruthSelectedTreeMaker.cxx: Finished processing muons." << endl;
 
   SaferDelete (&t);
 

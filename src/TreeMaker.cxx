@@ -39,15 +39,19 @@ bool TreeMaker (const char* directory,
   cout << "\n\tdoHITightVar: " << doHITightVar;
   cout << endl;
 
-  if (isMC)
+  const bool isHijing = (isMC && strstr (inFileName, "PbPb") != NULL && strstr(inFileName, "Hijing") != NULL);
+  if (isHijing)
+    cout << "Info: In TreeMaker.cxx: File detected as Hijing overlay" << endl;
+  const bool isOverlayMC = (isMC && strstr (inFileName, "PbPb") != NULL && strstr (inFileName, "Hijing") == NULL);
+  if (isOverlayMC)
+    cout << "Info: In TreeMaker.cxx: File detected as data overlay, will check data conditions" << endl;
+
+  if (isMC && isHijing)
+    SetupDirectories ("MCAnalysis/Hijing", false);
+  else if (isMC)
     SetupDirectories ("MCAnalysis");
   else
     SetupDirectories ("DataAnalysis");
-
-  const bool isHijing = (isMC && strstr (inFileName, "PbPb") != NULL && strstr(inFileName, "Hijing") != NULL);
-  const bool isOverlayMC = (isMC && strstr (inFileName, "PbPb") != NULL && strstr (inFileName, "Hijing") == NULL);
-  if (isOverlayMC)
-    cout << "Info: In TreeMaker.cxx: Running over data overlay, will check data conditions" << endl;
     
 
   const TString identifier = GetIdentifier (dataSet, directory, inFileName);
@@ -180,6 +184,18 @@ bool TreeMaker (const char* directory,
   }
   t->SetBranchAddresses ();
 
+  if (isHijing) {
+    tree->SetBranchAddress ("nTruthEvt",          &(t->nTruthEvt));
+    tree->SetBranchAddress ("nPart1",             t->nPart1);
+    tree->SetBranchAddress ("nPart2",             t->nPart2);
+    tree->SetBranchAddress ("impactParameter",    t->impactParameter);
+    tree->SetBranchAddress ("nColl",              t->nColl);
+    tree->SetBranchAddress ("nSpectatorNeutrons", t->nSpectatorNeutrons);
+    tree->SetBranchAddress ("nSpectatorProtons",  t->nSpectatorProtons);
+    tree->SetBranchAddress ("eccentricity",       t->eccentricity);
+    tree->SetBranchAddress ("eventPlaneAngle",    t->eventPlaneAngle);
+  }
+
   Trigger* electronTrigger = nullptr, *muonTrigger = nullptr;
   std::string electronTrigName, muonTrigName;
   if (collisionSystem == PbPb15) {
@@ -225,12 +241,13 @@ bool TreeMaker (const char* directory,
 
 
   // Load files for output
-  TFile* outFiles[numFileCentBins][numRunGroups];
-  OutTree* outTrees[numFileCentBins][numRunGroups];
+  const int numFileBins = (isHijing ? numFileIPBins : numFileCentBins);
+  TFile* outFiles[numFileBins][numRunGroups];
+  OutTree* outTrees[numFileBins][numRunGroups];
   const char* outTreeName = (isPbPb ? "PbPbZTrackTree" : "ppZTrackTree");
   if (isPbPb) {
     const short iRG = (isMC ? -1: GetRunGroup (dataSet));
-    for (int iCent = 1; iCent < numFileCentBins; iCent++) {
+    for (int iCent = 1; iCent < numFileBins; iCent++) {
       if (iRG != -1) {
         outFiles[iCent][iRG] = new TFile (Form ("%s/%s/%s_iCent%i.root", rootPath.Data (), GetRunGroupTString (dataSet).Data (), identifier.Data (), iCent), "recreate");
         outFiles[iCent][iRG]->Delete (Form ("%s;*", outTreeName));
@@ -252,6 +269,8 @@ bool TreeMaker (const char* directory,
         if (!isPbPb) outTrees[iCent][0]->SetBranchJets ();
         outTrees[iCent][0]->SetBranchTracks ();
         outTrees[iCent][0]->SetBranches ();
+        outTrees[iCent][0]->tree->Branch ("impactParameter", &ip, "impactParameter/F");
+        outTrees[iCent][0]->tree->Branch ("eventPlane", &eventPlane, "eventPlane/F");
       }
       else {
         for (short iRGMC = 0; iRGMC < numRunGroups; iRGMC++) {
@@ -288,7 +307,7 @@ bool TreeMaker (const char* directory,
   // First loop over events looking for Z->ee candidates
   isEE = true;
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In TreeMaker.cxx: Electrons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     t->GetEntry (iEvt);
 
@@ -300,24 +319,25 @@ bool TreeMaker (const char* directory,
     event_number = t->event_number;
     run_number = t->run_number;
 
-    bool hasPrimaryVert = false;
-    //bool hasPileupVert = false;
-    for (int iVert = 0; iVert < t->nvert; iVert++) {
-      if (t->vert_type[iVert] == 1) {
-        if (hasPrimaryVert) {
-          cout << "Info: In TreeMaker.cxx: Found multiple primary vertices in this event" << endl;
-          hasPrimaryVert = false;
-          break;
-        }
-        hasPrimaryVert = (t->vert_type[iVert] == 1);
-        vz = t->vert_z[iVert];
+    if (!isHijing) {
+      bool hasPrimary = false;
+      //bool hasPileup = false;
+      vz = -999;
+      for (int iVert = 0; iVert < t->nvert; iVert++) {
+        const bool isPrimary = (t->vert_type[iVert] == 1);
+        hasPrimary = hasPrimary || isPrimary;
+        //hasPileup = hasPileup || (t->vert_type[iVert] == 3);
+        if (isPrimary)
+          vz = t->vert_z[iVert];
       }
-      //else if (t->vert_type[iVert] == 3) {
-      //  hasPileupVert = true;
-      //}
+      //if (!hasPrimary || (!isPbPb && hasPileup) || fabs (vz) > 150)
+      if (!hasPrimary || fabs (vz) > 150)
+        continue;
     }
-    if (!hasPrimaryVert || fabs (vz) > 150)
-      continue;
+    else {
+      if (t->nvert > 0) vz = t->vert_z[0];
+      else vz = 0;
+    }
 
     event_weight = -1;
     if (!isMC) {
@@ -325,7 +345,13 @@ bool TreeMaker (const char* directory,
         event_weight = electronTrigger->trigPrescale;
     }
     else {
-      event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency / (mcNumberEvents);
+      event_weight = crossSectionPicoBarns * mcFilterEfficiency * (isPbPb ? 0.00171786 : 258.4); // sigma * f * L_int
+      //event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency * 0.00171786; // sigma * f * L_int
+      if (isHijing) {
+        assert (t->nTruthEvt > 0);
+        ip = t->impactParameter[0];
+        eventPlane = t->eventPlaneAngle[0];
+      }
     }
     if (event_weight == -1)
       continue; // trigger requirement
@@ -364,9 +390,14 @@ bool TreeMaker (const char* directory,
     }
 
     short iCent = 0;
-    if (isPbPb) {
+    if (isPbPb && !isHijing) {
       iCent = GetFileCentBin (fcal_et);
-      if (iCent < 1 || iCent > numFileCentBins-1)
+      if (iCent < 1 || iCent > numFileBins-1)
+        continue;
+    }
+    else if (isPbPb && isHijing) {
+      iCent = GetFileIPBin (ip);
+      if (iCent < 1 || iCent > numFileBins-1)
         continue;
     }
     short iRG = (isPbPb && !isHijing ? GetRunGroup (run_number) : 0);
@@ -374,8 +405,8 @@ bool TreeMaker (const char* directory,
     const float _event_weight = event_weight; // for storage, in case of multiple Z's in one event
 
     for (int iE1 = 0; iE1 < t->electron_n; iE1++) {
-      if (!doElectronPtDownVar && !doElectronPtUpVar) l1_pt = t->electron_pt[iE1];
-      else if (doElectronPtDownVar) l1_pt = t->electron_pt[iE1] - t->electron_pt_sys[iE1];
+      l1_pt = t->electron_pt[iE1];
+      if (doElectronPtDownVar)    l1_pt = t->electron_pt[iE1] - t->electron_pt_sys[iE1];
       else if (doElectronPtUpVar) l1_pt = t->electron_pt[iE1] + t->electron_pt_sys[iE1];
       l1_eta = t->electron_eta[iE1];
       l1_phi = t->electron_phi[iE1];
@@ -419,11 +450,9 @@ bool TreeMaker (const char* directory,
         continue; // electron z0 vertex compatibility cut
       l1_z0 = t->electron_id_track_z0[iE1] + t->electron_id_track_vz[iE1]; // z0 in detector coordinates
 
-      l1.SetPtEtaPhiM (l1_pt, l1_eta, l1_phi, electron_mass);
-
       for (int iE2 = 0; iE2 < iE1; iE2++) {
-        if (!doElectronPtDownVar && !doElectronPtUpVar) l2_pt = t->electron_pt[iE2];
-        else if (doElectronPtDownVar) l2_pt = t->electron_pt[iE2] - t->electron_pt_sys[iE2];
+        l2_pt = t->electron_pt[iE2];
+        if (doElectronPtDownVar)    l2_pt = t->electron_pt[iE2] - t->electron_pt_sys[iE2];
         else if (doElectronPtUpVar) l2_pt = t->electron_pt[iE2] + t->electron_pt_sys[iE2];
         l2_eta = t->electron_eta[iE2];
         l2_phi = t->electron_phi[iE2];
@@ -467,6 +496,13 @@ bool TreeMaker (const char* directory,
           continue; // electron z0 vertex compatibility cut
         l2_z0 = t->electron_id_track_z0[iE2] + t->electron_id_track_vz[iE2]; // z0 in detector coordinates
 
+        l1.SetPtEtaPhiM (t->electron_pt[iE1], l1_eta, l1_phi, electron_mass);
+        l2.SetPtEtaPhiM (t->electron_pt[iE2], l2_eta, l2_phi, electron_mass);
+
+        const float nom_z_pt = (l1+l2).Pt ();
+        const float nom_z_y = (l1+l2).Rapidity ();
+
+        l1.SetPtEtaPhiM (l1_pt, l1_eta, l1_phi, electron_mass);
         l2.SetPtEtaPhiM (l2_pt, l2_eta, l2_phi, electron_mass);
 
         z_pt = (l1+l2).Pt ();
@@ -512,11 +548,22 @@ bool TreeMaker (const char* directory,
           cout << "recoEff == 0" << endl;
           continue;
         }
-        //if (trigEff == 0 || recoEff == 0)
-        //  continue;
         event_weight = _event_weight / (trigEff * recoEff);
 
-        ntrk_all = 0;
+        if (isMC && !isHijing) {
+          if (isPbPb) {
+            if (nom_z_pt < 25 && fabs (nom_z_y) < 1.75)       event_weight = event_weight / (415887+638346+638321+976912);
+            else if (nom_z_pt >= 25 && fabs (nom_z_y) < 1.75) event_weight = event_weight / (415887+638346+638321+976912+415862+638366+638366+976816);
+            else if (nom_z_pt < 25 && fabs (nom_z_y) >= 1.75) event_weight = event_weight / (415887+638346+638321+976912+415862+638366+637401+976816);
+            else {
+              assert (nom_z_pt >= 25 && fabs (nom_z_y) >= 1.75);
+              event_weight = event_weight / (415887+638346+638321+976912+415862+638366+638366+976816+415862+638366+637401+976816);
+            }
+          }
+          else event_weight = event_weight / 1000000;
+        }
+
+        ntrk_perp = 0;
         ntrk = 0;
 
         float sumptcw = 0;
@@ -527,26 +574,38 @@ bool TreeMaker (const char* directory,
           else if (!doHITightVar && !t->trk_HIloose[iTrk])
             continue;
 
-          ntrk_all++;
+          if (isPbPb) {
+            if (fabs (t->trk_d0sig[iTrk]) > 3.0)
+              continue; // d0 significance cut in PbPb
+            if (fabs (t->trk_z0sig[iTrk]) > 3.0)
+              continue; //z0 significance cut in PbPb
+          }
 
           if (t->trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
+          if (fabs (t->trk_eta[iTrk]) > 2.5)
+            continue; // track maximum eta
 
           if (IsElectronTrack (t, iTrk, iE1, iE2))
             continue;
 
-          float dphi = DeltaPhi (trk_phi[ntrk], z_phi, true);
+          float dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, true);
           if (pi/3. < fabs (dphi) && fabs (dphi) < 2.*pi/3.) {
             if (dphi < 0) // then trackphi is ccw of zphi
               sumptccw += t->trk_pt[iTrk];
             else
               sumptcw += t->trk_pt[iTrk];
           }
+          dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, false);
+          if (pi/4. < dphi && dphi < 3.*pi/4.)
+            ntrk_perp++;
 
           trk_pt[ntrk] = t->trk_pt[iTrk];
           trk_eta[ntrk] = t->trk_eta[iTrk];
           trk_phi[ntrk] = t->trk_phi[iTrk];
           trk_charge[ntrk] = t->trk_charge[iTrk];
+          trk_d0[ntrk] = t->trk_d0[iTrk];
+          trk_z0[ntrk] = t->trk_z0[iTrk];
 
           if (isMC)
             trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
@@ -585,6 +644,13 @@ bool TreeMaker (const char* directory,
           }
         }
 
+        ntrk_perp *= 2;
+        //if (isPbPb && isHijing) {
+        //  iCent = GetFileNtrkBin (ntrk_perp);
+        //  if (isPbPb && (iCent < 1 || iCent > numFileBins-1))
+        //    continue;
+        //}
+
         outTrees[iCent][iRG]->Fill ();
         
       } // end iE2 loop
@@ -597,7 +663,7 @@ bool TreeMaker (const char* directory,
   // Now loop over events looking for Z->mumu candidates
   isEE = false;
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In TreeMaker.cxx: Muons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     t->GetEntry (iEvt);
 
@@ -611,23 +677,25 @@ bool TreeMaker (const char* directory,
     if ((!isMC || isOverlayMC) && !t->passes_toroid)
       continue; // additional check for muon quality
 
-    bool hasPrimaryVert = false;
-    //bool hasPileupVert = false;
-    for (int iVert = 0; iVert < t->nvert; iVert++) {
-      if (t->vert_type[iVert] == 1) {
-        if (hasPrimaryVert) {
-          cout << "Info: In TreeMaker.cxx: Found multiple primary vertices in this event" << endl;
-          hasPrimaryVert = false;
-          break;
-        }
-        hasPrimaryVert = (t->vert_type[iVert] == 1);
-        vz = t->vert_z[iVert];
+    if (!isHijing) {
+      bool hasPrimary = false;
+      //bool hasPileup = false;
+      vz = -999;
+      for (int iVert = 0; iVert < t->nvert; iVert++) {
+        const bool isPrimary = (t->vert_type[iVert] == 1);
+        hasPrimary = hasPrimary || isPrimary;
+        //hasPileup = hasPileup || (t->vert_type[iVert] == 3);
+        if (isPrimary)
+          vz = t->vert_z[iVert];
       }
-      //else if (t->vert_type[iVert] == 3)
-      //  hasPileupVert = true;
+      //if (!hasPrimary || (!isPbPb && hasPileup) || fabs (vz) > 150)
+      if (!hasPrimary || fabs (vz) > 150)
+        continue;
     }
-    if (!hasPrimaryVert || fabs (vz) > 150)
-      continue; // check for primary vertex
+    else {
+      if (t->nvert > 0) vz = t->vert_z[0];
+      else vz = 0;
+    }
 
     event_weight = -1;
     if (!isMC) {
@@ -635,7 +703,13 @@ bool TreeMaker (const char* directory,
         event_weight = muonTrigger->trigPrescale;
     }
     else {
-      event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency / (mcNumberEvents);
+      event_weight = crossSectionPicoBarns * mcFilterEfficiency * (isPbPb ? 0.00143844 : 258.4); // sigma * f * L_int
+      //event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency * (isPbPb ? 0.00143844 : 258.4); // sigma * f * L_int
+      if (isHijing) {
+        assert (t->nTruthEvt > 0);
+        ip = t->impactParameter[0];
+        eventPlane = t->eventPlaneAngle[0];
+      }
     }
     if (event_weight == -1)
       continue; // trigger requirement
@@ -674,9 +748,14 @@ bool TreeMaker (const char* directory,
     }
 
     short iCent = 0;
-    if (isPbPb) {
+    if (isPbPb && !isHijing) {
       iCent = GetFileCentBin (fcal_et);
-      if (iCent < 1 || iCent > numFileCentBins-1)
+      if (iCent < 1 || iCent > numFileBins-1)
+        continue;
+    }
+    else if (isPbPb && isHijing) {
+      iCent = GetFileIPBin (ip);
+      if (iCent < 1 || iCent > numFileBins-1)
         continue;
     }
     short iRG = (isPbPb && !isHijing ? GetRunGroup (run_number) : 0);
@@ -684,33 +763,25 @@ bool TreeMaker (const char* directory,
     const float _event_weight = event_weight; // for storage, in case of multiple Z's in one event
 
     for (int iM1 = 0; iM1 < t->muon_n; iM1++) {
-      if (!isPbPb) {
-        l1_pt = t->muon_pt[iM1];
-        l1_eta = t->muon_eta[iM1];
-        l1_phi = t->muon_phi[iM1];
-      }
-      else {
-        l1_pt = t->muon_ms_pt[iM1];
-        l1_eta = t->muon_eta[iM1];
-        l1_phi = t->muon_phi[iM1];
-      }
+      l1_pt = (isPbPb ? t->muon_ms_pt[iM1] : t->muon_pt[iM1]);
+      l1_eta = t->muon_eta[iM1];
+      l1_phi = t->muon_phi[iM1];
       l1_charge = t->muon_charge[iM1];
       l1_trk_pt = t->muon_id_track_pt[iM1];
       l1_trk_eta = t->muon_id_track_eta[iM1];
       l1_trk_phi = t->muon_id_track_phi[iM1];
 
-      int iMaxSys1 = 0;
-      for (int iSys = 0; iSys < (int)(t->muon_pt_sys->at (iM1).size ()); iSys++)
-        if (t->muon_pt_sys->at (iM1).at (iSys) > t->muon_pt_sys->at (iM1).at (iMaxSys1))
-          iMaxSys1 = iSys;
+      //int iMaxSys1 = 0;
+      //for (int iSys = 0; iSys < (int)(t->muon_pt_sys->at (iM1).size ()); iSys++)
+      //  if (fabs (t->muon_pt_sys->at (iM1).at (iSys) - l1_pt) > fabs (t->muon_pt_sys->at (iM1).at (iMaxSys1) - l1_pt))
+      //    iMaxSys1 = iSys;
 
-      l1_pt_sys = t->muon_pt_sys->at (iM1).at (iMaxSys1);
-      l1_eta_sys = t->muon_eta_sys->at (iM1).at (iMaxSys1);
-      l1_phi_sys = t->muon_phi_sys->at (iM1).at (iMaxSys1);
+      //l1_pt_sys = t->muon_pt_sys->at (iM1).at (iMaxSys1);
+      //l1_eta_sys = t->muon_eta_sys->at (iM1).at (iMaxSys1);
+      //l1_phi_sys = t->muon_phi_sys->at (iM1).at (iMaxSys1);
 
-      if (!doMuonPtUpVar && !doMuonPtDownVar) l1_pt = l1_pt;
-      else if (doMuonPtDownVar) l1_pt = l1_pt - l1_pt_sys;
-      else if (doMuonPtUpVar)   l1_pt = l1_pt + l1_pt_sys;
+      //if (doMuonPtDownVar) l1_pt = l1_pt - fabs (l1_pt - l1_pt_sys);
+      //else if (doMuonPtUpVar)   l1_pt = l1_pt + fabs (l1_pt - l1_pt_sys);
 
       if (l1_pt < muon_pt_cut)
         continue; // basic muon pT cut
@@ -730,36 +801,26 @@ bool TreeMaker (const char* directory,
         continue; // muon z0 to vertex cut
       l1_z0 = t->muon_id_track_z0[iM1] + t->muon_id_track_vz[iM1]; // z0 in detector coordinates
 
-      l1.SetPtEtaPhiM (l1_pt, l1_eta, l1_phi, muon_mass);
-
       for (int iM2 = 0; iM2 < iM1; iM2++) {
-        if (!isPbPb) {
-          l2_pt = t->muon_pt[iM2];
-          l2_eta = t->muon_eta[iM2];
-          l2_phi = t->muon_phi[iM2];
-        }
-        else {
-          l2_pt = t->muon_ms_pt[iM2];
-          l2_eta = t->muon_eta[iM2];
-          l2_phi = t->muon_phi[iM2];
-        }
+        l2_pt = (isPbPb ? t->muon_ms_pt[iM2] : t->muon_pt[iM2]);
+        l2_eta = t->muon_eta[iM2];
+        l2_phi = t->muon_phi[iM2];
         l2_charge = t->muon_charge[iM2];
         l2_trk_pt = t->muon_id_track_pt[iM2];
         l2_trk_eta = t->muon_id_track_eta[iM2];
         l2_trk_phi = t->muon_id_track_phi[iM2];
 
-        int iMaxSys2 = 0;
-        for (int iSys = 0; iSys < (int)(t->muon_pt_sys->at (iM2).size ()); iSys++)
-          if (t->muon_pt_sys->at (iM2).at (iSys) > t->muon_pt_sys->at (iM2).at (iMaxSys2))
-            iMaxSys2 = iSys;
+        //int iMaxSys2 = 0;
+        //for (int iSys = 0; iSys < (int)(t->muon_pt_sys->at (iM2).size ()); iSys++)
+        //  if (fabs (t->muon_pt_sys->at (iM2).at (iSys) - l2_pt) > fabs (t->muon_pt_sys->at (iM2).at (iMaxSys2) - l2_pt))
+        //    iMaxSys2 = iSys;
 
-        l2_pt_sys = t->muon_pt_sys->at (iM2).at (iMaxSys2);
-        l2_eta_sys = t->muon_eta_sys->at (iM2).at (iMaxSys2);
-        l2_phi_sys = t->muon_phi_sys->at (iM2).at (iMaxSys2);
+        //l2_pt_sys = t->muon_pt_sys->at (iM2).at (iMaxSys2);
+        //l2_eta_sys = t->muon_eta_sys->at (iM2).at (iMaxSys2);
+        //l2_phi_sys = t->muon_phi_sys->at (iM2).at (iMaxSys2);
 
-        if (!doMuonPtUpVar && !doMuonPtDownVar) l2_pt = l2_pt;
-        else if (doMuonPtDownVar) l2_pt = l2_pt - l2_pt_sys;
-        else if (doMuonPtUpVar)   l2_pt = l2_pt + l2_pt_sys;
+        //if (doMuonPtDownVar) l2_pt = l2_pt - fabs (l2_pt - l2_pt_sys);
+        //else if (doMuonPtUpVar)   l2_pt = l2_pt + fabs (l2_pt - l2_pt_sys);
 
         if (l2_pt < muon_pt_cut)
           continue; // basic muon pT cut
@@ -779,6 +840,13 @@ bool TreeMaker (const char* directory,
           continue; // muon z0 vertex compatibility cut
         l2_z0 = t->muon_id_track_z0[iM2] + t->muon_id_track_vz[iM2]; // z0 in detector coordinates
 
+        l1.SetPtEtaPhiM (isPbPb ? t->muon_ms_pt[iM1] : t->muon_pt[iM1], l1_eta, l1_phi, muon_mass);
+        l2.SetPtEtaPhiM (isPbPb ? t->muon_ms_pt[iM2] : t->muon_pt[iM2], l2_eta, l2_phi, muon_mass);
+
+        const float nom_z_pt = (l1+l2).Pt ();
+        const float nom_z_y = (l1+l2).Rapidity ();
+
+        l1.SetPtEtaPhiM (l1_pt, l1_eta, l1_phi, muon_mass);
         l2.SetPtEtaPhiM (l2_pt, l2_eta, l2_phi, muon_mass);
 
         z_pt = (l1+l2).Pt ();
@@ -829,7 +897,20 @@ bool TreeMaker (const char* directory,
         }
         event_weight = _event_weight / (trigEff * recoEff);
 
-        ntrk_all = 0;
+        if (isMC && !isHijing) {
+          if (isPbPb) {
+            if (nom_z_pt < 25 && fabs (nom_z_y) < 1.75)       event_weight = event_weight / (357861+541661+561006+840470);
+            else if (nom_z_pt >= 25 && fabs (nom_z_y) < 1.75) event_weight = event_weight / (357861+541661+561006+840470+357894+560953+560953+841487);
+            else if (nom_z_pt < 25 && fabs (nom_z_y) >= 1.75) event_weight = event_weight / (357861+541661+561006+840470+357900+560051+561091+839951);
+            else {
+              assert (nom_z_pt >= 25 && fabs (nom_z_y) >= 1.75);
+              event_weight = event_weight / (357861+541661+561006+840470+357894+560953+560953+841487+357900+560051+561091+839951);
+            }
+          }
+          else event_weight = event_weight / 3360000;
+        }
+
+        ntrk_perp = 0;
         ntrk = 0;
 
         float sumptcw = 0;
@@ -840,26 +921,38 @@ bool TreeMaker (const char* directory,
           else if (!doHITightVar && !t->trk_HIloose[iTrk])
             continue;
 
-          ntrk_all++;
+          if (isPbPb) {
+            if (fabs (t->trk_d0sig[iTrk]) > 3.0)
+              continue; // d0 significance cut in PbPb
+            if (fabs (t->trk_z0sig[iTrk]) > 3.0)
+              continue; //z0 significance cut in PbPb
+          }
 
           if (t->trk_pt[iTrk] < trk_pt_cut)
             continue; // track minimum pT
+          if (fabs (t->trk_eta[iTrk]) > 2.5)
+            continue; // track maximum eta
 
           if (IsMuonTrack (t, iTrk, iM1, iM2))
             continue;
 
-          float dphi = DeltaPhi (trk_phi[ntrk], z_phi, true);
+          float dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, true);
           if (pi/3. < fabs (dphi) && fabs (dphi) < 2.*pi/3.) {
             if (dphi < 0) // then trackphi is ccw of zphi
               sumptccw += t->trk_pt[iTrk];
             else
               sumptcw += t->trk_pt[iTrk];
           }
+          dphi = DeltaPhi (t->trk_phi[ntrk], z_phi, false);
+          if (pi/4. < dphi && dphi < 3.*pi/4.)
+            ntrk_perp++;
 
           trk_pt[ntrk] = t->trk_pt[iTrk];
           trk_eta[ntrk] = t->trk_eta[iTrk];
           trk_phi[ntrk] = t->trk_phi[iTrk];
           trk_charge[ntrk] = t->trk_charge[iTrk];
+          trk_d0[ntrk] = t->trk_d0[iTrk];
+          trk_z0[ntrk] = t->trk_z0[iTrk];
 
           if (isMC)
             trk_truth_matched[ntrk] = (t->trk_prob_truth[iTrk] > 0.5);
@@ -898,6 +991,13 @@ bool TreeMaker (const char* directory,
           }
         }
 
+        ntrk_perp *= 2;
+        //if (isPbPb && isHijing) {
+        //  iCent = GetFileNtrkBin (ntrk_perp);
+        //  if (isPbPb && (iCent < 1 || iCent > numFileBins-1))
+        //    continue;
+        //}
+
         outTrees[iCent][iRG]->Fill ();
         
       } // end iM2 loop
@@ -906,29 +1006,29 @@ bool TreeMaker (const char* directory,
   } // end muon selection
   cout << endl << "Info: In TreeMaker.cxx: Finished processing muons." << endl;
 
-  SaferDelete (electronTrigger);
-  SaferDelete (muonTrigger);
+  SaferDelete (&electronTrigger);
+  SaferDelete (&muonTrigger);
 
-  SaferDelete (t);
+  SaferDelete (&t);
 
   if (isPbPb) {
     const short iRG = (isMC ? -1: GetRunGroup (dataSet));
-    for (int iCent = 1; iCent < numFileCentBins; iCent++) {
+    for (int iCent = 1; iCent < numFileBins; iCent++) {
       if (iRG != -1) {
         outFiles[iCent][iRG]->Write (0, TObject::kOverwrite);
         outFiles[iCent][iRG]->Close ();
-        SaferDelete (outFiles[iCent][iRG]);
+        SaferDelete (&(outFiles[iCent][iRG]));
       }
       else if (isHijing) {
         outFiles[iCent][0]->Write (0, TObject::kOverwrite);
         outFiles[iCent][0]->Close ();
-        SaferDelete (outFiles[iCent][0]);
+        SaferDelete (&(outFiles[iCent][0]));
       }
       else {
         for (int iRGMC = 0; iRGMC < numRunGroups; iRGMC++) {
           outFiles[iCent][iRGMC]->Write (0, TObject::kOverwrite);
           outFiles[iCent][iRGMC]->Close ();
-          SaferDelete (outFiles[iCent][iRGMC]);
+          SaferDelete (&(outFiles[iCent][iRGMC]));
         }
       }
     }
@@ -936,10 +1036,10 @@ bool TreeMaker (const char* directory,
   else {
     outFiles[0][0]->Write ();//0, TObject::kOverwrite);
     outFiles[0][0]->Close ();
-    SaferDelete (outFiles[0][0]);
+    SaferDelete (&(outFiles[0][0]));
   }
 
-  SaferDelete (h_zdcCuts);
+  SaferDelete (&h_zdcCuts);
 
   return true;
 }

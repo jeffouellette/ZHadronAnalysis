@@ -17,28 +17,30 @@ namespace ZTrackAnalyzer {
 /**
  * Establishes path variables appropriately.
  */
-void SetupDirectories (const TString dataSubDir) {
+void SetupDirectories (const TString dataSubDir, const bool addSubDir) {
   rootPath = extWorkPath + "rootFiles/" + dataSubDir + "/";
   plotPath = workPath + "Plots/" + dataSubDir + "/";
 
-  if (doElectronPtUpVar)
-    rootPath = rootPath + "Variations/ElectronPtUpVariation/";
-  else if (doElectronPtDownVar)
-    rootPath = rootPath + "Variations/ElectronPtDownVariation/";
-  else if (doMuonPtUpVar)
-    rootPath = rootPath + "Variations/MuonPtUpVariation/";
-  else if (doMuonPtDownVar)
-    rootPath = rootPath + "Variations/MuonPtDownVariation/";
-  else if (doElectronLHMediumVar)
-    rootPath = rootPath + "Variations/ElectronLHMediumWPVariation/";
-  else if (doMuonTightVar)
-    rootPath = rootPath + "Variations/MuonTightWPVariation/";
-  else if (doHITightVar)
-    rootPath = rootPath + "Variations/TrackHITightWPVariation/";
-  else if (doPionsOnlyVar)
-    rootPath = rootPath + "Variations/TrackEffPionsVariation/";
-  else
-    rootPath = rootPath + "Nominal/";
+  if (addSubDir) {
+    if (doElectronPtUpVar)
+      rootPath = rootPath + "Variations/ElectronPtUpVariation/";
+    else if (doElectronPtDownVar)
+      rootPath = rootPath + "Variations/ElectronPtDownVariation/";
+    else if (doMuonPtUpVar)
+      rootPath = rootPath + "Variations/MuonPtUpVariation/";
+    else if (doMuonPtDownVar)
+      rootPath = rootPath + "Variations/MuonPtDownVariation/";
+    else if (doElectronLHMediumVar)
+      rootPath = rootPath + "Variations/ElectronLHMediumWPVariation/";
+    else if (doMuonTightVar)
+      rootPath = rootPath + "Variations/MuonTightWPVariation/";
+    else if (doHITightVar)
+      rootPath = rootPath + "Variations/TrackHITightWPVariation/";
+    else if (doPionsOnlyVar)
+      rootPath = rootPath + "Variations/TrackEffPionsVariation/";
+    else
+      rootPath = rootPath + "Nominal/";
+  }
 }
 
 
@@ -53,7 +55,7 @@ TH1D* GetZdcCuts () {
   TH1D* h_zdcCuts = (TH1D*) ((TH1D*) zdcFile->Get (is2015data ? "hCut" : "h_cuts")->Clone ("h_zdcCuts"));
   h_zdcCuts->SetDirectory (0);
   zdcFile->Close ();
-  SaferDelete (zdcFile);
+  SaferDelete (&zdcFile);
   return h_zdcCuts;
 }
 
@@ -209,22 +211,27 @@ TString GetIdentifier (const int dataSet, const char* directory, const char* inF
 
   if (TString (inFileName).Contains ("Hijing")) {
     id = id + "_Hijing";
-    //if (collisionSystem == pp15 || collisionSystem == PbPb15)
-    //  id += "_15";
-    //else if (collisionSystem == pPb16 || collisionSystem == Pbp16)
-    //  id += "_16";
-    //else if (collisionSystem == XeXe17 || collisionSystem == pp17)
-    //  id += "_17";
-    //else if (collisionSystem == PbPb18)
-    //  id += "_18";
+    if (TString (inFileName).Contains ("e4858") || TString (inFileName).Contains ("r11899") || TString (inFileName).Contains ("r11900") || TString (inFileName).Contains ("r11901") || TString (inFileName).Contains ("r11902") || TString (inFileName).Contains ("r11903"))
+      id += "_SC";
+    else if (TString (inFileName).Contains ("e4962") || TString (inFileName).Contains ("r11892") || TString (inFileName).Contains ("r11893") || TString (inFileName).Contains ("r11894") || TString (inFileName).Contains ("r11895") || TString (inFileName).Contains ("r11898"))
+      id += "_MB";
+
+    if (TString (inFileName).Contains ("r11892") || TString (inFileName).Contains ("r11899") || TString (inFileName).Contains ("s3531"))
+      id += "_vtxz_n64";
+    else if (TString (inFileName).Contains ("r11893") || TString (inFileName).Contains ("r11900") || TString (inFileName).Contains ("s3530"))
+      id += "_vtxz_n24";
+    else if (TString (inFileName).Contains ("r11894") || TString (inFileName).Contains ("r11901") || TString (inFileName).Contains ("s3520"))
+      id += "_vtxz_0";
+    else if (TString (inFileName).Contains ("r11895") || TString (inFileName).Contains ("r11902") || TString (inFileName).Contains ("s3528"))
+      id += "_vtxz_p24";
+    else if (TString (inFileName).Contains ("r11898") || TString (inFileName).Contains ("r11903") || TString (inFileName).Contains ("s3529"))
+      id += "_vtxz_p64";
   }
 
-  if (TString (inFileName).Contains ("ptmin25")) {
+  if (TString (inFileName).Contains ("ptmin25"))
     id = id + "_ptmin25";
-  }
-  else if (TString (inFileName).Contains ("ygt175")) {
+  else if (TString (inFileName).Contains ("ygt175"))
     id = id + "_ygt175";
-  }
 
   return id;
 }

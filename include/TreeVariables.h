@@ -68,6 +68,16 @@ struct TreeVariables {
     bool BlayerDesyn = false;
 
     vector<float>* mcEventWeights = nullptr;
+    // truth event info
+    int nTruthEvt = 0;
+    int nPart1[5];
+    int nPart2[5];
+    float impactParameter[5];
+    int nColl[5];
+    int nSpectatorNeutrons[5];
+    int nSpectatorProtons[5];
+    float eccentricity[5];
+    float eventPlaneAngle[5];
 
     float actualInteractionsPerCrossing = 0;
     float averageInteractionsPerCrossing = 0;
@@ -117,10 +127,23 @@ struct TreeVariables {
     float   trk_charge[10000];
     bool    trk_HItight[10000];
     bool    trk_HIloose[10000];
+    bool    trk_TightPrimary[10000];
     float   trk_d0[10000];
+    float   trk_d0sig[10000];
     float   trk_z0[10000];
-    float   trk_vz[10000];
+    float   trk_z0sig[10000];
     float   trk_theta[10000];
+    float   trk_vz[10000];
+    int     trk_nBLayerHits[10000];
+    int     trk_nBLayerSharedHits[10000];
+    int     trk_nPixelHits[10000];
+    int     trk_nPixelDeadSensors[10000];
+    int     trk_nPixelSharedHits[10000];
+    int     trk_nSCTHits[10000];
+    int     trk_nSCTDeadSensors[10000];
+    int     trk_nSCTSharedHits[10000];
+    int     trk_nTRTHits[10000];
+    int     trk_nTRTSharedHits[10000];
     float   trk_prob_truth[10000];
     float   trk_truth_pt[10000];
     float   trk_truth_eta[10000];
@@ -152,15 +175,19 @@ struct TreeVariables {
     float   electron_topoetcone20[40];
     float   electron_topoetcone30[40];
     float   electron_topoetcone40[40];
-    //int     electron_ntrk[40];
     float   electron_id_track_pt[40];
     float   electron_id_track_eta[40];
     float   electron_id_track_phi[40];
     float   electron_id_track_charge[40];
+    float   electron_id_track_d0[40];
     float   electron_id_track_d0sig[40];
     float   electron_id_track_z0[40];
-    float   electron_id_track_vz[40];
+    float   electron_id_track_z0sig[40];
     float   electron_id_track_theta[40];
+    float   electron_id_track_vz[40];
+    bool    electron_id_track_tightprimary[40];
+    bool    electron_id_track_hiloose[40];
+    bool    electron_id_track_hitight[40];
     float   electron_pt_sys[40];
     float   electron_eta_sys[40];
     float   electron_phi_sys[40];
@@ -198,25 +225,29 @@ struct TreeVariables {
     float   muon_topoetcone20[40];
     float   muon_topoetcone30[40];
     float   muon_topoetcone40[40];
-    float   muon_ms_track_pt[40];
-    float   muon_ms_track_eta[40];
-    float   muon_ms_track_phi[40];
-    float   muon_ms_track_charge[40];
-    float   muon_ms_track_d0sig[40];
-    float   muon_ms_track_z0[40];
-    float   muon_ms_track_vz[40];
-    float   muon_ms_track_theta[40];
-    float   muon_id_track_pt[40];
-    float   muon_id_track_eta[40];
-    float   muon_id_track_phi[40];
-    float   muon_id_track_charge[40];
-    float   muon_id_track_d0sig[40];
-    float   muon_id_track_z0[40];
-    float   muon_id_track_vz[40];
-    float   muon_id_track_theta[40];
-    bool    muon_id_track_tightprimary[40];
-    bool    muon_id_track_hiloose[40];
-    bool    muon_id_track_hitight[40];
+    float   muon_id_track_pt[40]; //!
+    float   muon_id_track_eta[40]; //!
+    float   muon_id_track_phi[40]; //!
+    float   muon_id_track_charge[40]; //!
+    float   muon_id_track_d0[40]; //!
+    float   muon_id_track_d0sig[40]; //!
+    float   muon_id_track_z0[40]; //!
+    float   muon_id_track_z0sig[40]; //!
+    float   muon_id_track_theta[40]; //!
+    float   muon_id_track_vz[40]; //!
+    bool    muon_id_track_tightprimary[40]; //!
+    bool    muon_id_track_hiloose[40]; //!
+    bool    muon_id_track_hitight[40]; //!
+    float   muon_ms_track_pt[40]; //!
+    float   muon_ms_track_eta[40]; //!
+    float   muon_ms_track_phi[40]; //!
+    float   muon_ms_track_charge[40]; //!
+    float   muon_ms_track_d0[40]; //!
+    float   muon_ms_track_d0sig[40]; //!
+    float   muon_ms_track_z0[40]; //!
+    float   muon_ms_track_z0sig[40]; //!
+    float   muon_ms_track_theta[40]; //!
+    float   muon_ms_track_vz[40]; //!
   
     vector <vector <double>>* muon_pt_sys;
     vector <vector <double>>* muon_eta_sys;

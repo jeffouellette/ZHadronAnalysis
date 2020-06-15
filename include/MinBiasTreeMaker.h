@@ -1,9 +1,9 @@
-#ifndef __MinbiasTreeMaker_h__
-#define __MinbiasTreeMaker_h__
+#ifndef __MinBiasTreeMaker_h__
+#define __MinBiasTreeMaker_h__
 
 namespace ZTrackAnalyzer {
 
-bool MinbiasTreeMaker (const char* directory,
+bool MinBiasTreeMaker (const char* directory,
                        const int dataSet,
                        const char* inFileName = "");
 

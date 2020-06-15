@@ -38,6 +38,7 @@ bool useScratchDisk = false;
 extern bool isPbPb;
 extern bool is2015data;
 extern bool isMC;
+extern float crossSectionPicoBarns;
 extern float mcFilterEfficiency;
 extern int mcNumberEvents;
 
@@ -101,36 +102,37 @@ extern CollisionSystem collisionSystem;
 //}
 
 // Centrality classes for mixing events
-const float fileCentBins[29] = {
+const float fileCentBins[30] = {
     66.402, // 80%
-   148.625, // 70%
-   296.17,  // 60%
-   533.608, // 50%
-   659.269, // 46%
-   804.607, // 42%
-   971.487, // 38%
-  1162.33,  // 34%
-  1378.92,  // 30%
-  1497.54,  // 28%
-  1624.34,  // 26%
-  1759.06,  // 24%
-  1902.73,  // 22%
-  2055.77,  // 20%
-  2218.88,  // 18%
-  2393.11,  // 16%
-  2579.56,  // 14%
-  2779.68,  // 12%
-  2995.94,  // 10%
-  3110.27,  //  9%
-  3229.67,  //  8%
-  3354.66,  //  7%
-  3485.57,  //  6%
-  3622.6,   //  5%
-  3767.,    //  4%
-  3920.41,  //  3%
-  4083.38,  //  2%
-  4263.72,  //  1%
-  5000      //  0%,   entry in array is numFileCentBins-1
+   148.625, // 70%, 1
+   296.17,  // 60%, 2
+   533.608, // 50%, 3
+   659.269, // 46%, 4
+   804.607, // 42%, 5
+   971.487, // 38%, 6
+  1162.33,  // 34%, 7
+  1378.92,  // 30%, 8
+  1497.54,  // 28%, 9
+  1624.34,  // 26%, 10
+  1759.06,  // 24%, 11
+  1902.73,  // 22%, 12
+  2055.77,  // 20%, 13
+  2218.88,  // 18%, 14
+  2393.11,  // 16%, 15
+  2579.56,  // 14%, 16
+  2779.68,  // 12%, 17
+  2995.94,  // 10%, 18
+  3110.27,  //  9%, 19
+  3229.67,  //  8%, 20
+  3354.66,  //  7%, 21
+  3485.57,  //  6%, 22
+  3622.6,   //  5%, 23
+  3767.,    //  4%, 24
+  3920.41,  //  3%, 25
+  4083.38,  //  2%, 26
+  4263.72,  //  1%, 27
+  5000,      //  0%, 28, entry in array is numFileCentBins-1
+  10000     // overflow for Hijing
 };
 const int numFileCentBins = sizeof (fileCentBins) / sizeof (fileCentBins[0]);
 
@@ -146,6 +148,137 @@ short GetFileCentBin (const float fcal_et) {
   }
   return i;
 }
+
+
+const int numFileIPBins = 79;
+double* GenerateIPMixBins () {
+  int i = 0;
+  double* ipBins = new double[numFileIPBins+1];
+  for (i = 0; i < 5; i++)
+    ipBins[i] = i*(1.564)/5.;
+  for (i = 5; i < 23; i++)
+    ipBins[i] = 1.564+(i-5)*(4.953-1.564)/18.;
+  for (i = 23; i < 63; i++)
+    ipBins[i] = 4.953+(i-23)*(11.083-4.953)/40.;
+  for (i = 63; i < 78; i++)
+    ipBins[i] = 11.083+(i-63)*(14.032-11.083)/15.;
+  ipBins[78] = 14.032;
+  return ipBins;
+}
+const double* fileIPBins = GenerateIPMixBins ();
+/**
+ * Returns the bin corresponding to this sum fcal et bin.
+ */
+short GetFileIPBin (const float ip) {
+  short i = 0;
+  while (i < numFileIPBins) {
+    if (ip < fileIPBins[i])
+      break;
+    i++;
+  }
+  return i;
+}
+
+
+const double fileNtrkBins[81] = {
+   0,
+   4.46017,
+   8.92033,
+   11.9765,
+   14.5842,
+   17.1919,
+   19.7996,
+   22.312,
+   24.8163,
+   27.3207,
+   29.8251,
+   32.5971,
+   35.3891,
+   38.1812,
+   41.0823,
+   44.1872,
+   47.2921,
+   50.4606,
+   54.0624,
+   57.6641,
+   61.4922,
+   65.738,
+   69.9839,
+   74.5723,
+   79.162,
+   84.2263,
+   89.3966,
+   94.7963,
+   100.256,
+   106.384,
+   112.668,
+   119.176,
+   125.905,
+   132.904,
+   140.27,
+   147.77,
+   155.623,
+   163.77,
+   172.14,
+   180.71,
+   189.899,
+   199.249,
+   209.028,
+   219.016,
+   229.4,
+   240.137,
+   251.174,
+   263.165,
+   274.432,
+   286.208,
+   298.925,
+   311.532,
+   324.533,
+   338.187,
+   352.468,
+   366.967,
+   381.965,
+   397.7,
+   414.07,
+   430.512,
+   447.859,
+   466.129,
+   484.939,
+   504.442,
+   525.371,
+   546.002,
+   568.148,
+   591.277,
+   614.442,
+   639.841,
+   665.697,
+   693.615,
+   721.418,
+   750.462,
+   781.428,
+   814.919,
+   851.232,
+   892.274,
+   935.023,
+   988.651,
+   1400
+};
+const int numFileNtrkBins = sizeof (fileNtrkBins) / sizeof (fileNtrkBins[0]);
+/**
+ * Returns the bin corresponding to this sum fcal et bin.
+ */
+short GetFileNtrkBin (const float ntrk) {
+  short i = 0;
+  while (i < numFileNtrkBins) {
+    if (ntrk < fileNtrkBins[i])
+      break;
+    i++;
+  }
+  return i;
+}
+
+
+
 
 
 const set<int> group1 = {286711, 286717, 286748, 286767, 286834, 286854, 286908, 286990};

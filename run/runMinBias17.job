@@ -7,82 +7,82 @@ InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run
 accounting_group = group_atlas.boulder
 
 dataFlag = minbias_034
-#systematicFlags = false false false false false false false false
-systematicFlags = false false false false false false true false
+#sysFlags = false false false false false false false false
+sysFlags = false false false false false false true false
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340644 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340644 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340644_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340644_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340644_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340683 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340683 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340683_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340683_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340683_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340697 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340697 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340697_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340697_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340697_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340718 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340718 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340718_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340718_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340718_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340814 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340814 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340814_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340814_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340814_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340849 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340849 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340849_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340849_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340849_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340850 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340850 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340850_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340850_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340850_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340910 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340910 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340910_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340910_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340910_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340925 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340925 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340925_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340925_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340925_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 340973 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 340973 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/340973_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/340973_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/340973_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 341027 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 341027 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/341027_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/341027_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/341027_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 341123 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 341123 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/341123_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/341123_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/341123_minbias.out
 Queue 1
 
-Arguments = false MinbiasTreeMaker $(dataFlag) 341184 false pp17 $(systematicFlags)
+Arguments = false MinBiasTreeMaker $(dataFlag) 341184 false pp17 $(sysFlags)
 Error = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/errors/341184_minbias.err
 Log = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/logs/341184_minbias.log
 Output = /atlasgpfs01/usatlas/workarea/jeff/ZTrackAnalyzer/run/outputs/341184_minbias.out

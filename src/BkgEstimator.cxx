@@ -34,9 +34,12 @@ bool BkgEstimator (const char* directory,
 
   SetupDirectories ("BkgEstimator");
 
+  const bool isHijing = (isMC && strstr (inFileName, "PbPb") != NULL && strstr(inFileName, "Hijing") != NULL);
+  if (isHijing)
+    cout << "Info: In BkgEstimator.cxx: File detected as Hijing overlay" << endl;
   const bool isOverlayMC = (isMC && strstr (inFileName, "PbPb") != NULL && strstr (inFileName, "Hijing") == NULL);
   if (isOverlayMC)
-    cout << "Info: In BkgEstimator.cxx: Running over data overlay, will check data conditions" << endl;
+    cout << "Info: In BkgEstimator.cxx: File detected as data overlay, will check data conditions" << endl;
     
 
   const TString identifier = GetIdentifier (dataSet, directory, inFileName);
@@ -218,7 +221,7 @@ bool BkgEstimator (const char* directory,
   // First loop over events looking for Z->ee candidates
   isEE = true;
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In BkgEstimator.cxx: Electrons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     t->GetEntry (iEvt);
 
@@ -255,7 +258,9 @@ bool BkgEstimator (const char* directory,
         event_weight = electronTrigger->trigPrescale;
     }
     else {
-      event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency / (mcNumberEvents);
+      //event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency / (mcNumberEvents);
+      //event_weight = crossSectionPicoBarns * mcFilterEfficiency / (mcNumberEvents);
+      event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency * 0.00171786; // sigma * f * L_int
     }
     if (event_weight == -1)
       continue; // trigger requirement
@@ -388,9 +393,11 @@ bool BkgEstimator (const char* directory,
     
         // for electrons, QCD bkg. corresponds to loose-non-medium and non-isolated electron pairs
         if (isPbPb)
-          isQCDBkg = (!t->electron_lhmedium_hi[iE1] && !t->electron_lhmedium_hi[iE2] && fmin (t->electron_etcone20[iE1]/l1_pt, t->electron_etcone20[iE2]/l2_pt) > 0.05*fcal_et*1e-3 +0.025);
+          isQCDBkg = ((!t->electron_lhmedium_hi[iE1] && t->electron_etcone20[iE1]/l1_pt > 0.10*fcal_et*1e-3+0.050) || (!t->electron_lhmedium_hi[iE2] && t->electron_etcone20[iE2]/l2_pt > 0.10*fcal_et*1e-3+0.050));
+          //isQCDBkg = (!t->electron_lhmedium_hi[iE1] && !t->electron_lhmedium_hi[iE2] && fmin (t->electron_etcone20[iE1]/l1_pt, t->electron_etcone20[iE2]/l2_pt) > 0.10*fcal_et*1e-3 +0.050);
         else
-          isQCDBkg = (!t->electron_lhmedium[iE1] && !t->electron_lhmedium[iE2] && fmin (t->electron_etcone20[iE1]/l1_pt, t->electron_etcone20[iE2]/l2_pt) > 0.025);
+          isQCDBkg = ((!t->electron_lhmedium[iE1] && t->electron_etcone20[iE1]/l1_pt > 0.050) || (!t->electron_lhmedium[iE2] && t->electron_etcone20[iE2]/l2_pt > 0.050));
+          //isQCDBkg = (!t->electron_lhmedium[iE1] && !t->electron_lhmedium[iE2] && fmin (t->electron_etcone20[iE1]/l1_pt, t->electron_etcone20[iE2]/l2_pt) > 0.050);
     
 
         // find correct Z boson weighting factor
@@ -424,9 +431,20 @@ bool BkgEstimator (const char* directory,
           cout << "recoEff == 0" << endl;
           continue;
         }
-        //if (trigEff == 0 || recoEff == 0)
-        //  continue;
         event_weight = _event_weight / (trigEff * recoEff);
+
+        if (isMC && !isHijing) {
+          if (isPbPb) {
+            if (z_pt < 25 && fabs (z_y) < 1.75)       event_weight = event_weight / (415887+638346+638321+976912);
+            else if (z_pt >= 25 && fabs (z_y) < 1.75) event_weight = event_weight / (415887+638346+638321+976912+415862+638366+638366+976816);
+            else if (z_pt < 25 && fabs (z_y) >= 1.75) event_weight = event_weight / (415887+638346+638321+976912+415862+638366+637401+976816);
+            else {
+              assert (z_pt >= 25 && fabs (z_y) >= 1.75);
+              event_weight = event_weight / (415887+638346+638321+976912+415862+638366+638366+976816+415862+638366+637401+976816);
+            }
+          }
+          else event_weight = event_weight / 1000000;
+        }
 
         outTree->Fill ();
         
@@ -440,7 +458,7 @@ bool BkgEstimator (const char* directory,
   // Now loop over events looking for Z->mumu candidates
   isEE = false;
   for (int iEvt = 0; iEvt < nEvts; iEvt++) {
-    if (nEvts > 0 && iEvt % (nEvts / 100) == 0)
+    if (nEvts > 100 && iEvt % (nEvts / 100) == 0)
       cout << "Info: In BkgEstimator.cxx: Muons " << iEvt / (nEvts / 100) << "\% done...\r" << flush;
     t->GetEntry (iEvt);
 
@@ -478,7 +496,9 @@ bool BkgEstimator (const char* directory,
         event_weight = muonTrigger->trigPrescale;
     }
     else {
-      event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency / (mcNumberEvents);
+      //event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency / (mcNumberEvents);
+      //event_weight = crossSectionPicoBarns * mcFilterEfficiency / (mcNumberEvents);
+      event_weight = t->mcEventWeights->at (0) * mcFilterEfficiency * 0.00143844; // sigma * f * L_int
     }
     if (event_weight == -1)
       continue; // trigger requirement
@@ -529,7 +549,7 @@ bool BkgEstimator (const char* directory,
       if (!isPbPb)
         l1_pt = t->muon_pt[iM1];
       else
-        l1_pt = t->muon_ms_pt[iM1] * 1e-3;
+        l1_pt = t->muon_ms_pt[iM1];
       l1_eta = t->muon_eta[iM1];
       l1_phi = t->muon_phi[iM1];
       l1_charge = t->muon_charge[iM1];
@@ -559,7 +579,7 @@ bool BkgEstimator (const char* directory,
         if (!isPbPb)
           l2_pt = t->muon_pt[iM2];
         else 
-          l2_pt = t->muon_ms_pt[iM2]*1e-3;
+          l2_pt = t->muon_ms_pt[iM2];
         l2_eta = t->muon_eta[iM2];
         l2_phi = t->muon_phi[iM2];
         l2_charge = t->muon_charge[iM2];
@@ -638,6 +658,19 @@ bool BkgEstimator (const char* directory,
         }
         event_weight = _event_weight / (trigEff * recoEff);
 
+        if (isMC && !isHijing) {
+          if (isPbPb) {
+            if (z_pt < 25 && fabs (z_y) < 1.75)       event_weight = event_weight / (357861+541661+561006+840470);
+            else if (z_pt >= 25 && fabs (z_y) < 1.75) event_weight = event_weight / (357861+541661+561006+840470+357894+560953+560953+841487);
+            else if (z_pt < 25 && fabs (z_y) >= 1.75) event_weight = event_weight / (357861+541661+561006+840470+357900+560051+561091+839951);
+            else {
+              assert (z_pt >= 25 && fabs (z_y) >= 1.75);
+              event_weight = event_weight / (357861+541661+561006+840470+357894+560953+560953+841487+357900+560051+561091+839951);
+            }
+          }
+          else event_weight = event_weight / 3360000;
+        }
+
         outTree->Fill ();
         
       } // end iM2 loop
@@ -646,16 +679,16 @@ bool BkgEstimator (const char* directory,
   } // end muon selection
   cout << endl << "Info: In BkgEstimator.cxx: Finished processing muons." << endl;
 
-  SaferDelete (electronTrigger);
-  SaferDelete (muonTrigger);
+  SaferDelete (&electronTrigger);
+  SaferDelete (&muonTrigger);
 
-  SaferDelete (t);
+  SaferDelete (&t);
 
   outFile->Write (0, TObject::kOverwrite);
   outFile->Close ();
-  SaferDelete (outFile);
+  SaferDelete (&outFile);
 
-  SaferDelete (h_zdcCuts);
+  SaferDelete (&h_zdcCuts);
 
   return true;
 }
