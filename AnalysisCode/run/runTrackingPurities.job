@@ -1,0 +1,378 @@
+Universe = vanilla
+Notification = Complete
+Executable = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/bin/run
+Priority = +1
+GetEnv = True
+InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run
+accounting_group = group_atlas.boulder
+
+sysFlags = false false false false false false false false
+#sysFlags = false false false false false false true false
+
+
+Arguments = false TrackingPurity mc_200 0 true pp17 $(sysFlags) 642.820 1 1000000 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.pp.361106.Zee.recon.AOD.e4916_s3238_r10313_r10210_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/ppEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/pp_Zee.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/pp_Zee.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/pp_Zee.out
+Queue 1
+Arguments = false TrackingPurity mc_200 0 true pp17 $(sysFlags) 642.850 1 3360000 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.pp.361107.Zmumu.recon.AOD.e4916_s3238_r10313_r10726_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/ppEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/pp_Zmumu.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/pp_Zmumu.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/pp_Zmumu.out
+Queue 1
+
+
+
+
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.830 1 357861 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.361107.pp_Zmumu.recon.AOD.e4916_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Zmumu.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.520 0.99997 541661 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420067.pn_Zmumu.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pn_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pn_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pn_Zmumu.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.450 0.99996 561006 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420068.np_Zmumu.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_np_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_np_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_np_Zmumu.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 665.320 0.99995 840470 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420069.nn_Zmumu.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_nn_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_nn_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_nn_Zmumu.out
+#Queue 1
+#
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.830 1 415887 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.361106.pp_Zee.recon.AOD.e4916_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Zee.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.580 0.99997 638346 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420121.pn_Zee.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pn_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pn_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pn_Zee.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.430 0.99997 638321 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420122.np_Zee.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_np_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_np_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_np_Zee.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 665.300 0.99994 976912 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420123.nn_Zee.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_nn_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_nn_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_nn_Zee.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.830 0.1793 357894 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420090.pp_Zmumu_ptmin25.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.510 0.17947 560953 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420070.pn_Zmumu_ptmin25.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pn_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pn_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pn_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.480 0.17991 560953 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420071.np_Zmumu_ptmin25.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_np_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_np_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_np_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 665.340 0.17981 841487 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420072.nn_Zmumu_ptmin25.recon.AOD.e5247_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_nn_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_nn_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_nn_Zmumu_ptmin25.out
+#Queue 1
+#
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.830 0.1793 415862 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420127.pp_Zee_ptmin25.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Zee_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.580 0.17947 638366 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420124.pn_Zee_ptmin25.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pn_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pn_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pn_Zee_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.430 0.17991 638366 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420125.np_Zee_ptmin25.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_np_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_np_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_np_Zee_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 665.300 0.17981 976816 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420126.nn_Zee_ptmin25.recon.AOD.e5883_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_nn_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_nn_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_nn_Zee_ptmin25.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.810 0.36778 357900 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420293.pp_Zmumu_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Zmumu_ygt175.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.500 0.37302 560051 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420290.pn_Zmumu_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pn_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pn_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pn_Zmumu_ygt175.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.510 0.37258 561091 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420291.np_Zmumu_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_np_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_np_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_np_Zmumu_ygt175.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 665.370 0.37872 839951 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420292.nn_Zmumu_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_nn_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_nn_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_nn_Zmumu_ygt175.out
+#Queue 1
+#
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.830 0.36778 415862 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420297.pp_Zee_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Zee_ygt175.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.520 0.37292 638366 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420294.pn_Zee_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pn_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pn_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pn_Zee_ygt175.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 656.500 0.37264 637401 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420295.np_Zee_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_np_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_np_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_np_Zee_ygt175.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 665.350 0.37864 976816 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420296.nn_Zee_ygt175.recon.AOD.e7636_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_200/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_nn_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_nn_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_nn_Zee_ygt175.out
+#Queue 1
+
+
+
+
+## alternate generator (Sherpa) samples
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 108.750 1 1360000 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420076.Sherpa.Zmumu_ptmin25.recon.AOD.e6047_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_036/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_Sherpa_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_Sherpa_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_Sherpa_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 108.660 1 1800000 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.420074.Sherpa.Zee_ptmin25.recon.AOD.e6047_d1521_r11472_r11217_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_036/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_Sherpa_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_Sherpa_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_Sherpa_Zee_ptmin25.out
+#Queue 1
+
+
+
+
+## background samples, ttbar & Ztautau
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 56.695 0.54439 67734 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.410000.ttbar.recon.AOD.e4917_d1521_r11472_r11217_myOutput.root 
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_ttbar.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_ttbar.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_ttbar.out
+#Queue 1
+#Arguments = false TrackingPurity mc_200 0 true PbPb18 $(sysFlags) 642.930 1 193395 user.jeouelle.21.2.113.ztrack.210.mc16_5TeV.PbPb.361108.pp_Ztautau.recon.AOD.e4916_d1521_r11472_r11217_myOutput.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_pp_Ztautau.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_pp_Ztautau.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_pp_Ztautau.out
+#Queue 1
+
+
+
+
+## 2018 PbPb Hijing sample
+#Arguments = false TrackingPurity hijing_110 0 true PbPb18 $(sysFlags) 1 1 100000 user.jeouelle.21.2.82.minbias.110.mc16_5TeV.PbPb.420000.Hijing.Flow_JJFV6.recon.AOD.e4962_a882_s3136_r11157_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_110/hijing2018_eventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_Hijing_18.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_Hijing_18.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_Hijing_18.out
+#Queue 1
+
+## 2015 PbPb Hijing sample
+#Arguments = false TrackingPurity hijing_110 0 true PbPb15 $(sysFlags) 1 1 1000000 user.jeouelle.21.2.82.minbias.110.mc16_5TeV.PbPb.420000.Hijing.Flow_JJFV6.recon.AOD.e4962_a884_s3136_r11318_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_110/hijing2015_eventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb_Hijing_15.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb_Hijing_15.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb_Hijing_15.out
+#Queue 1
+
+
+
+
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361107.Zmumu.recon.AOD.e4916_s3541_r11892_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_MB_vtxz_n64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_MB_vtxz_n64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_MB_vtxz_n64.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361107.Zmumu.recon.AOD.e4916_s3540_r11893_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_MB_vtxz_n24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_MB_vtxz_n24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_MB_vtxz_n24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361107.Zmumu.recon.AOD.e4916_s3537_r11894_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_MB_vtxz_0.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_MB_vtxz_0.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_MB_vtxz_0.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361107.Zmumu.recon.AOD.e4916_s3538_r11895_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_MB_vtxz_p24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_MB_vtxz_p24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_MB_vtxz_p24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361107.Zmumu.recon.AOD.e4916_s3539_r11898_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_MB_vtxz_p64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_MB_vtxz_p64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_MB_vtxz_p64.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361107.Zmumu.recon.AOD.e4916_s3541_r11899_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_SC_vtxz_n64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_SC_vtxz_n64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_SC_vtxz_n64.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361107.Zmumu.recon.AOD.e4916_s3540_r11900_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_SC_vtxz_n24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_SC_vtxz_n24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_SC_vtxz_n24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361107.Zmumu.recon.AOD.e4916_s3537_r11901_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_SC_vtxz_0.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_SC_vtxz_0.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_SC_vtxz_0.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361107.Zmumu.recon.AOD.e4916_s3538_r11902_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_SC_vtxz_p24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_SC_vtxz_p24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_SC_vtxz_p24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361107.Zmumu.recon.AOD.e4916_s3539_r11903_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zmumu_Hijing_SC_vtxz_p64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zmumu_Hijing_SC_vtxz_p64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zmumu_Hijing_SC_vtxz_p64.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361106.Zee.recon.AOD.e4916_s3541_r11892_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_MB_vtxz_n64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_MB_vtxz_n64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_MB_vtxz_n64.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361106.Zee.recon.AOD.e4916_s3540_r11893_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_MB_vtxz_n24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_MB_vtxz_n24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_MB_vtxz_n24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361106.Zee.recon.AOD.e4916_s3537_r11894_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_MB_vtxz_0.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_MB_vtxz_0.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_MB_vtxz_0.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361106.Zee.recon.AOD.e4916_s3538_r11895_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_MB_vtxz_p24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_MB_vtxz_p24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_MB_vtxz_p24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 20000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Flow.361106.Zee.recon.AOD.e4916_s3539_r11898_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_MB_vtxz_p64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_MB_vtxz_p64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_MB_vtxz_p64.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361106.Zee.recon.AOD.e4916_s3541_r11899_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_SC_vtxz_n64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_SC_vtxz_n64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_SC_vtxz_n64.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361106.Zee.recon.AOD.e4916_s3540_r11900_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_SC_vtxz_n24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_SC_vtxz_n24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_SC_vtxz_n24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361106.Zee.recon.AOD.e4916_s3537_r11901_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_SC_vtxz_0.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_SC_vtxz_0.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_SC_vtxz_0.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361106.Zee.recon.AOD.e4916_s3538_r11902_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_SC_vtxz_p24.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_SC_vtxz_p24.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_SC_vtxz_p24.out
+#Queue 1
+#Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 50000 user.jeouelle.21.2.113.ztrack.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.361106.Zee.recon.AOD.e4916_s3539_r11903_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Zee_Hijing_SC_vtxz_p64.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Zee_Hijing_SC_vtxz_p64.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Zee_Hijing_SC_vtxz_p64.out
+#Queue 1
+
+
+
+
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 60000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_MinBias_Flow.420000.recon.AOD.e4962_s3531_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_MB_vtxz_n64.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_MB_vtxz_n64.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_MB_vtxz_n64.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 60000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_MinBias_Flow.420000.recon.AOD.e4962_s3530_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_MB_vtxz_n24.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_MB_vtxz_n24.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_MB_vtxz_n24.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 60000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_MinBias_Flow.420000.recon.AOD.e4962_s3520_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_MB_vtxz_0.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_MB_vtxz_0.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_MB_vtxz_0.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 60000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_MinBias_Flow.420000.recon.AOD.e4962_s3528_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_MB_vtxz_p24.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_MB_vtxz_p24.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_MB_vtxz_p24.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 60000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_MinBias_Flow.420000.recon.AOD.e4962_s3529_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_MB_vtxz_p64.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_MB_vtxz_p64.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_MB_vtxz_p64.out
+Queue 1
+
+
+
+
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 100000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.420002.recon.AOD.e4858_s3531_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_SC_vtxz_n64.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_SC_vtxz_n64.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_SC_vtxz_n64.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 100000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.420002.recon.AOD.e4858_s3530_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_SC_vtxz_n24.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_SC_vtxz_n24.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_SC_vtxz_n24.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 100000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.420002.recon.AOD.e4858_s3520_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_SC_vtxz_0.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_SC_vtxz_0.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_SC_vtxz_0.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 100000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.420002.recon.AOD.e4858_s3528_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_SC_vtxz_p24.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_SC_vtxz_p24.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_SC_vtxz_p24.out
+Queue 1
+Arguments = false TrackingPurity hijing_300 0 true PbPb18 $(sysFlags) 1 1 100000 user.jeouelle.21.2.113.minbias.300.mc16_5TeV.PbPb.Hijing_Semicentral_Flow.420002.recon.AOD.e4858_s3529_s3519_r11875_myOutput.root /atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_300/PbPbEventWeightsFile.root
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/PbPb18_Hijing_SC_vtxz_p64.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/PbPb18_Hijing_SC_vtxz_p64.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/PbPb18_Hijing_SC_vtxz_p64.out
+Queue 1

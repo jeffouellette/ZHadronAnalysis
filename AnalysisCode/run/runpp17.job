@@ -1,0 +1,89 @@
+Universe = vanilla
+Notification = Complete
+Executable = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/bin/run
+Priority = +1
+GetEnv = True
+InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run
+accounting_group = group_atlas.boulder
+
+dataFlag = data_100
+#sysFlags = false false false false false false false false
+sysFlags = false false false false false false true false
+
+Arguments = false TreeMaker $(dataFlag) 340644 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340644.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340644.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340644.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340683 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340683.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340683.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340683.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340697 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340697.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340697.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340697.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340718 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340718.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340718.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340718.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340814 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340814.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340814.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340814.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340849 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340849.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340849.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340849.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340850 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340850.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340850.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340850.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340910 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340910.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340910.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340910.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340925 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340925.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340925.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340925.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 340973 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/340973.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/340973.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/340973.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 341027 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/341027.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/341027.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/341027.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 341123 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/341123.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/341123.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/341123.out
+Queue 1
+
+Arguments = false TreeMaker $(dataFlag) 341184 false pp17 $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/errors/341184.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/logs/341184.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run/outputs/341184.out
+Queue 1
