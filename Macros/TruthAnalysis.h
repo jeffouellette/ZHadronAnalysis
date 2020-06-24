@@ -52,7 +52,6 @@ void TruthAnalysis :: LoadTrackMomentumResolutions () {
   if (tmrsLoaded)
     return;
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
   TDirectory* _gDirectory = gDirectory; 
   TString _tmrDir = "Nominal";
   if (useHITight)
@@ -140,8 +139,6 @@ void TruthAnalysis :: LoadHists (const char* histFileName, const bool _finishHis
 // Main macro. Loops over Pb+Pb and pp trees and fills histograms appropriately, then saves them.
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void TruthAnalysis :: Execute (const char* inFileName, const char* outFileName) {
-
-  //SetupDirectories ("", "ZTrackAnalysis/");
 
   TFile* inFile = new TFile (Form ("%s/%s", rootPath.Data (), inFileName), "read");
   cout << "Read input file from " << Form ("%s/%s", rootPath.Data (), inFileName) << endl;

@@ -184,8 +184,6 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
   LoadEventWeights ();
   //eventPlaneCalibrator = EventPlaneCalibrator (Form ("%s/FCalCalibration/Nominal/data18hi.root", rootPath.Data ()));
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
   cout << "Arguments provided: " << endl;
   cout << "isPbPb = " << isPbPb << endl;
   cout << "inFileName = " << inFileName << endl;

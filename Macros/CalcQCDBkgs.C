@@ -3,8 +3,6 @@
 
 #include "Params.h"
 
-//#include "AtlasUtils.h"
-
 #include <TFile.h>
 #include <TTree.h>
 #include <TChain.h>

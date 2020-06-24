@@ -6,8 +6,6 @@
 
 #include <ArrayTemplates.h>
 
-//#include <AtlasUtils.h>
-
 #include <TEfficiency.h>
 #include <TClass.h>
 #include <TObject.h>
@@ -254,7 +252,6 @@ void FullAnalysis :: ClearHists () {
 // Load pre-filled histograms
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void FullAnalysis :: LoadHists (const char* histFileName, const bool _finishHists) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
   if (histsLoaded)
     return;
 
@@ -315,7 +312,6 @@ void FullAnalysis :: LoadHists (const char* histFileName, const bool _finishHist
 // Save histograms
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void FullAnalysis :: SaveHists (const char* histFileName) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
   if (!histsLoaded)
     return;
 
@@ -521,8 +517,6 @@ void FullAnalysis :: Execute (const char* inFileName, const char* outFileName) {
 
   LoadEventWeights ();
   //eventPlaneCalibrator = EventPlaneCalibrator (Form ("%s/FCalCalibration/Nominal/data18hi.root", rootPath.Data ()));
-
-  //SetupDirectories ("", "ZTrackAnalysis/");
 
   TFile* inFile = new TFile (Form ("%s/%s", rootPath.Data (), inFileName), "read");
   cout << "Read input file from " << Form ("%s/%s", rootPath.Data (), inFileName) << endl;

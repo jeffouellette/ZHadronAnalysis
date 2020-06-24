@@ -1,6 +1,4 @@
-#CXXFLAGS=-O3 -g -Wall `root-config --cflags` -I${ATLAS_PATH}/include -I${HOME}/RootUtils -I${ATLAS_PATH}/ZTrackAnalysis/Macros
-CXXFLAGS=-Ofast -g -Wall `root-config --cflags` -I${ROOT_UTILS_PATH}/include -I${ZTRACKS_PATH}/Macros
-#LDFLAGS=`root-config --glibs` -L${ATLAS_PATH}/lib -L${HOME}/RootUtils -lGlobalParams -lUtilities -lAtlasUtils -lAtlasStyle
+CXXFLAGS=-O3 -g -Wall `root-config --cflags` -I${ROOT_UTILS_PATH}/include -I${ZTRACKS_PATH}/Macros
 LDFLAGS=`root-config --glibs` -L${ROOT_UTILS_PATH}/lib -lUtilities
 
 CC=$(CXX) $(CXXFLAGS) $(LDFLAGS)

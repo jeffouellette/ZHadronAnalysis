@@ -1,8 +1,9 @@
+#ifndef __QuickZMassPlot_C__
+#define __QuickZMassPlot_C__
+
 #include "Params.h"
 
 #include <ArrayTemplates.h>
-
-//#include <AtlasUtils.h>
 
 void QuickZMassPlot () {
 
@@ -192,3 +193,5 @@ void QuickZMassPlot () {
   }
 
 }
+
+#endif

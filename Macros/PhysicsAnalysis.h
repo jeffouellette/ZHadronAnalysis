@@ -7,8 +7,6 @@
 
 #include <ArrayTemplates.h>
 
-//#include <AtlasUtils.h>
-
 #include <TEfficiency.h>
 #include <TClass.h>
 #include <TObject.h>
@@ -842,7 +840,6 @@ void PhysicsAnalysis :: CopyAnalysis (PhysicsAnalysis* a, const bool copySigs, c
 // Load pre-filled histograms
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void PhysicsAnalysis :: LoadHists (const char* histFileName, const bool _finishHists) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
   //if (histsLoaded)
   ClearHists ();
 
@@ -941,7 +938,6 @@ void PhysicsAnalysis :: LoadHists (const char* histFileName, const bool _finishH
 // Save histograms
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void PhysicsAnalysis :: SaveHists (const char* histFileName) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
   if (!histsLoaded)
     return;
 
@@ -1017,7 +1013,6 @@ void PhysicsAnalysis :: SaveHists (const char* histFileName) {
 // Save histograms
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void PhysicsAnalysis :: SaveResults (const char* saveFileName) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
   if (!histsLoaded)
     return;
 
@@ -1327,7 +1322,6 @@ void PhysicsAnalysis :: UnfoldSubtractedYield () {
   if (histsUnfolded) return;
   assert (histsLoaded);
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
   TFile* f_binMigrationFile = new TFile (Form ("%s/BinMigrationFactors/binmigration_corrfactors_master.root", rootPath.Data ()), "read");
 
   for (short iSpc = 0; iSpc < 2; iSpc++) {
@@ -2037,8 +2031,6 @@ void PhysicsAnalysis :: Execute (const char* inFileName, const char* outFileName
   LoadEventWeights ();
   //eventPlaneCalibrator = EventPlaneCalibrator (Form ("%s/FCalCalibration/Nominal/data18hi.root", rootPath.Data ()));
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
   TFile* inFile = new TFile (Form ("%s/%s", rootPath.Data (), inFileName), "read");
   cout << "Read input file from " << Form ("%s/%s", rootPath.Data (), inFileName) << endl;
 
@@ -2736,7 +2728,6 @@ void PhysicsAnalysis :: LoadEventWeights () {
 
   const TString ext = (ewExt == "" ? TString (name) : ewExt);
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
   TDirectory* _gDirectory = gDirectory;
 
   cout << "Loading event weights from " << rootPath.Data () << "/" << eventWeightsFileName.Data () << endl;
@@ -2775,7 +2766,6 @@ void PhysicsAnalysis :: LoadTrackingEfficiencies (const bool doRebin) {
   if (effsLoaded)
     return;
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
   TDirectory* _gDirectory = gDirectory;
 
   TString _effDir = "Nominal";
@@ -2900,7 +2890,6 @@ void PhysicsAnalysis :: LoadTrackingPurities (const bool doRebin) {
   if (pursLoaded)
     return;
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
   TDirectory* _gDirectory = gDirectory;
 
   TString _purDir = "Nominal";
@@ -6910,7 +6899,6 @@ void PhysicsAnalysis :: PlotIAA_dPtZ_SpcComp (const bool useTrkPt) {
 // Writes cubic polynomial fits of IAA to a file.
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void PhysicsAnalysis :: WriteIAAs () {
-  //SetupDirectories ("", "ZTrackAnalysis/");
 
   TDirectory* _gDirectory = gDirectory;
 

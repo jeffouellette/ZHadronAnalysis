@@ -51,8 +51,6 @@ void NonClosureVariation :: GetRelativeVariations (PhysicsAnalysis* nominal) {
 
   nominal->CalculateSigToBkg ();
  
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
   TDirectory* _gDirectory = gDirectory;
 
   TFile* f_pTch = new TFile (Form ("%s/ClosureSystematic/closureSystematic_pTch.root", rootPath.Data ()), "read");

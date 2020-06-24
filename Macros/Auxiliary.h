@@ -5,8 +5,6 @@
 #include "Systematic.h"
 #include "Params.h"
 
-//#include <AtlasUtils.h>
-
 #include "math.h"
 
 using namespace std;

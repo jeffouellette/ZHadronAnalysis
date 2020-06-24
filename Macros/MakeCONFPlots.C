@@ -6,8 +6,6 @@
 
 #include "ArrayTemplates.h"
 
-//#include <AtlasUtils.h>
-
 #include <TFile.h>
 #include <TH2.h>
 #include <TGraphErrors.h>

@@ -32,6 +32,8 @@ HijingAnalysis* hijing = nullptr;
 MixingAnalysis* hijing_bkg = nullptr;
 TruthAnalysis* hijing_truth = nullptr;
 
+TruthAnalysis* smeared_truth = nullptr;
+
 
 // MC closure systematics
 PhysicsAnalysis* hijing_bkgStatUpVar = nullptr, *hijing_bkgStatDownVar = nullptr;
@@ -112,6 +114,9 @@ void Run () {
   //hijing_bkg->subtractPP = false;
   //hijing_truth = new TruthAnalysis ("hijing_truth");
 
+  truth = new TruthAnalysis ("truth");
+  smeared_truth = new TruthAnalysis ("smeared");
+
   //if (doSys) {
   //  mc_bkgStatUpVar         = new PhysicsAnalysis ("mc_bkgStatUpVar");
   //  mc_bkgStatDownVar       = new PhysicsAnalysis ("mc_bkgStatDownVar");
@@ -158,6 +163,9 @@ void Run () {
   //hijing_bkg->LoadHists ("MCAnalysis/Hijing/mixedHists.root");
   //hijing->SubtractBackground (hijing_bkg);
   //hijing_truth->LoadHists ("TruthAnalysis/Hijing/savedHists.root");
+
+  truth->LoadHists ("TruthAnalysis/Nominal/pp_all_hists.root");
+  smeared_truth->LoadHists ("TruthAnalysis/Variations/SmearingVariation/pp_all_hists.root");
 
   data18->LoadHists ("DataAnalysis/Nominal/data18hi_hists.root");
   bkg18->LoadHists ("MixingAnalysis/Nominal/data18hi_hists.root");
@@ -654,7 +662,7 @@ void Run () {
     combSys->AddSystematic (binCenterSys);
     combSys->AddSystematics ();
 
-    combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
+    //combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
   }
 
   data18->CalculateTrackMeans (data18, data18->h_z_pt);
@@ -665,9 +673,6 @@ void Run () {
   //hijing_truth->TruncatePhysicsPlots ();
   //hijing_bkg->TruncatePhysicsPlots ();
   //hijing->CalculateIAA ();
-
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
 }
 
 

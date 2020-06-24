@@ -9,7 +9,6 @@
 #include <TLine.h>
 #include <TCanvas.h>
 
-//#include <AtlasUtils.h>
 #include <Utilities.h>
 
 #include "Params.h"
@@ -37,8 +36,6 @@ TH1D*** h_avg_tmr = nullptr;
 
 
 void AnalyzeTrackMomentumResolution () {
-
-  SetupDirectories ("", "ZTrackAnalysis/");
 
   TFile* inFile = new TFile (Form ("%s/TrackingMomentumResolution/Nominal/trackingMomentumResolution.root", rootPath.Data ()), "read");
 

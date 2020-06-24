@@ -61,7 +61,6 @@ bool isPbPb = true;
 
 void PlotLeptonEffs () {
 
-  //SetupDirectories ("TagAndProbe/", "ZTrackAnalysis/");
   TFile* inFile = new TFile (Form ("%s/Nominal/outFile.root", rootPath.Data ()), "read");
 
   TH1D* h_muonTrigEffNum_pt[3];

@@ -43,8 +43,6 @@ void MCAnalysis :: Execute (const char* inFileName, const char* outFileName) {
   LoadEventWeights ();
   //eventPlaneCalibrator = EventPlaneCalibrator (Form ("%s/FCalCalibration/Nominal/data18hi.root", rootPath.Data ()));
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
   TFile* inFile = new TFile (Form ("%s/%s", rootPath.Data (), inFileName), "read");
   if (!inFile || !inFile->IsOpen ()) {
     cout << "Error in Execute: File not open!" << endl;

@@ -56,7 +56,6 @@ class BinWidthSystematic : public Systematic {
 // Load pre-filled histograms
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void BinWidthSystematic :: LoadGraphs (const char* graphFileName) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
 
   TDirectory* _gDirectory = gDirectory;
   graphFile = new TFile (Form ("%s/%s", rootPath.Data (), graphFileName), "read");

@@ -55,7 +55,6 @@ class ElectronSystematicTable {
 // raw (unscaled) hadron yields.
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void ElectronSystematicTable :: GetRelativeVariations (const string inFileName) {
-  //SetupDirectories ("", "ZTrackAnalysis/");
 
   TFile* inFile = new TFile (Form ("%s/DataAnalysis/Variations/ElectronPtVariation/systematics_electron_scale.root", rootPath.Data ()), "read");
 

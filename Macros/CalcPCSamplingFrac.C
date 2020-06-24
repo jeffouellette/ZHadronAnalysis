@@ -5,8 +5,6 @@
 #include "TTree.h"
 #include "TH1D.h"
 
-//#include <AtlasUtils.h>
-
 #include "Params.h"
 
 using namespace std;

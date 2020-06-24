@@ -175,8 +175,6 @@ void HijingMixedAnalysis :: Execute (const char* inFileName, const char* outFile
   LoadEventWeights ();
   //eventPlaneCalibrator = EventPlaneCalibrator (Form ("%s/FCalCalibration/Nominal/data18hi.root", rootPath.Data ()));
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
   cout << "Arguments provided: " << endl;
   cout << "inFileName = " << inFileName << endl;
   cout << "outFileName = " << outFileName << endl;

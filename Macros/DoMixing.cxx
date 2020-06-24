@@ -135,8 +135,6 @@ void GenerateIPMixBins () {
 
 void DoMixing (const bool isPbPb, const char* inFileName, const char* bkgInFileName, const char* mixedFileName) {
 
-  //SetupDirectories ("", "ZTrackAnalysis/");
-
   cout << "Arguments provided: " << endl;
   cout << "isPbPb = " << isPbPb << endl;
   cout << "inFileName = " << inFileName << endl;
