@@ -38,7 +38,7 @@ TagAndProbe : src/TagAndProbe.cxx
 
 # Main needs to be compiled into binary
 run : $(libs:%=lib/lib%.so) src/run.cxx
-	$(CXX) $(CXXFLAGS) src/run.cxx $(LDFLAGS) $(libs:%=-l%) $(algs:%=-l%) -o bin/run
+	$(CXX) $(CXXFLAGS) src/run.cxx $(LDFLAGS) $(libs:%=-l%) $(algs:%=-l%) -o bin/run.exe
 
 # Algorithms need to be compiled into object files and then migrated to a shared library
 % : obj/%.o

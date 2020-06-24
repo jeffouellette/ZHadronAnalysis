@@ -12,4 +12,4 @@ DoMixing : DoMixing.cxx
 	$(CC) -o ${ZTRACKS_PATH}/Macros/DoMixing ${ZTRACKS_PATH}/Macros/DoMixing.cxx
 
 clean :
-	rm ${ZTRACKS_PATH}/Macros/ProcessFile ${ZTRACKS_PATH}/Macros/DoMixing
+	rm ${ZTRACKS_PATH}/Macros/ProcessFile.exe ${ZTRACKS_PATH}/Macros/DoMixing.exe

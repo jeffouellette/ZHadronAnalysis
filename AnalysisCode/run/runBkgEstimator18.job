@@ -1,6 +1,6 @@
 Universe = vanilla
 Notification = Complete
-Executable = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/bin/run
+Executable = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/bin/run.exe.exe
 Priority = +1
 GetEnv = True
 InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/AnalysisCode/run

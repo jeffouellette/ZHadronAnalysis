@@ -10,6 +10,7 @@ lib
 *.tgz
 *.tar.gz
 *.dSYM
+*.exe
 
 # ROOT compilation tags
 *_h.d
