@@ -1,0 +1,41 @@
+Universe = vanilla
+Notification = Complete
+Executable = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros/ProcessFile
+Priority = +1
+GetEnv = True
+InitialDir = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros
+accounting_group = group_atlas.boulder
+request_memory   = 8G
+
+sysFlags = false false
+#sysFlags = false true
+
+Arguments = minbias Group1.root Group1_hists.root $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Group1.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Group1.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Group1.out
+Queue 1
+
+Arguments = minbias Group2.root Group2_hists.root $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Group2.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Group2.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Group2.out
+Queue 1
+
+Arguments = minbias Group3.root Group3_hists.root $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Group3.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Group3.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Group3.out
+Queue 1
+
+Arguments = minbias Group4.root Group4_hists.root $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Group4.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Group4.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Group4.out
+Queue 1
+
+Arguments = minbias Group5.root Group5_hists.root $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Group5.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Group5.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Group5.out
+Queue 1

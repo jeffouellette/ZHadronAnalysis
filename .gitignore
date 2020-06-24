@@ -1,5 +1,6 @@
 # General
 GoodRunLists
+*rootlogon.C
 *.key
 lib
 *.pdf
@@ -24,3 +25,6 @@ lib
 # 2018 5.02 TeV Pb+Pb Z-tracks analysis
 rootFiles
 Plots
+Submit/errors
+Submit/logs
+Submit/outputs

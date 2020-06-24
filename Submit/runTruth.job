@@ -1,0 +1,165 @@
+Universe = vanilla
+Notification = Complete
+Executable = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros/ProcessFile
+Priority = +1
+GetEnv = True
+InitialDir = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros
+accounting_group = group_atlas.boulder
+
+sysFlags = false doSmearingVar
+
+
+Arguments = truth CombinedTrees/pp_all.root 0 Histograms/pp_all_hists.root 0 false $(sysFlags)
+Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Hijing_pp_all.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Hijing_pp_all.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Hijing_pp_all.out
+Queue 1
+
+
+
+
+#Arguments = truth PbPb18_pp_Zmumu.root 0 PbPb18_pp_Zmumu_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pp_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pp_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pp_Zmumu.out
+#Queue 1
+#Arguments = truth PbPb18_pn_Zmumu.root 0 PbPb18_pn_Zmumu_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pn_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pn_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pn_Zmumu.out
+#Queue 1
+#Arguments = truth PbPb18_np_Zmumu.root 0 PbPb18_np_Zmumu_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_np_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_np_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_np_Zmumu.out
+#Queue 1
+#Arguments = truth PbPb18_nn_Zmumu.root 0 PbPb18_nn_Zmumu_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_nn_Zmumu.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_nn_Zmumu.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_nn_Zmumu.out
+#Queue 1
+#
+#Arguments = truth PbPb18_pp_Zee.root 0 PbPb18_pp_Zee_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pp_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pp_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pp_Zee.out
+#Queue 1
+#Arguments = truth PbPb18_pn_Zee.root 0 PbPb18_pn_Zee_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pn_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pn_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pn_Zee.out
+#Queue 1
+#Arguments = truth PbPb18_np_Zee.root 0 PbPb18_np_Zee_hists.root $(sysFlags) 
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_np_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_np_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_np_Zee.out
+#Queue 1
+#Arguments = truth PbPb18_nn_Zee.root 0 PbPb18_nn_Zee_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_nn_Zee.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_nn_Zee.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_nn_Zee.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = truth PbPb18_pp_Zmumu_ptmin25.root 0 PbPb18_pp_Zmumu_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pp_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pp_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pp_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_pn_Zmumu_ptmin25.root 0 PbPb18_pn_Zmumu_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pn_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pn_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pn_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_np_Zmumu_ptmin25.root 0 PbPb18_np_Zmumu_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_np_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_np_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_np_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_nn_Zmumu_ptmin25.root 0 PbPb18_nn_Zmumu_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_nn_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_nn_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_nn_Zmumu_ptmin25.out
+#Queue 1
+#
+#Arguments = truth PbPb18_pp_Zee_ptmin25.root 0 PbPb18_pp_Zee_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pp_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pp_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pp_Zee_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_pn_Zee_ptmin25.root 0 PbPb18_pn_Zee_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pn_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pn_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pn_Zee_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_np_Zee_ptmin25.root 0 PbPb18_np_Zee_ptmin25_hists.root $(sysFlags) 
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_np_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_np_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_np_Zee_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_nn_Zee_ptmin25.root 0 PbPb18_nn_Zee_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_nn_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_nn_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_nn_Zee_ptmin25.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = truth PbPb18_pp_Zmumu_ygt175.root 0 PbPb18_pp_Zmumu_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pp_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pp_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pp_Zmumu_ygt175.out
+#Queue 1
+#Arguments = truth PbPb18_pn_Zmumu_ygt175.root 0 PbPb18_pn_Zmumu_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pn_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pn_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pn_Zmumu_ygt175.out
+#Queue 1
+#Arguments = truth PbPb18_np_Zmumu_ygt175.root 0 PbPb18_np_Zmumu_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_np_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_np_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_np_Zmumu_ygt175.out
+#Queue 1
+#Arguments = truth PbPb18_nn_Zmumu_ygt175.root 0 PbPb18_nn_Zmumu_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_nn_Zmumu_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_nn_Zmumu_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_nn_Zmumu_ygt175.out
+#Queue 1
+#
+#Arguments = truth PbPb18_pp_Zee_ygt175.root 0 PbPb18_pp_Zee_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pp_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pp_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pp_Zee_ygt175.out
+#Queue 1
+#Arguments = truth PbPb18_pn_Zee_ygt175.root 0 PbPb18_pn_Zee_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_pn_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_pn_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_pn_Zee_ygt175.out
+#Queue 1
+#Arguments = truth PbPb18_np_Zee_ygt175.root 0 PbPb18_np_Zee_ygt175_hists.root $(sysFlags) 
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_np_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_np_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_np_Zee_ygt175.out
+#Queue 1
+#Arguments = truth PbPb18_nn_Zee_ygt175.root 0 PbPb18_nn_Zee_ygt175_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_nn_Zee_ygt175.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_nn_Zee_ygt175.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_nn_Zee_ygt175.out
+#Queue 1
+#
+#
+#
+#
+#Arguments = truth PbPb18_Sherpa_Zmumu_ptmin25.root 0 PbPb18_Sherpa_Zmumu_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_Sherpa_Zmumu_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_Sherpa_Zmumu_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_Sherpa_Zmumu_ptmin25.out
+#Queue 1
+#Arguments = truth PbPb18_Sherpa_Zee_ptmin25.root 0 PbPb18_Sherpa_Zee_ptmin25_hists.root $(sysFlags)
+#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/PbPb18_Sherpa_Zee_ptmin25.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/PbPb18_Sherpa_Zee_ptmin25.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/PbPb18_Sherpa_Zee_ptmin25.out
+#Queue 1
