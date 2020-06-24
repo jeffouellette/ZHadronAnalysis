@@ -6,6 +6,9 @@
 #include "TreeVariables.h"
 #include "ZTrackUtilities.h"
 
+#include <Utilities.h>
+#include <AtlasUtils.h>
+
 #include <TH2D.h>
 #include <TChain.h>
 #include <TSystem.h>

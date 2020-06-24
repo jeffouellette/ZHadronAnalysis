@@ -21,7 +21,7 @@ const double pi = atan (1)*4;
 
 const float electron_pt_cut = 20;
 const float muon_pt_cut = 20;
-const float trk_pt_cut = 1;
+const float trk_pt_cut = 0.8;
 const float jet_pt_cut = 1;
 
 const double electron_mass = 0.000511;

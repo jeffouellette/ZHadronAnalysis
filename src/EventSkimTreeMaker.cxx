@@ -7,6 +7,9 @@
 #include "ZTrackUtilities.h"
 #include "OutTree.h"
 
+#include <Utilities.h>
+#include <AtlasUtils.h>
+
 #include <TH2D.h>
 #include <TChain.h>
 #include <TSystem.h>

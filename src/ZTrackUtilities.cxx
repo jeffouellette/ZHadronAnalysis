@@ -4,6 +4,8 @@
 #include "ZTrackUtilities.h"
 #include "Params.h"
 
+#include <Utilities.h>
+
 #include <TSystemDirectory.h>
 
 #include <math.h>
@@ -237,104 +239,104 @@ TString GetIdentifier (const int dataSet, const char* directory, const char* inF
 }
 
 
-/**
- * Returns a linearly spaced array. The 0th element is lo, and the num-th element is hi.
- */
-double* linspace (double lo, double hi, int num) {
-  double* arr = new double[num+1];
-  double delta = ((double)(hi)-(double)(lo))/(double)(num);
-  for (int i = 0; i <= num; i++) {
-    arr[i] = lo + i * delta;
-  }
-  return arr;
-}
-
-
-/**
- * Returns a logarithmically spaced array, where the 0th element is lo and the num-th element is hi.
- */
-double* logspace (double lo, double hi, int num) {
-  double loghi = log2(hi);
-  if (lo == 0) {
-    double* arr = linspace(log2(hi/(100*num)), loghi, num);
-    for (int i = 0; i <= num; i++) {
-      arr[i] = pow(2, arr[i]);
-    }
-    return arr;
-  } else {
-    double loglo = log2(lo);
-    double* arr = linspace(loglo, loghi, num);
-    for (int i = 0; i <= num; i++) {
-      arr[i] = pow(2, arr[i]);
-    }
-    return arr;
-  }
-}
-
-
-/**
- * Returns the equivalent angle in the range 0 to 2pi.
- */
-double InTwoPi (double phi) {
-  while (phi < 0 || 2*pi <= phi) {
-   if (phi < 0) phi += 2*pi;
-   else phi -= 2*pi;
-  }
-  return phi;
-}
-
-
-/**
- * Returns the difference between two angles in 0 to pi.
- * If sign is true, will return a signed version such that phi2 = phi1 + dphi
- */
-double DeltaPhi (double phi1, double phi2, const bool sign) {
-  phi1 = InTwoPi(phi1);
-  phi2 = InTwoPi(phi2);
-  double dphi = abs(phi1 - phi2);
-  while (dphi > pi) dphi = abs (dphi - 2*pi);
-
-  if (sign && InTwoPi (phi2 + dphi) == phi1)
-     dphi *= -1;
-
-  return dphi;
-}
-
-
-/**
- * Returns dR between two eta, phi coordinates.
- */
-double DeltaR (const double eta1, const double eta2, const double phi1, const double phi2 ) {
- const double deta = eta1 - eta2;
- const double dphi = DeltaPhi (phi1, phi2, false);
- return sqrt( pow( deta, 2 ) + pow( dphi, 2 ) );
-}
-
-
-/**
- * Returns true iff this eta, phi coordinate lies in the disabled HEC region.
- */
-bool InDisabledHEC (const double eta, double phi, const double dr) {
-  phi = InTwoPi (phi);
-  return 1.5-dr < eta && eta < 3.2+dr &&
-         pi-dr < phi && phi < 3*pi/2+dr;
-}
-
-
-/**
- * Returns true iff this eta lies within the EMCal.
- */
-bool InEMCal (const float eta) {
-  return fabs(eta) < 1.37 || (1.52 < fabs(eta) && fabs(eta) < 2.47);
-}
-
-
-/**
- * Returns true iff this object is within a given radius in the HCal.
- */
-bool InHadCal (const float eta, const float R) {
-  return fabs(eta) <= 4.9 - R;
-}
+///**
+// * Returns a linearly spaced array. The 0th element is lo, and the num-th element is hi.
+// */
+//double* linspace (double lo, double hi, int num) {
+//  double* arr = new double[num+1];
+//  double delta = ((double)(hi)-(double)(lo))/(double)(num);
+//  for (int i = 0; i <= num; i++) {
+//    arr[i] = lo + i * delta;
+//  }
+//  return arr;
+//}
+//
+//
+///**
+// * Returns a logarithmically spaced array, where the 0th element is lo and the num-th element is hi.
+// */
+//double* logspace (double lo, double hi, int num) {
+//  double loghi = log2(hi);
+//  if (lo == 0) {
+//    double* arr = linspace(log2(hi/(100*num)), loghi, num);
+//    for (int i = 0; i <= num; i++) {
+//      arr[i] = pow(2, arr[i]);
+//    }
+//    return arr;
+//  } else {
+//    double loglo = log2(lo);
+//    double* arr = linspace(loglo, loghi, num);
+//    for (int i = 0; i <= num; i++) {
+//      arr[i] = pow(2, arr[i]);
+//    }
+//    return arr;
+//  }
+//}
+//
+//
+///**
+// * Returns the equivalent angle in the range 0 to 2pi.
+// */
+//double InTwoPi (double phi) {
+//  while (phi < 0 || 2*pi <= phi) {
+//   if (phi < 0) phi += 2*pi;
+//   else phi -= 2*pi;
+//  }
+//  return phi;
+//}
+//
+//
+///**
+// * Returns the difference between two angles in 0 to pi.
+// * If sign is true, will return a signed version such that phi2 = phi1 + dphi
+// */
+//double DeltaPhi (double phi1, double phi2, const bool sign) {
+//  phi1 = InTwoPi(phi1);
+//  phi2 = InTwoPi(phi2);
+//  double dphi = abs(phi1 - phi2);
+//  while (dphi > pi) dphi = abs (dphi - 2*pi);
+//
+//  if (sign && InTwoPi (phi2 + dphi) == phi1)
+//     dphi *= -1;
+//
+//  return dphi;
+//}
+//
+//
+///**
+// * Returns dR between two eta, phi coordinates.
+// */
+//double DeltaR (const double eta1, const double eta2, const double phi1, const double phi2 ) {
+// const double deta = eta1 - eta2;
+// const double dphi = DeltaPhi (phi1, phi2, false);
+// return sqrt( pow( deta, 2 ) + pow( dphi, 2 ) );
+//}
+//
+//
+///**
+// * Returns true iff this eta, phi coordinate lies in the disabled HEC region.
+// */
+//bool InDisabledHEC (const double eta, double phi, const double dr) {
+//  phi = InTwoPi (phi);
+//  return 1.5-dr < eta && eta < 3.2+dr &&
+//         pi-dr < phi && phi < 3*pi/2+dr;
+//}
+//
+//
+///**
+// * Returns true iff this eta lies within the EMCal.
+// */
+//bool InEMCal (const float eta) {
+//  return fabs(eta) < 1.37 || (1.52 < fabs(eta) && fabs(eta) < 2.47);
+//}
+//
+//
+///**
+// * Returns true iff this object is within a given radius in the HCal.
+// */
+//bool InHadCal (const float eta, const float R) {
+//  return fabs(eta) <= 4.9 - R;
+//}
 
 
 /**

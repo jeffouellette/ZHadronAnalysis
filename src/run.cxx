@@ -4,6 +4,7 @@
 #include "TruthTreeMaker.h"
 #include "TrackingEfficiency.h"
 #include "TrackingPurity.h"
+#include "TrackingMomentumResolution.h"
 #include "TagAndProbe.h"
 #include "FCalCalibration.h"
 #include "BkgEstimator.h"
@@ -128,6 +129,10 @@ int main (int argc, char** argv) {
   else if (alg == "TrackingPurity") {
     cout << "Info: In run.cxx: Running TrackingPurity algorithm..." << endl;
     success = TrackingPurity (subdir, dataSet, inFileName, eventWeightsFileName);
+  }
+  else if (alg == "TrackingMomentumResolution") {
+    cout << "Info: In run.cxx: Running TrackingMomentumResolution algorithm..." << endl;
+    success = TrackingMomentumResolution (subdir, dataSet, inFileName, eventWeightsFileName);
   }
   else if (alg == "TagAndProbe") {
     cout << "Info: In run.cxx: Running TagAndProbe algorithm..." << endl;

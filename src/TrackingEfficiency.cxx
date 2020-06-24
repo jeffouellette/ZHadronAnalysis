@@ -7,6 +7,8 @@
 #include "Trigger.h"
 #include "ZTrackUtilities.h"
 
+#include <Utilities.h>
+
 #include <TChain.h>
 #include <TSystem.h>
 #include <TH2D.h>

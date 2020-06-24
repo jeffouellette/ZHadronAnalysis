@@ -9,6 +9,9 @@
 #include "ZTrackUtilities.h"
 #include "Cuts.h"
 
+#include <Utilities.h>
+#include <AtlasUtils.h>
+
 #include <TChain.h>
 #include <TSystem.h>
 #include <TCanvas.h>

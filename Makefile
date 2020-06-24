@@ -1,9 +1,9 @@
 CXX=g++
-CXXFLAGS=-O3 -g -Wall -fPIC `root-config --cflags` -I${gpfs}/ZTrackAnalyzer/include
-LDFLAGS=`root-config --glibs --ldflags` -L${gpfs}/ZTrackAnalyzer/lib
+CXXFLAGS=-O3 -g -Wall -fPIC `root-config --cflags` -Iinclude -I${ROOT_UTILS_PATH}/include -I${ATLAS_PATH}/include
+LDFLAGS=`root-config --glibs --ldflags` -Llib -L${ROOT_UTILS_PATH}/lib -L${ATLAS_PATH}/lib -lUtilities -lAtlasUtils -lAtlasStyle
 
 libs = ZTrackUtilities TreeVariables Trigger Cuts
-algs = TreeMaker MinBiasTreeMaker TruthSelectedTreeMaker TruthTreeMaker TrackingEfficiency TrackingPurity TagAndProbe FCalCalibration BkgEstimator EventSkimTreeMaker
+algs = TreeMaker MinBiasTreeMaker TruthSelectedTreeMaker TruthTreeMaker TrackingMomentumResolution TrackingEfficiency TrackingPurity TagAndProbe FCalCalibration BkgEstimator EventSkimTreeMaker
 
 bins = run
 
@@ -13,25 +13,28 @@ bins : $(bins)
 all : libs algs bins
 
 ZTrackUtilities : src/ZTrackUtilities.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 TreeVariables : src/TreeVariables.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 Trigger : src/Trigger.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 Cuts : src/Cuts.cxx TreeVariables
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -lTreeVariables -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -lTreeVariables -shared -o lib/lib$@.so src/$@.cxx
+
+TrackingMomentumResolution : src/TrackingMomentumResolution.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 TrackingEfficiency : src/TrackingEfficiency.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 TrackingPurity : src/TrackingPurity.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 TagAndProbe : src/TagAndProbe.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o ${gpfs}/ZTrackAnalyzer/lib/lib$@.so ${gpfs}/ZTrackAnalyzer/src/$@.cxx
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 # Main needs to be compiled into binary
 run : $(libs:%=lib/lib%.so) src/run.cxx
