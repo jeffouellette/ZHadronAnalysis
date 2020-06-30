@@ -160,7 +160,7 @@ void GenerateWeights (const char* name, const char* inFileName = "outFile.root",
     // Calculate reweighting factors otherwise (requires obtaining raw distributions in data)
     else {
       // get reference (data) distributions
-      TFile* ztrackFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/DataAnalysis/Nominal/eventWeightsFile.root", "read");
+      TFile* ztrackFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/DataAnalysis/Nominal/eventWeightsFile.root", "read");
       referenceNchDist = (TH1D*)ztrackFile->Get ("h_PbPbNchDist_data");
 
       referenceFCalDist = (TH1D*) ztrackFile->Get ("h_PbPbFCalDist_data");
@@ -266,7 +266,7 @@ void GenerateWeights (const char* name, const char* inFileName = "outFile.root",
         h_ppNch_weights->SetBinContent (ix, 1);
       }
     } else {
-      TFile* ztrackFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/DataAnalysis/Nominal/eventWeightsFile.root", "read");
+      TFile* ztrackFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/DataAnalysis/Nominal/eventWeightsFile.root", "read");
       referenceNchDist = (TH1D*)ztrackFile->Get ("h_ppNchDist_data");
 
       for (int ix = 1; ix <= h_ppNch_weights->GetNbinsX (); ix++) {
@@ -304,27 +304,27 @@ void GenerateWeights (const char* name, const char* inFileName = "outFile.root",
 
 
 void GenerateDataWeights () {
-  GenerateWeights ("data", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/DataAnalysis/Nominal/data18hi.root", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/DataAnalysis/Nominal/eventWeightsFile.root");
+  GenerateWeights ("data", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/DataAnalysis/Nominal/data18hi.root", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/DataAnalysis/Nominal/eventWeightsFile.root");
 }
 
 void GeneratePbPbMCWeights () {
-  GenerateWeights ("mc", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_100/PbPbEventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_100/PbPbEventWeightsFile.root");
+  GenerateWeights ("mc", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/mc_100/PbPbEventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/mc_100/PbPbEventWeightsFile.root");
 }
 
 void GenerateppMCWeights () {
-  GenerateWeights ("mc", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_100/ppEventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/mc_100/ppEventWeightsFile.root");
+  GenerateWeights ("mc", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/mc_100/ppEventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/mc_100/ppEventWeightsFile.root");
 }
 
 void GenerateHijingWeights () {
-  GenerateWeights ("hijing", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_200/PbPbEventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_200/PbPbEventWeightsFile.root");
+  GenerateWeights ("hijing", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/hijing_200/PbPbEventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/hijing_200/PbPbEventWeightsFile.root");
 }
 
 //void Generate2015HijingWeights () {
-//  GenerateWeights ("hijing", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_110/hijing2015_eventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_110/hijing2015_eventWeightsFile.root");
+//  GenerateWeights ("hijing", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/hijing_110/hijing2015_eventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/hijing_110/hijing2015_eventWeightsFile.root");
 //}
 
 //void Generate2018HijingWeights () {
-//  GenerateWeights ("hijing", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_110/hijing2018_eventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/data/hijing_110/hijing2018_eventWeightsFile.root");
+//  GenerateWeights ("hijing", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/hijing_110/hijing2018_eventWeightsTree.root", "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/data/hijing_110/hijing2018_eventWeightsFile.root");
 //}
 
 #endif

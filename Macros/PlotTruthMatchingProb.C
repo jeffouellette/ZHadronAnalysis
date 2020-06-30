@@ -3,7 +3,7 @@
 void PlotTruthMatchingProb () {
 
   //TFile* inFile = new TFile ("../rootFiles/TrackingEfficiencies/Nominal/trackingEfficiencies_18.root", "read");
-  TFile* inFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/TrackingEfficiencies/Nominal/trackingEfficiencies_18.root", "read");
+  TFile* inFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/TrackingEfficiencies/Nominal/trackingEfficiencies_18.root", "read");
 
   TH1D* h_pp = (TH1D*) inFile->Get ("h_truth_matching_prob_pp");
   TH1D* h_PbPb = (TH1D*) inFile->Get ("h_truth_matching_prob_PbPb");

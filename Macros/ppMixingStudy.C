@@ -3,8 +3,8 @@
 
 void ppMixingStudy () {
 
-  TFile* f_mb = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/rootFiles/FCalCalibration/Nominal/data18hi.root", "read");
-  TFile* f_ztag = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/rootFiles/DataAnalysis/Nominal/pp_fcal_et_ztag.root", "read");
+  TFile* f_mb = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/rootFiles/FCalCalibration/Nominal/data18hi.root", "read");
+  TFile* f_ztag = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/rootFiles/DataAnalysis/Nominal/pp_fcal_et_ztag.root", "read");
 
   TH1D* h_mb = (TH1D*) f_mb->Get ("h_pp_fcal_et");
   TH1D* h_ztag = (TH1D*) f_ztag->Get ("h_pp_fcal_et_ztag");

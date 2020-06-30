@@ -835,6 +835,19 @@ void MakeTheoryBox (const double x, const double y, const Color_t color, const d
 }
 
 
+void MakeTheoryLine (const double x, const double y, const Color_t color, const double lineMultiplier = 1.) {
+  const double ytsize = 0.07;
+  const double xtsize = 0.18;
+  const double x2 = x - 0.15*xtsize;
+  const double x1 = x - 0.55*xtsize*lineMultiplier;
+  TLine mline;
+  mline.SetLineColor (color);
+  mline.SetLineWidth (4);
+  mline.DrawLineNDC (x1, y, x2, y);
+  return;
+}
+
+
 void MakeDataBox (const double x, const double y, const Color_t color, const double colorAlpha, const Style_t mstyle, const double msize) {
   MakeTheoryBox (x, y, color, colorAlpha);
 

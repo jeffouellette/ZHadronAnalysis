@@ -43,6 +43,7 @@ const Color_t scetgColor  = (Color_t) tcolor->GetColor (39, 180, 66);
 const double  scetgAlpha  = 0.6;
 const Color_t jewelColor  = tcolor->GetColor (255, 170, 50);
 const double  jewelAlpha  = 0.5;
+const Color_t colbtColor  = kAzure-3;
 
 const bool plotXhZ = true;
 const double minModelUnc = 0.08;
@@ -271,6 +272,9 @@ void MakeFinalPlots () {
   }
 
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Get Powheg+Pythia hadron yield predictions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   TGAE** g_pythia_pth_ptz = Get1DArray <TGAE*> (nPtZBins);
   TGAE** g_pythia_finepth_ptz = Get1DArray <TGAE*> (nPtZBins);
   TGAE** g_pythia_xhz_ptz = Get1DArray <TGAE*> (nPtZBins);
@@ -420,6 +424,47 @@ void MakeFinalPlots () {
   }
 
 
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Get CoLBT predictions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  TGraph** g_colbt_xhz = Get1DArray <TGraph*> (nPtZBins);
+  {
+    for (int iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
+      g_colbt_xhz[iPtZ] = new TGraph ();
+    }
+
+    string modelFileName;
+    short iPtZ;
+    ifstream f;
+    float x = 0, y = 0;
+
+    modelFileName = "../CoLBT/iaa_pt30_all.dat";
+    iPtZ = 3;
+    f.open (modelFileName.c_str ());
+    f >> x >> y;
+    do {
+      g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, y);
+      f >> x >> y;
+    } while (f);
+    f.close ();
+
+    modelFileName = "../CoLBT/iaa_pt60_all.dat";
+    iPtZ = 4;
+    f.open (modelFileName.c_str ());
+    f >> x >> y;
+    do {
+      g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, y);
+      f >> x >> y;
+    } while (f);
+    f.close ();
+  }
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Get Hybrid model predictions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   TGAE** g_hybrid_xhz = Get1DArray <TGAE*> (nPtZBins);
   TGAE** g_hybrid_pth  = Get1DArray <TGAE*> (nPtZBins);
   for (int iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
@@ -474,6 +519,9 @@ void MakeFinalPlots () {
 
 
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Get SCET_G predictions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   TGAE** g_scetg_pth = Get1DArray <TGAE*> (nPtZBins);
   TGAE** g_scetg_xhz = Get1DArray <TGAE*> (nPtZBins);
   for (int iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
@@ -648,6 +696,9 @@ void MakeFinalPlots () {
   }
 
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Get JEWEL predictions
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   TGAE** g_jewel_xhz = Get1DArray <TGAE*> (nPtZBins);
   TGAE** g_jewel_pth = Get1DArray <TGAE*> (nPtZBins);
   {
@@ -668,7 +719,9 @@ void MakeFinalPlots () {
 
 
 
-
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  // Get data comparison plots
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   TFile* dataCompFile = new TFile ("../DataComparisons/Zhadron_IAA_data_comparisons.root", "read");
   TGE* tg_PHENIX_IAA_stat = (TGE*) dataCompFile->Get ("tg_PHENIX_IAA_stat");
   TGE* tg_PHENIX_IAA_syst = (TGE*) dataCompFile->Get ("tg_PHENIX_IAA_syst");
@@ -679,6 +732,9 @@ void MakeFinalPlots () {
 
   TLatex* tl = new TLatex ();
   TLine* l = new TLine ();
+
+
+
 
   {
     TCanvas* c1 = new TCanvas ("c1", "", 1600, plotXhZ ? 1200 : 600);
@@ -1067,8 +1123,8 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      const double ymin = 0.06;
-      const double ymax = 2000;
+      const double ymin = 0.08;
+      const double ymax = 1200;
       yax->SetRangeUser (ymin, ymax);
       //yax->SetTitleFont (43);
       //yax->SetTitleSize (30);
@@ -1102,9 +1158,9 @@ void MakeFinalPlots () {
       l->SetLineStyle (2);
       l->SetLineWidth (2);
       l->SetLineColor (kBlack);
-      l->DrawLine (pTchBins[nPtZBins-1][0], 1, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
-      l->DrawLine (pTchBins[nPtZBins-1][0], 10, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 10);
-      l->DrawLine (pTchBins[nPtZBins-1][0], 100, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 100);
+      l->DrawLine (1, 1, 14, 1);
+      l->DrawLine (1, 10, 28, 10);
+      l->DrawLine (1, 100, 60, 100);
     }
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
@@ -1168,14 +1224,14 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.19, 0.890, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (26);
     tl->DrawLatexNDC (0.43, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.43, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.43, 0.845, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (24);
-    tl->DrawLatex (13, 1.28, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
-    tl->DrawLatex (13, 12.8, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
+    tl->DrawLatex (3.40, 1.28, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
+    tl->DrawLatex (6.35, 12.8, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
     tl->DrawLatex (13, 128, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
 
-    tl->SetTextSize (28);
+    tl->SetTextSize (26);
     tl->SetTextAlign (11);
     tl->DrawLatexNDC (0.765, 0.320-0.011, "30-80\% #/#it{pp}");
     tl->DrawLatexNDC (0.765, 0.270-0.011, "10-30\% #/#it{pp}");
@@ -2204,8 +2260,8 @@ void MakeFinalPlots () {
     xax->SetLabelSize (0);
 
     yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{p}_{T} d#Delta#phi) [GeV^{-1}]");
-    double ymin = 5e-4;
-    double ymax = 8e3;
+    double ymin = 1.1e-3;
+    double ymax = 8e5;
     yax->SetRangeUser (ymin, ymax);
     //yax->SetTitleFont (43);
     //yax->SetTitleSize (30);
@@ -2239,7 +2295,7 @@ void MakeFinalPlots () {
       for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
         TGAE* g_syst = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
 
-        OffsetYAxis (g_syst, pow (10, iPtZ-2), true);
+        OffsetYAxis (g_syst, pow (100, iPtZ-2), true);
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
         const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
@@ -2264,7 +2320,7 @@ void MakeFinalPlots () {
         Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
         float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
 
-        OffsetYAxis (g_stat, pow (10, iPtZ-2), true);
+        OffsetYAxis (g_stat, pow (100, iPtZ-2), true);
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
         const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
@@ -2297,29 +2353,40 @@ void MakeFinalPlots () {
     tl->SetTextAlign (11);
 
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.19, 0.890, "#bf{#it{ATLAS}} Internal");
+    tl->DrawLatexNDC (0.41, 0.900, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (26);
-    tl->DrawLatexNDC (0.43, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.43, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.43, 0.855, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.43, 0.810, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (24);
-    tl->SetTextAngle (-35);
-    tl->DrawLatex (4, 1, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
-    tl->DrawLatex (8, 6, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
-    tl->DrawLatex (15, 40, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
+    tl->SetTextAngle (337);
+    tl->DrawLatex (2, 4, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
+    tl->DrawLatex (5.5, 100, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10^{2})");
+    tl->DrawLatex (14, 3000, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{4})");
     tl->SetTextAngle (0);
 
-    //TLine* dashedLines = new TLine ();
-    //dashedLines->SetLineStyle (2);
-    //dashedLines->SetLineColor (kBlack);
+    TLine* dashedLines = new TLine ();
+    dashedLines->SetLineStyle (2);
+    dashedLines->SetLineColor (kBlack);
 
-    //dashedLines->DrawLine (1, 17., 50., ymin);
-    //dashedLines->DrawLine (1, 350., 60., exp (((log(ymin)-log(17.))/log(50.))*log(60.) + log(350.)));
+    dashedLines->DrawLine (1, 21518.047, 40, 1.30*4);
+    dashedLines->DrawLine (1, 70, 14, 1.30*0.15);
 
-    myMarkerAndBoxAndLineText (0.30, 0.245, 1.4, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.6, "#it{pp}", 0.032);
-    myMarkerAndBoxAndLineText (0.30, 0.200, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\%", 0.032);
-    myMarkerAndBoxAndLineText (0.47, 0.245, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\%", 0.032);
-    myMarkerAndBoxAndLineText (0.47, 0.200, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\%", 0.032);
+    //myMarkerAndBoxAndLineText (0.30, 0.245, 1.4, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.6, "#it{pp}", 0.032);
+    //myMarkerAndBoxAndLineText (0.30, 0.200, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\%", 0.032);
+    //myMarkerAndBoxAndLineText (0.47, 0.245, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\%", 0.032);
+    //myMarkerAndBoxAndLineText (0.47, 0.200, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\%", 0.032);
+
+    tl->SetTextSize (26);
+    tl->SetTextAlign (11);
+    tl->DrawLatexNDC (0.785, 0.320-0.011, "#it{pp}");
+    tl->DrawLatexNDC (0.785, 0.280-0.011, "30-80\%");
+    tl->DrawLatexNDC (0.785, 0.240-0.011, "10-30\%");
+    tl->DrawLatexNDC (0.785, 0.200-0.011, "0-10\%");
+    MakeDataBox   (0.80, 0.320, finalFillColors[0], 0.30, kOpenCircle, 1.6);
+    MakeDataBox   (0.80, 0.280, finalFillColors[1], 0.30, markerStyles[0], 1.6);
+    MakeDataBox   (0.80, 0.240, finalFillColors[2], 0.30, markerStyles[1], 1.6);
+    MakeDataBox   (0.80, 0.200, finalFillColors[3], 0.30, markerStyles[2], 2.2);
 
     c6b->SaveAs ("../Plots/FinalPlots/yield_allptz_pTchOnly_onePlot.pdf");
   }
@@ -3791,6 +3858,20 @@ void MakeFinalPlots () {
     }
 
     {
+      TGraph* g = (TGraph*) g_colbt_xhz[iPtZ]->Clone ();
+
+      TGAE* matched = (TGAE*) g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->Clone ();
+      RecenterGraph (matched);
+      RecenterGraph (g, matched);
+      SaferDelete (&matched);
+
+      g->SetLineColor (colbtColor);
+      g->SetLineWidth (4);
+      ((TGraph*) g->Clone ())->Draw ("L");
+      SaferDelete (&g);
+    }
+
+    {
       TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
 
       RecenterGraph (g_syst);
@@ -3847,18 +3928,20 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.24, 0.290, "30 < #it{p}_{T}^{Z} < 60 GeV");
+    //tl->SetTextSize (28);
+    //tl->DrawLatexNDC (0.24, 0.335, "30 < #it{p}_{T}^{Z} < 60 GeV");
 
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.33, 0.245-0.011, "ATLAS 0-10\%");
-    tl->DrawLatexNDC (0.33, 0.200-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.65, 0.245-0.011, "SCET_{G}");
+    tl->DrawLatexNDC (0.33, 0.294-0.011, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->DrawLatexNDC (0.33, 0.247-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.33, 0.200-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.65, 0.247-0.011, "SCET_{G}");
     tl->DrawLatexNDC (0.65, 0.200-0.011, "JEWEL");
 
-    MakeDataBox   (0.34, 0.245, finalFillColors[2], 0.30, markerStyles[1], 1.8);
-    MakeTheoryBox (0.34, 0.200, hybridColor, hybridAlpha);
-    MakeTheoryBox (0.66, 0.245, scetgColor, scetgAlpha);
+    MakeDataBox   (0.34, 0.294, finalFillColors[2], 0.30, markerStyles[1], 1.8);
+    MakeTheoryBox (0.34, 0.247, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.34, 0.200, colbtColor);
+    MakeTheoryBox (0.66, 0.247, scetgColor, scetgAlpha);
     MakeTheoryBox (0.66, 0.200, jewelColor, jewelAlpha);
 
     c14->SaveAs ("../Plots/FinalPlots/iaa_xhZ_theoryComp_iPtZ3.pdf");
@@ -3959,6 +4042,20 @@ void MakeFinalPlots () {
     }
 
     {
+      TGraph* g = (TGraph*) g_colbt_xhz[iPtZ]->Clone ();
+
+      TGAE* matched = (TGAE*) g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->Clone ();
+      RecenterGraph (matched);
+      RecenterGraph (g, matched);
+      SaferDelete (&matched);
+
+      g->SetLineColor (colbtColor);
+      g->SetLineWidth (4);
+      ((TGraph*) g->Clone ())->Draw ("L");
+      SaferDelete (&g);
+    }
+
+    {
       TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
 
       RecenterGraph (g_syst);
@@ -4015,18 +4112,20 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.24, 0.290, "#it{p}_{T}^{Z} > 60 GeV");
+    //tl->SetTextSize (28);
+    //tl->DrawLatexNDC (0.24, 0.335, "#it{p}_{T}^{Z} > 60 GeV");
 
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.33, 0.245-0.011, "ATLAS 0-10\%");
-    tl->DrawLatexNDC (0.33, 0.200-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.65, 0.245-0.011, "SCET_{G}");
+    tl->DrawLatexNDC (0.33, 0.294-0.011, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.33, 0.247-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.33, 0.200-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.65, 0.247-0.011, "SCET_{G}");
     tl->DrawLatexNDC (0.65, 0.200-0.011, "JEWEL");
 
-    MakeDataBox   (0.34, 0.245, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-    MakeTheoryBox (0.34, 0.200, hybridColor, hybridAlpha);
-    MakeTheoryBox (0.66, 0.245, scetgColor, scetgAlpha);
+    MakeDataBox   (0.34, 0.294, finalFillColors[3], 0.30, markerStyles[2], 2.4);
+    MakeTheoryBox (0.34, 0.247, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.34, 0.200, colbtColor);
+    MakeTheoryBox (0.66, 0.247, scetgColor, scetgAlpha);
     MakeTheoryBox (0.66, 0.200, jewelColor, jewelAlpha);
 
     c15->SaveAs ("../Plots/FinalPlots/iaa_xhZ_theoryComp_iPtZ4.pdf");

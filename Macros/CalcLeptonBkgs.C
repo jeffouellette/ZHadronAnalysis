@@ -14,28 +14,28 @@ void CalcLeptonBkgs () {
   TChain* chain = new TChain ("PbPbZTrackTree", "PbPbZTrackTree");
   double ttbarEECounts = 0, ttbarMuMuCounts = 0, ZtautauEECounts = 0, ZtautauMuMuCounts = 0, eeAllCounts = 0, mumuAllCounts = 0;
 
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_ttbar/*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_ttbar/*.root");
   cout << "Running over ttbar events..." << endl;
   ttbarEECounts = chain->GetEntries ("isEE");
   ttbarMuMuCounts = chain->GetEntries ("!isEE");
   chain->Reset ();
 
 
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_Ztautau/*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_Ztautau/*.root");
   cout << "Running over ttbar events..." << endl;
   ZtautauEECounts = chain->GetEntries ("isEE");
   ZtautauMuMuCounts = chain->GetEntries ("!isEE");
   chain->Reset ();
 
 
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_nn_Zee/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_nn_Zmumu/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_np_Zee/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_np_Zmumu/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pn_Zee/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pn_Zmumu/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_Zee/Group*.root");
-  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_Zmumu/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_nn_Zee/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_nn_Zmumu/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_np_Zee/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_np_Zmumu/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pn_Zee/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pn_Zmumu/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_Zee/Group*.root");
+  chain->Add ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MCAnalysis/Nominal/PbPb18_pp_Zmumu/Group*.root");
   cout << "Running over all events..." << endl;
   eeAllCounts = chain->GetEntries ("isEE");
   mumuAllCounts = chain->GetEntries ("!isEE");

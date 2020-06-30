@@ -15,7 +15,7 @@ void CompareHijingTrackEff () {
   double newPtTrkBins[6] = {1, 1.5, 2, 6, 10, 60};
   int newNPtTrkBins = (sizeof (newPtTrkBins) / sizeof (newPtTrkBins[0])) - 1;
 
-  const TString dir = "/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/rootFiles/TrackingEfficiencies/Nominal/";
+  const TString dir = "/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/rootFiles/TrackingEfficiencies/Nominal/";
 
   TFile* pythiaFile = new TFile (dir + "trackingEfficienciesMult_18.root", "read");
   //TFile* pythiaFile = new TFile (dir + "PbPb_Hijing_15.root", "read");
@@ -223,15 +223,15 @@ void CompareHijingTrackEff () {
     l->Draw ("same");
   }
 
-  c->SaveAs ("/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/Plots/ZTrackAnalysis/TrackingEfficienciesComp.pdf");
+  c->SaveAs ("/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/Plots/ZTrackAnalysis/TrackingEfficienciesComp.pdf");
 
 
 
 
-  TFile* f_mcEW = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/rootFiles/MCAnalysis/eventWeightsFile.root", "read");
+  TFile* f_mcEW = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/rootFiles/MCAnalysis/eventWeightsFile.root", "read");
   TH1D* h_PbPbNchDist_mc = (TH1D*) f_mcEW->Get ("h_PbPbNchDist_mc");
 
-  TFile* f_hijingEW = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/rootFiles/MinbiasAnalysis/PbPb_Hijing_18_eventWeights.root", "read");
+  TFile* f_hijingEW = new TFile ("/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/rootFiles/MinbiasAnalysis/PbPb_Hijing_18_eventWeights.root", "read");
   TH1D* h_PbPbNchDist_hijing = (TH1D*) f_hijingEW->Get ("h_PbPbNchDist_hijing");
 
   TCanvas* c2 = new TCanvas ("c2", "", 1200, 800);
@@ -279,7 +279,7 @@ void CompareHijingTrackEff () {
   myMarkerText (0.55, 0.88, kAzure+2, kOpenCircle, "Pythia Z#rightarrow ll with Data Overlay", 1.25, 0.04);
   myMarkerText (0.55, 0.81, kRed+1, kOpenSquare, "Pythia Z#rightarrow ee with HIJING Overlay", 1.25, 0.04);
 
-  c2->SaveAs ("/Users/jeffouellette/Research/atlas-hi/ZTrackAnalysis/Plots/ZTrackAnalysis/NchComp.pdf");
+  c2->SaveAs ("/Users/jeffouellette/Research/atlas-hi/ZHadronAnalysis/Plots/ZTrackAnalysis/NchComp.pdf");
 }
 
 #endif

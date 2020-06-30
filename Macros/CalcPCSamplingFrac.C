@@ -11,7 +11,7 @@ using namespace std;
 
 void CalcPCSamplingFrac () {
 
-  TFile* infile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/MixingAnalysis/Nominal/fcals.root", "read");
+  TFile* infile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/MixingAnalysis/Nominal/fcals.root", "read");
   TTree* intree = (TTree*) infile->Get ("fcals");
 
   float fcal_et = 0;
@@ -24,7 +24,7 @@ void CalcPCSamplingFrac () {
   intree->SetBranchAddress ("HLT_noalg_pc_L1TE50_VTE600.0ETA49", &HLT_noalg_pc_L1TE50_VTE600_0ETA49);
   intree->SetBranchAddress ("HLT_noalg_cc_L1TE600_0ETA49",       &HLT_noalg_cc_L1TE600_0ETA49);
 
-  TFile* outfile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/mbSamplingFracs.root", "recreate");
+  TFile* outfile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/mbSamplingFracs.root", "recreate");
   TH1D* h_centrality_sampled_pc = new TH1D ("h_centrality_sampled_pc", ";Centrality [%];Events", 80, 0, 80);
   TH1D* h_centrality_sampled_cc = new TH1D ("h_centrality_sampled_cc", ";Centrality [%];Events", 80, 0, 80);
   TH1D* h_centrality_all_pc = new TH1D ("h_centrality_all_pc", ";Centrality [%];Events", 80, 0, 80);
@@ -49,7 +49,7 @@ void CalcPCSamplingFrac () {
   infile = nullptr;
   intree = nullptr;
 
-  TFile* infile2 = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/EventSkims/Nominal/fcals.root", "read");
+  TFile* infile2 = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/EventSkims/Nominal/fcals.root", "read");
   TTree* intree2 = (TTree*) infile2->Get ("fcals");
 
   intree2->SetBranchAddress ("fcal_et", &fcal_et);
@@ -128,7 +128,7 @@ void CalcPCSamplingFrac () {
   myText (0.43, 0.24, kRed+1, "CC stream", 0.04);
 
 
-  c->SaveAs ("/atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros/Plots/MBCentralitySampling.pdf");
+  c->SaveAs ("/atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZHadronAnalysis/Macros/Plots/MBCentralitySampling.pdf");
  
 
   h_centrality_sampled_pc->Write ();

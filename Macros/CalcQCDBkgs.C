@@ -13,10 +13,10 @@
 
 void CalcQCDBkgs () {
 
-  TFile* dataFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/BkgEstimator/Nominal/data18hi.root", "read");
+  TFile* dataFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/BkgEstimator/Nominal/data18hi.root", "read");
   TTree* dataTree = (TTree*) dataFile->Get ("PbPbZTree");
 
-  TFile* mcFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/BkgEstimator/Nominal/mc.root", "read");
+  TFile* mcFile = new TFile ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/BkgEstimator/Nominal/mc.root", "read");
   TTree* mcTree = (TTree*) mcFile->Get ("PbPbZTree");
 
   bool isQCDBkg = false;

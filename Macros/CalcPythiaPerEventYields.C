@@ -84,7 +84,7 @@ void DoStuff (TString inFileName, TString outFileName) {
   float trk_counts_xhZ[maxNXhZBins] = {};
   float trk_counts_FineXhZ[nFineXhZBins] = {};
 
-  TFile* outFile = new TFile (Form ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/TruthAnalysis/Nominal/%s", outFileName.Data ()), "recreate");
+  TFile* outFile = new TFile (Form ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/TruthAnalysis/Nominal/%s", outFileName.Data ()), "recreate");
 
   TH1D* h_z_counts = new TH1D ("h_z_counts", "iPtZ", nPtZBins, 0, nPtZBins);
 
@@ -127,7 +127,7 @@ void DoStuff (TString inFileName, TString outFileName) {
   }
 
 
-  TFile* inFile = new TFile (Form ("/atlasgpfs01/usatlas/data/jeff/ZTrackAnalysis/rootFiles/TruthAnalysis/Nominal/%s", inFileName.Data ()), "read");
+  TFile* inFile = new TFile (Form ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/TruthAnalysis/Nominal/%s", inFileName.Data ()), "read");
   TTree* inTree = (TTree*) inFile->Get ("ppZTrackTree");
 
   inTree->LoadBaskets (2000000000);
