@@ -54,8 +54,8 @@ float max_rel_sys = 40;
 
 extern int mixingFraction;
 
-const TString rootPath = TString (std::getenv ("ZTRACKS_PATH")) + "/rootFiles/";
-const TString plotPath = TString (std::getenv ("ZTRACKS_PATH")) + "/Plots/";
+const TString rootPath = TString (std::getenv ("ZHADRONS_PATH")) + "/rootFiles/";
+const TString plotPath = TString (std::getenv ("ZHADRONS_PATH")) + "/Plots/";
 
 const double etaTrkBins[6] = {0, 0.5, 1.0, 1.5, 2.0, 2.5};
 const int numEtaTrkBins = sizeof (etaTrkBins) / sizeof (etaTrkBins[0]) - 1;

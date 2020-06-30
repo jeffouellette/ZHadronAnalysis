@@ -1,7 +1,7 @@
-#ifndef __ZTrackUtilities_cxx__
-#define __ZTrackUtilities_cxx__
+#ifndef __LocalUtilities_cxx__
+#define __LocalUtilities_cxx__
 
-#include "ZTrackUtilities.h"
+#include "LocalUtilities.h"
 #include "Params.h"
 
 #include <Utilities.h>
@@ -20,8 +20,8 @@ namespace ZHadronAnalysis {
  * Establishes path variables appropriately.
  */
 void SetupDirectories (const TString dataSubDir, const bool addSubDir) {
-  rootPath = extWorkPath + "rootFiles/" + dataSubDir + "/";
-  plotPath = workPath + "Plots/" + dataSubDir + "/";
+  rootPath = extWorkPath + "/rootFiles/" + dataSubDir + "/";
+  plotPath = workPath + "/Plots/" + dataSubDir + "/";
 
   if (addSubDir) {
     if (doElectronPtUpVar)
@@ -80,7 +80,7 @@ TFile* GetFile (const char* directory, const int dataSet, const char* inFileName
         fileIdentifier = to_string (dataSet);
     }
     else {
-      cout << "Error: In ZTrackUtilities.C: Cannot identify this MC file! Will return null!" << endl;
+      cout << "Error: In LocalUtilities.C: Cannot identify this MC file! Will return null!" << endl;
       return nullptr;
     }
   }
@@ -92,7 +92,7 @@ TFile* GetFile (const char* directory, const int dataSet, const char* inFileName
   TSystemDirectory dir (dataPathTemp.Data (), dataPathTemp.Data ());
   TList* sysfiles = dir.GetListOfFiles ();
   if (!sysfiles) {
-    cout << "Error: In ZTrackUtilities.C: Cannot get list of files! Will return null!" << endl;
+    cout << "Error: In LocalUtilities.C: Cannot get list of files! Will return null!" << endl;
     return nullptr;
   }
   TSystemFile* sysfile;
@@ -109,7 +109,7 @@ TFile* GetFile (const char* directory, const int dataSet, const char* inFileName
   }
 
   if (!fname.Contains (fileIdentifier)) {
-    cout << "Error: In ZTrackUtilities.cxx: TFile cannot be found for given data set. Will return null!" << endl;
+    cout << "Error: In LocalUtilities.cxx: TFile cannot be found for given data set. Will return null!" << endl;
     return nullptr;
   }
 
@@ -144,7 +144,7 @@ TFile* GetFile (const char* directory, const int dataSet, const char* inFileName
   }
   
   if (!file) {
-    cout << "Error: In ZTrackUtilities.C: TFile not obtained for given data set. Will return null!" << endl;
+    cout << "Error: In LocalUtilities.C: TFile not obtained for given data set. Will return null!" << endl;
     return nullptr;
   }
   else return file;

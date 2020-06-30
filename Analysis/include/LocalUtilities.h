@@ -1,5 +1,5 @@
-#ifndef __ZTrackUtilities_h__
-#define __ZTrackUtilities_h__
+#ifndef __LocalUtilities_h__
+#define __LocalUtilities_h__
 
 
 #include <TString.h>

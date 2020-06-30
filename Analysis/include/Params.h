@@ -1,7 +1,7 @@
 #ifndef __Params_h__
 #define __Params_h__
 
-#include "ZTrackUtilities.h"
+#include "LocalUtilities.h"
 
 #include <TString.h>
 
@@ -27,8 +27,8 @@ const float jet_pt_cut = 1;
 const double electron_mass = 0.000511;
 const double muon_mass = 0.105658;
 
-TString workPath = std::getenv ("ZTRACKS_PATH") + "/Analysis/";
-TString extWorkPath = std::getenv ("ZTRACKS_DATA_PATH");
+TString workPath = TString (std::getenv ("ZHADRONS_PATH")) + "/Analysis/";
+TString extWorkPath = std::getenv ("ZHADRONS_DATA_PATH");
 TString rootPath = extWorkPath + "rootFiles/";
 TString dataPath = extWorkPath + "data/";
 TString plotPath = workPath + "Plots/"; 
