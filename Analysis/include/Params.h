@@ -27,8 +27,8 @@ const float jet_pt_cut = 1;
 const double electron_mass = 0.000511;
 const double muon_mass = 0.105658;
 
-TString workPath = "/atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Analysis/";
-TString extWorkPath = "/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/";
+TString workPath = std::getenv ("ZTRACKS_PATH") + "/Analysis/";
+TString extWorkPath = std::getenv ("ZTRACKS_DATA_PATH");
 TString rootPath = extWorkPath + "rootFiles/";
 TString dataPath = extWorkPath + "data/";
 TString plotPath = workPath + "Plots/"; 
