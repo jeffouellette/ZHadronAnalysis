@@ -8,7 +8,6 @@ using namespace std;
 
 namespace ZHadronAnalysis {
 
-bool isMC = false;
 float event_weight = 0;
 
 unsigned int event_number = 0;
@@ -120,7 +119,7 @@ struct OutTree {
   }
   OutTree (const char* name, TFile* file) {
     tree = new TTree (name, name);
-    tree->SetDirectory (file);
+    tree->SetDirectory ((TDirectory*) file);
   }
 
   void SetBranchEventInfo   (const bool _branchEventInfo = true)    { branchEventInfo = _branchEventInfo; }

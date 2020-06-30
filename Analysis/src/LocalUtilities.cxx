@@ -53,7 +53,8 @@ TH1D* GetZdcCuts () {
   if (!isPbPb)
     return nullptr; // no cuts needed outside of Pb+Pb
 
-  TFile* zdcFile = new TFile (Form ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/ZdcAnalysis/HIRun2PileUp_PbPb5p02_%s.root", is2015data ? "2015" : "2018"), "read");
+  //TFile* zdcFile = new TFile (Form ("/atlasgpfs01/usatlas/data/jeff/ZHadronAnalysis/rootFiles/ZdcAnalysis/HIRun2PileUp_PbPb5p02_%s.root", is2015data ? "2015" : "2018"), "read");
+  TFile* zdcFile = new TFile (Form ("%s/ZdcAnalysis/HIRun2PileUp_PbPb5p02_%s.root", rootPath.Data (), is2015data ? "2015" : "2018"), "read");
   TH1D* h_zdcCuts = (TH1D*) ((TH1D*) zdcFile->Get (is2015data ? "hCut" : "h_cuts")->Clone ("h_zdcCuts"));
   h_zdcCuts->SetDirectory (0);
   zdcFile->Close ();

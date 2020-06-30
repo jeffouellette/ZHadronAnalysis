@@ -2,7 +2,7 @@ CXX=g++
 CXXFLAGS=-O3 -g -Wall -fPIC `root-config --cflags` -Iinclude -I${ROOT_UTILS_PATH}/include -I${ATLAS_PATH}/include
 LDFLAGS=`root-config --glibs --ldflags` -Llib -L${ROOT_UTILS_PATH}/lib -L${ATLAS_PATH}/lib -lUtilities -lAtlasUtils -lAtlasStyle
 
-libs = ZTrackUtilities TreeVariables Trigger Cuts
+libs = LocalUtilities TreeVariables Trigger Cuts
 algs = TreeMaker MinBiasTreeMaker TruthSelectedTreeMaker TruthTreeMaker TrackingMomentumResolution TrackingEfficiency TrackingPurity TagAndProbe FCalCalibration BkgEstimator EventSkimTreeMaker
 
 bins = run
@@ -10,9 +10,12 @@ bins = run
 libs : $(libs)
 algs : $(algs)
 bins : $(bins)
-all : libs algs bins
+all : directories libs algs bins
 
-ZTrackUtilities : src/ZTrackUtilities.cxx
+directories : 
+	mkdir -p lib bin obj
+
+LocalUtilities : src/LocalUtilities.cxx
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 TreeVariables : src/TreeVariables.cxx
@@ -24,17 +27,17 @@ Trigger : src/Trigger.cxx
 Cuts : src/Cuts.cxx TreeVariables
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -lTreeVariables -shared -o lib/lib$@.so src/$@.cxx
 
-TrackingMomentumResolution : src/TrackingMomentumResolution.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
-
-TrackingEfficiency : src/TrackingEfficiency.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
-
-TrackingPurity : src/TrackingPurity.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
-
-TagAndProbe : src/TagAndProbe.cxx
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
+#TrackingMomentumResolution : src/TrackingMomentumResolution.cxx
+#	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
+#
+#TrackingEfficiency : src/TrackingEfficiency.cxx
+#	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
+#
+#TrackingPurity : src/TrackingPurity.cxx
+#	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
+#
+#TagAndProbe : src/TagAndProbe.cxx
+#	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o lib/lib$@.so src/$@.cxx
 
 # Main needs to be compiled into binary
 run : $(libs:%=lib/lib%.so) src/run.cxx
