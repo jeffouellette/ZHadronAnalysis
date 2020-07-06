@@ -4,9 +4,13 @@
 #include "Params.h"
 //#include "ZTrackUtilities.h"
 
+#include <AtlasUtils.h>
+
+#include <Utilities.h>
 #include <ArrayTemplates.h>
 
 #include <TEfficiency.h>
+#include <TF1.h>
 
 #include <iostream>
 
@@ -61,7 +65,7 @@ bool isPbPb = true;
 
 void PlotLeptonEffs () {
 
-  TFile* inFile = new TFile (Form ("%s/Nominal/outFile.root", rootPath.Data ()), "read");
+  TFile* inFile = new TFile (Form ("%s/TagAndProbe/Nominal/outFile.root", rootPath.Data ()), "read");
 
   TH1D* h_muonTrigEffNum_pt[3];
   TH1D* h_muonTrigEffDen_pt[3];
@@ -827,13 +831,13 @@ void PlotLeptonEffs () {
   }
 
 
-  TH2D* h2_zmumuTrigEff_pt_y_pp = (TH2D*) h2_zmumuTrigEffNum_pt_y_pp->Clone ("h2_zmumuTrigEffNum_pt_y_pp");
+  TH2D* h2_zmumuTrigEff_pt_y_pp = (TH2D*) h2_zmumuTrigEffNum_pt_y_pp->Clone ("h2_zmumuTrigEff_pt_y_pp");
   h2_zmumuTrigEff_pt_y_pp->Divide (h2_zmumuTrigEffDen_pt_y_pp);
-  TH2D* h2_zmumuTrigEff_pt_y_PbPb18 = (TH2D*) h2_zmumuTrigEffNum_pt_y_PbPb18->Clone ("h2_zmumuTrigEffNum_pt_y_PbPb18");
+  TH2D* h2_zmumuTrigEff_pt_y_PbPb18 = (TH2D*) h2_zmumuTrigEffNum_pt_y_PbPb18->Clone ("h2_zmumuTrigEff_pt_y_PbPb18");
   h2_zmumuTrigEff_pt_y_PbPb18->Divide (h2_zmumuTrigEffDen_pt_y_PbPb18);
   TH1D** h_zmumuTrigEff_y_PbPb18 = Get1DArray <TH1D*> (8);
   for (int iPt = 0; iPt < 8; iPt++) {
-    h_zmumuTrigEff_y_PbPb18[iPt] = (TH1D*) h_zmumuTrigEffNum_y_PbPb18[iPt]->Clone (Form ("h_zmumuTrigEffNum_y_PbPb18_iPt%i", iPt));
+    h_zmumuTrigEff_y_PbPb18[iPt] = (TH1D*) h_zmumuTrigEffNum_y_PbPb18[iPt]->Clone (Form ("h_zmumuTrigEff_y_PbPb18_iPt%i", iPt));
     h_zmumuTrigEff_y_PbPb18[iPt]->Divide (h_zmumuTrigEffDen_y_PbPb18[iPt]);
   }
 
@@ -850,13 +854,13 @@ void PlotLeptonEffs () {
     h_zeeTrigEffDen_y_PbPb18[iPt]->Rebin (2);
   }
 
-  TH2D* h2_zeeTrigEff_pt_y_pp = (TH2D*) h2_zeeTrigEffNum_pt_y_pp->Clone ("h2_zeeTrigEffNum_pt_y_pp");
+  TH2D* h2_zeeTrigEff_pt_y_pp = (TH2D*) h2_zeeTrigEffNum_pt_y_pp->Clone ("h2_zeeTrigEff_pt_y_pp");
   h2_zeeTrigEff_pt_y_pp->Divide (h2_zeeTrigEffDen_pt_y_pp);
-  TH2D* h2_zeeTrigEff_pt_y_PbPb18 = (TH2D*) h2_zeeTrigEffNum_pt_y_PbPb18->Clone ("h2_zeeTrigEffNum_pt_y_PbPb18");
+  TH2D* h2_zeeTrigEff_pt_y_PbPb18 = (TH2D*) h2_zeeTrigEffNum_pt_y_PbPb18->Clone ("h2_zeeTrigEff_pt_y_PbPb18");
   h2_zeeTrigEff_pt_y_PbPb18->Divide (h2_zeeTrigEffDen_pt_y_PbPb18);
   TH1D** h_zeeTrigEff_y_PbPb18 = Get1DArray <TH1D*> (8);
   for (int iPt = 0; iPt < 8; iPt++) {
-    h_zeeTrigEff_y_PbPb18[iPt] = (TH1D*) h_zeeTrigEffNum_y_PbPb18[iPt]->Clone (Form ("h_zeeTrigEffNum_y_PbPb18_iPt%i", iPt));
+    h_zeeTrigEff_y_PbPb18[iPt] = (TH1D*) h_zeeTrigEffNum_y_PbPb18[iPt]->Clone (Form ("h_zeeTrigEff_y_PbPb18_iPt%i", iPt));
     h_zeeTrigEff_y_PbPb18[iPt]->Divide (h_zeeTrigEffDen_y_PbPb18[iPt]);
   }
 
@@ -936,9 +940,9 @@ void PlotLeptonEffs () {
   TH2D* h2_zmumuIDEffNum_pt_y_PbPb18 = (TH2D*) (inFile)->Get ("h2_zmumuIDEffNum_pt_y_PbPb18");
   TH2D* h2_zmumuIDEffDen_pt_y_PbPb18 = (TH2D*) (inFile)->Get ("h2_zmumuIDEffDen_pt_y_PbPb18");
 
-  TH2D* h2_zmumuIDEff_pt_y_pp = (TH2D*) h2_zmumuIDEffNum_pt_y_pp->Clone ("h2_zmumuIDEffNum_pt_y_pp");
+  TH2D* h2_zmumuIDEff_pt_y_pp = (TH2D*) h2_zmumuIDEffNum_pt_y_pp->Clone ("h2_zmumuIDEff_pt_y_pp");
   h2_zmumuIDEff_pt_y_pp->Divide (h2_zmumuIDEffDen_pt_y_pp);
-  TH2D* h2_zmumuIDEff_pt_y_PbPb18 = (TH2D*) h2_zmumuIDEffNum_pt_y_PbPb18->Clone ("h2_zmumuIDEffNum_pt_y_PbPb18");
+  TH2D* h2_zmumuIDEff_pt_y_PbPb18 = (TH2D*) h2_zmumuIDEffNum_pt_y_PbPb18->Clone ("h2_zmumuIDEff_pt_y_PbPb18");
   h2_zmumuIDEff_pt_y_PbPb18->Divide (h2_zmumuIDEffDen_pt_y_PbPb18);
 
   TH2D* h2_zeeIDEffNum_pt_y_pp = (TH2D*) (inFile)->Get ("h2_zeeIDEffNum_pt_y_pp");
@@ -946,9 +950,9 @@ void PlotLeptonEffs () {
   TH2D* h2_zeeIDEffNum_pt_y_PbPb18 = (TH2D*) (inFile)->Get ("h2_zeeIDEffNum_pt_y_PbPb18");
   TH2D* h2_zeeIDEffDen_pt_y_PbPb18 = (TH2D*) (inFile)->Get ("h2_zeeIDEffDen_pt_y_PbPb18");
 
-  TH2D* h2_zeeIDEff_pt_y_pp = (TH2D*) h2_zeeIDEffNum_pt_y_pp->Clone ("h2_zeeIDEffNum_pt_y_pp");
+  TH2D* h2_zeeIDEff_pt_y_pp = (TH2D*) h2_zeeIDEffNum_pt_y_pp->Clone ("h2_zeeIDEff_pt_y_pp");
   h2_zeeIDEff_pt_y_pp->Divide (h2_zeeIDEffDen_pt_y_pp);
-  TH2D* h2_zeeIDEff_pt_y_PbPb18 = (TH2D*) h2_zeeIDEffNum_pt_y_PbPb18->Clone ("h2_zeeIDEffNum_pt_y_PbPb18");
+  TH2D* h2_zeeIDEff_pt_y_PbPb18 = (TH2D*) h2_zeeIDEffNum_pt_y_PbPb18->Clone ("h2_zeeIDEff_pt_y_PbPb18");
   h2_zeeIDEff_pt_y_PbPb18->Divide (h2_zeeIDEffDen_pt_y_PbPb18);
 
 

@@ -361,6 +361,7 @@ void Run () {
 
 
 
+    /*
     cout << "Calculating track ID relative systematic errors." << endl;
     trkSys = new TrackIDSystematic (data18, "trkSys", "Track ID Cuts");
     data_trackHItight = new PhysicsAnalysis ("data_trackHITightVar");
@@ -661,6 +662,7 @@ void Run () {
     combSys->AddSystematic (nonClosureSys);
     combSys->AddSystematic (binCenterSys);
     combSys->AddSystematics ();
+    */
 
     //combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
   }

@@ -23,6 +23,9 @@ void PlotPullDist (const PhysicsAnalysis* data, const bool useTrkPt = true, cons
   const short iPtZLo = (doSpecificBin ? pPtZ : 2);
   const short iPtZHi = (doSpecificBin ? pPtZ+1 : 5);
 
+  float chi2 = 0;
+  int ndf = 0;
+
   int nPoints = 0;
   for (short iCent = 1; iCent < numCentBins; iCent++) {
   //for (short iCent = 0; iCent < 1; iCent++) {
@@ -39,10 +42,14 @@ void PlotPullDist (const PhysicsAnalysis* data, const bool useTrkPt = true, cons
 
         const float pull = (h_ee->GetBinContent (iX) - h_mumu->GetBinContent (iX)) / sqrt (variance);
         h_pull->Fill (pull);
+        chi2 += pull*pull;
+        ndf++;
         nPoints++;
       } // end loop over iX
     } // end loop over iPtZ
   } // end loop over iCent
+
+  cout << "Chi^2/ndf = " << chi2 << "/" << ndf << endl;
 
   TH1D* h_pull_expected = new TH1D (Form ("h_pull_expected_%s", useTrkPt ? "pTch" : "xhZ"), Form (";Pull = (#LTY^{#it{ee}} (%s)#GT - #LTY^{#it{#mu#mu}} (%s)#GT) / #sigma;Entries", useTrkPt ? "#it{p}_{T}^{ch}" : "#it{x}_{hZ}", useTrkPt ? "#it{p}_{T}^{ch}" : "#it{x}_{hZ}"), 21, -5, 5);
   TF1* gaus = new TF1 ("gaus", "gaus(0)", -5, 5);
