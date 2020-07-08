@@ -980,6 +980,8 @@ void DoLowPtZSystStudy (PhysicsAnalysis* data, PhysicsAnalysis* bkg, const bool 
   for (int iCent = 0; iCent < numCentBins; iCent++) {
     c->cd ();
 
+    if (iCent != 0 && data->isMC) continue;
+
     uPads[iCent]->cd ();
     gPad->SetLogx ();
     gPad->SetLogy ();

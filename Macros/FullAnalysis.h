@@ -102,6 +102,7 @@ class FullAnalysis : public PhysicsAnalysis {
   void PlotLeptonTrackDRProjX ();
   void PlotZPtSpectra (FullAnalysis* a = nullptr);
   void PlotZPtSpectraChannelCompare ();
+  void CalculateZPtMeans ();
   void PlotZYPhiMap ();
   void PlotZEtaMap (FullAnalysis* a = nullptr);
   void PlotZYMap (FullAnalysis* a = nullptr);
@@ -1801,7 +1802,7 @@ void FullAnalysis :: PlotZPtSpectraChannelCompare () {
     {
       TH1D* htemp = new TH1D ("htemp", "", 1, 1, 250);;
       htemp->GetXaxis ()->SetMoreLogLabels ();
-      htemp->GetYaxis ()->SetRangeUser (0.1, 1.9);
+      htemp->GetYaxis ()->SetRangeUser (iCent == 0 ? 0.8: 0.1, iCent == 0 ? 1.2 : 1.9);
       htemp->GetXaxis ()->SetTitle ("#it{p}_{T}^{Z} [GeV]");
       htemp->GetYaxis ()->SetTitle ("#it{ee} / #it{#mu#mu}");
       htemp->GetXaxis ()->SetTitleSize (0.04/0.4);
@@ -1809,7 +1810,7 @@ void FullAnalysis :: PlotZPtSpectraChannelCompare () {
       htemp->GetXaxis ()->SetLabelSize (0.04/0.4);
       htemp->GetYaxis ()->SetLabelSize (0.04/0.4);
       htemp->GetXaxis ()->SetTitleOffset (1.2);
-      htemp->GetYaxis ()->SetTitleOffset (1.1);
+      htemp->GetYaxis ()->SetTitleOffset (1.1*0.4/0.6);
       htemp->GetYaxis ()->CenterTitle ();
       htemp->DrawCopy ("hist");
       SaferDelete (&htemp);
@@ -1848,6 +1849,52 @@ void FullAnalysis :: PlotZPtSpectraChannelCompare () {
     c->SaveAs (Form ("%s/ZPtSpectra/z_pt_spectrum_iCent%i_channelCompare.pdf", plotPath.Data (), iCent));
   }
   
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Calculates the per-bin Z pT distribution means.
+////////////////////////////////////////////////////////////////////////////////////////////////
+void FullAnalysis :: CalculateZPtMeans () {
+
+  double zpt_norm, mean_zpt, mean_zpt_err;
+  double*** mean_zpts = Get3DArray <double> (3, numCentBins, nPtZBins);
+  double*** mean_zpt_errs = Get3DArray <double> (3, numCentBins, nPtZBins);
+
+  for (short iSpc = 0; iSpc < 2; iSpc++) {
+    const char* spc = (iSpc == 0 ? "ee" : "mumu");
+
+    for (short iCent = 0; iCent < numCentBins; iCent++) {
+
+      TH1D* h_zpt = h_z_pt[iCent][iSpc];
+      for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+        zpt_norm = 0;
+        mean_zpt = 0;
+        mean_zpt_err = 0;
+        const int firstBin = h_zpt->FindBin (zPtBins[iPtZ]);
+        const int lastBin = h_zpt->FindBin(zPtBins[iPtZ+1])-1;
+        // calculate mean pT^Z
+        for (int iX = firstBin; iX <= lastBin; iX++) {
+          zpt_norm += h_zpt->GetBinContent (iX) * h_zpt->GetBinWidth (iX);
+          mean_zpt += h_zpt->GetBinContent (iX) * h_zpt->GetBinCenter (iX) * h_zpt->GetBinWidth (iX);
+        }
+        mean_zpt = mean_zpt / zpt_norm;
+        // now calculate the derivative vector and assume the covariance matrix is diagonal (events are independent)
+        mean_zpt_err = 0;
+        for (int iX = firstBin; iX <= lastBin; iX++) {
+          mean_zpt_err += pow ((h_zpt->GetBinCenter (iX) - mean_zpt) * h_zpt->GetBinWidth (iX), 2) * pow (h_zpt->GetBinError (iX), 2) / pow (zpt_norm, 2);
+        }
+        mean_zpt_err = sqrt (mean_zpt_err);
+
+        mean_zpts[iSpc][iCent][iPtZ] = mean_zpt;
+        mean_zpt_errs[iSpc][iCent][iPtZ] = mean_zpt_err;
+
+        cout << "<pT^Z> in iCent = " << iCent << ", iPtZ = " << iPtZ << ", iSpc = " << iSpc << " is " << mean_zpts[iSpc][iCent][iPtZ] << " +/- " << mean_zpt_errs[iSpc][iCent][iPtZ] << " GeV" << endl;
+      } // end loop over iPtZ
+    } // end loop over iCent
+  } // end loop over iSpc
 }
 
 

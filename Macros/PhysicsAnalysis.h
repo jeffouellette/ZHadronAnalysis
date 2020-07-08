@@ -335,6 +335,7 @@ class PhysicsAnalysis {
   virtual void PlotAllYields_dPhi (const bool useTrkPt = true, const short pSpc = 2, const short pPtZ = nPtZBins-1);
   virtual void PlotAllYields_dPtZ (const bool useTrkPt = true, const short pSpc = 2);
   virtual void PlotAllYields_dPtZ_SpcComp (const bool useTrkPt = true);
+  virtual void PlotPPYields_dPtZ_SpcComp (const bool useTrkPt, const short iPtZ = nPtZBins-1);
   virtual void PlotClosureCheck (PhysicsAnalysis* truthComp, const bool useTrkPt = true, const short iSpc = 2);
   virtual void PlotClosureCheck_SigToBkg (PhysicsAnalysis* truthComp, const bool useTrkPt = true, const short iSpc = 2, const char* saveFileName = "");
   virtual void PlotClosureCheck_SigToBkg_BkgNormalization (PhysicsAnalysis* truthComp, const bool useTrkPt = true, const short iSpc = 2, const char* saveFileName = "");
@@ -6120,6 +6121,156 @@ void PhysicsAnalysis :: PlotAllYields_dPtZ_SpcComp (const bool useTrkPt) {
   } // end loop over iCent
   
   c->SaveAs (Form ("%s/TrkYields/allYields_%s_SpcComp.pdf", plotPath.Data (), useTrkPt ? "pTch" : "xhZ"));
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Plots hadron yield in pp for ee and mumu separately
+////////////////////////////////////////////////////////////////////////////////////////////////
+void PhysicsAnalysis :: PlotPPYields_dPtZ_SpcComp (const bool useTrkPt, const short iPtZ = nPtZBins-1) {
+
+  const char* canvasName = Form ("c_pp_yields_channelCompare_%s_iPtZ%i", useTrkPt ? "pTch" : "xhZ", iPtZ);
+  const bool canvasExists = (gDirectory->Get (canvasName) != nullptr);
+  TCanvas* c = nullptr;
+  TPad* uPad = nullptr, *dPad = nullptr;
+  if (canvasExists) {
+    c = dynamic_cast<TCanvas*>(gDirectory->Get (canvasName));
+    uPad = dynamic_cast<TPad*>(gDirectory->Get (Form ("%s_uPad", canvasName)));
+    dPad = dynamic_cast<TPad*>(gDirectory->Get (Form ("%s_dPad", canvasName)));
+  }
+  else {
+    c = new TCanvas (canvasName, "", 800, 800);
+    c->cd ();
+    uPad = new TPad (Form ("%s_uPad", canvasName), "", 0.0, 0.4, 1.0, 1.0);
+    dPad = new TPad (Form ("%s_dPad", canvasName), "", 0.0, 0.0, 1.0, 0.4);
+    uPad->SetBottomMargin (0);
+    dPad->SetTopMargin (0);
+    dPad->SetBottomMargin (0.25);
+    uPad->Draw ();
+    dPad->Draw ();
+    gDirectory->Add (c);
+    gDirectory->Add (uPad);
+    gDirectory->Add (dPad);
+  }
+  c->cd ();
+
+  uPad->cd ();
+  gPad->SetLogx ();
+  gPad->SetLogy ();
+
+  if (!canvasExists) {
+    TH1D* htemp = new TH1D ("htemp", "", 1, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+    htemp->Reset ();
+    htemp->GetYaxis ()->SetRangeUser (1e-2, 1e1);
+    htemp->GetXaxis ()->SetTitle ("#it{p}_{T}^{ ch} [GeV]");
+    htemp->GetYaxis ()->SetTitle ("(1/N_{Z}) (d^{2}N_{ch}/d#it{p}_{T}d#Delta#phi) [GeV^{-1}]");
+    htemp->GetXaxis ()->SetTitleSize (0);
+    htemp->GetYaxis ()->SetTitleSize (0.04/0.6);
+    htemp->GetXaxis ()->SetLabelSize (0);
+    htemp->GetYaxis ()->SetLabelSize (0.04/0.6);
+    htemp->GetYaxis ()->SetTitleOffset (1.1);
+    htemp->DrawCopy ("hist");
+    SaferDelete (&htemp);
+  }
+
+  for (short iSpc : {0, 1}) {
+    TH1D* h = (useTrkPt ? h_trk_pt_ptz : h_trk_xhz_ptz)[iSpc][iPtZ][0];
+
+    TGraphAsymmErrors* g = GetTGAE (h);
+    ResetXErrors (g);
+
+    Style_t markerStyle = kFullCircle;
+    const float markerSize = 1.25;
+    Color_t markerColor = (iSpc == 0 ? finalColors[3] : finalColors[1]);
+
+    g->SetMarkerStyle (markerStyle);
+    g->SetMarkerColor (markerColor);
+    g->SetMarkerSize (markerSize);
+    g->SetLineWidth (2);
+    g->SetLineColor (markerColor);
+    ((TGAE*) g->Clone ())->Draw ("P");
+
+    markerStyle = FullToOpenMarker (markerStyle);
+
+    g->SetMarkerStyle (markerStyle);
+    g->SetMarkerSize (markerSize);
+    g->SetMarkerColor (kBlack);
+
+    ((TGAE*) g->Clone ())->Draw ("P");
+
+    SaferDelete (&g);
+  }
+
+  dPad->cd ();
+  gPad->SetLogx ();
+
+  {
+    TH1D* htemp = new TH1D ("htemp", "", 1, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+    htemp->GetXaxis ()->SetMoreLogLabels ();
+    htemp->GetYaxis ()->SetRangeUser (-0.05, 0.05);
+    htemp->GetXaxis ()->SetTitle ("#it{p}_{T}^{Z} [GeV]");
+    htemp->GetYaxis ()->SetTitle ("(Y_{#it{ll}} #minus Y_{comb.}) / Y_{comb.}");
+    htemp->GetXaxis ()->SetTitleSize (0.04/0.4);
+    htemp->GetYaxis ()->SetTitleSize (0.04/0.4);
+    htemp->GetXaxis ()->SetLabelSize (0.04/0.4);
+    htemp->GetYaxis ()->SetLabelSize (0.04/0.4);
+    htemp->GetXaxis ()->SetTitleOffset (1.2);
+    htemp->GetYaxis ()->SetTitleOffset (1.1*0.4/0.6);
+    htemp->GetYaxis ()->CenterTitle ();
+    htemp->DrawCopy ("hist");
+    SaferDelete (&htemp);
+
+    TLine* l = new TLine (0, 1, 300, 1);
+    l->SetLineColor (46);
+    l->SetLineWidth (2);
+    l->SetLineStyle (5);
+    l->Draw ("same");
+  }
+
+  for (short iSpc : {0, 1}) {
+    TH1D* h = (TH1D*) (useTrkPt ? h_trk_pt_ptz_sub : h_trk_xhz_ptz_sub)[iSpc][iPtZ][0]->Clone ("h_ratio");
+    h->Add ((useTrkPt ? h_trk_pt_ptz_sub : h_trk_xhz_ptz_sub)[2][iPtZ][0], -1);
+    h->Divide ((useTrkPt ? h_trk_pt_ptz_sub : h_trk_xhz_ptz_sub)[2][iPtZ][0]);
+
+    TGraphAsymmErrors* g = GetTGAE (h);
+    ResetXErrors (g);
+
+    Style_t markerStyle = kFullCircle;
+    const float markerSize = 1.25;
+    Color_t markerColor = (iSpc == 0 ? finalColors[3] : finalColors[1]);
+
+    g->SetMarkerStyle (markerStyle);
+    g->SetMarkerColor (markerColor);
+    g->SetMarkerSize (markerSize);
+    g->SetLineWidth (2);
+    g->SetLineColor (markerColor);
+    ((TGAE*) g->Clone ())->Draw ("P");
+
+    markerStyle = FullToOpenMarker (markerStyle);
+
+    g->SetMarkerStyle (markerStyle);
+    g->SetMarkerSize (markerSize);
+    g->SetMarkerColor (kBlack);
+
+    ((TGAE*) g->Clone ())->Draw ("P");
+
+    SaferDelete (&g);
+  }
+
+  uPad->cd ();
+
+  if (isMC) myText (0.44, 0.85, kBlack, "#bf{#it{ATLAS}} Simulation Internal", 0.045/0.6);
+  else      myText (0.62, 0.85, kBlack, "#bf{#it{ATLAS}} Internal", 0.045/0.6);
+  myMarkerText (0.75, 0.65, finalColors[3], kFullCircle, "#it{Z} #rightarrow #it{ee}", 1.25, 0.04/0.6, true);
+  myMarkerText (0.75, 0.58, finalColors[1], kFullCircle, "#it{Z} #rightarrow #it{#mu#mu}", 1.25, 0.04/0.6, true);
+
+  myText (0.62, 0.75, kBlack, Form ("#it{pp}, 5.02 TeV"), 0.04/0.6);
+
+  c->SaveAs (Form ("%s/TrkYields/pp_yields_%s_iPtZ%i_channelCompare.pdf", plotPath.Data (), useTrkPt ? "pTch" : "xhZ", iPtZ));
+  
+
 }
 
 

@@ -106,7 +106,7 @@ void Run () {
   bkg18     = new MixingAnalysis ("bkg");
 
   mc      = new MCAnalysis ();
-  //mc_bkg  = new MixingAnalysis ("mc_bkg");
+  mc_bkg  = new MixingAnalysis ("mc_bkg");
 
   //hijing  = new HijingAnalysis ("hijing");
   //hijing->subtractPP = false;
@@ -154,10 +154,12 @@ void Run () {
 
   //mc->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/savedHists.root");
   //mc_bkg->LoadHists ("MCAnalysis/Variations/PPMixingVariation/mixedHists.root");
-  //mc_bkg->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/mixedHists.root");
-  //mc->SubtractBackground (mc_bkg);
+  mc_bkg->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/mixedHists.root");
+  //mc_bkg->LoadHists ("MCAnalysis/Nominal/mixedHists.root");
+  mc->SubtractBackground (mc_bkg);
   //mc->CalculateIAA ();
   //SaferDelete (&mc_bkg);
+  mc->TruncatePhysicsPlots ();
 
   //hijing->LoadHists ("MCAnalysis/Hijing/savedHists.root");
   //hijing_bkg->LoadHists ("MCAnalysis/Hijing/mixedHists.root");
