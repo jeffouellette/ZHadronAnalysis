@@ -43,7 +43,7 @@ const Color_t scetgColor  = (Color_t) tcolor->GetColor (39, 180, 66);
 const double  scetgAlpha  = 0.6;
 const Color_t jewelColor  = tcolor->GetColor (255, 170, 50);
 const double  jewelAlpha  = 0.5;
-const Color_t colbtColor  = kAzure-3;
+const Color_t colbtColor  = kAzure-2;
 
 const bool plotXhZ = true;
 const double minModelUnc = 0.08;
@@ -169,7 +169,7 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Load our histograms and systematics graphs
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults.root", "read");
+  TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults_new.root", "read");
   TFile* sysFile = new TFile ("../rootFiles/Systematics/CombinedSys.root", "read");
 
   TH1D*** h_trk_pt_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
@@ -178,6 +178,8 @@ void MakeFinalPlots () {
   //TH1D*** h_trk_xhz_ptz_iaa_stat_2015proj = Get2DArray <TH1D*> (nPtZBins, numCentBins);
   TH1D*** h_trk_pt_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
   TH1D*** h_trk_xhz_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+
+  TH1D*** h_trk_dphi_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins+1);
 
   TGAE** g_trk_avg_pt_ptz_stat = Get1DArray <TGAE*> (numCentBins);
   TGAE** g_trk_avg_xhz_ptz_stat = Get1DArray <TGAE*> (numCentBins);
@@ -211,6 +213,23 @@ void MakeFinalPlots () {
         }
         h_trk_xhz_ptz_sub_stat[iPtZ][iCent] = h;
       }
+    }
+
+
+    for (short iCent = 0; iCent < numCentBins+1; iCent++) {
+
+      h_trk_dphi_ptz_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_dphi_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
+      //h_trk_dphi_ptz_sub_stat[iPtZ][iCent] = new TH1D (Form ("h_trk_dphi_ptz_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent), "", iCent == 0 ? 20 : 10, -pi/2., 3.*pi/2.);
+      //for (short iPtch = 0; iPtch < nPtchBins[iPtZ]; iPtch++) {
+      //  TH1D* temp = (TH1D*) (resultsFile->Get (Form ("h_trk_dphi_sub_comb_iPtZ%i_iPtch%i_iCent%i_data18", iPtZ, iPtch, iCent)))->Clone ("temp");
+      //  while (temp->GetNbinsX () >= 2* h_trk_dphi_ptz_sub_stat[iPtZ][iCent]->GetNbinsX ()) {
+      //    temp->Rebin (2);
+      //    temp->Scale (0.5);
+      //  }
+      //  assert (temp->GetNbinsX () == h_trk_dphi_ptz_sub_stat[iPtZ][iCent]->GetNbinsX ());
+      //  h_trk_dphi_ptz_sub_stat[iPtZ][iCent]->Add (temp);
+      //  SaferDelete (&temp);
+      //}
     }
   }
   for (short iCent = 0; iCent < numCentBins; iCent++) {
@@ -428,35 +447,57 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Get CoLBT predictions
   ////////////////////////////////////////////////////////////////////////////////////////////////
+  TGraph** g_colbt_pth = Get1DArray <TGraph*> (nPtZBins);
   TGraph** g_colbt_xhz = Get1DArray <TGraph*> (nPtZBins);
   {
     for (int iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
+      g_colbt_pth[iPtZ] = new TGraph ();
       g_colbt_xhz[iPtZ] = new TGraph ();
     }
 
-    string modelFileName;
+    string modelFileName, dummyLine;
     short iPtZ;
     ifstream f;
-    float x = 0, y = 0;
+    float x = 0, withResp = 0, noResp = 0;
 
-    modelFileName = "../CoLBT/iaa_pt30_all.dat";
+    modelFileName = "../CoLBT/Iaa_pt_zpt30_cent0_10.dat";
     iPtZ = 3;
     f.open (modelFileName.c_str ());
-    f >> x >> y;
-    do {
-      g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, y);
-      f >> x >> y;
-    } while (f);
+    getline (f, dummyLine);
+    for (int i = 0; i < 5; i++) {
+      f >> x >> withResp >> noResp;
+      g_colbt_pth[iPtZ]->SetPoint (g_colbt_pth[iPtZ]->GetN (), x, withResp);
+    }
     f.close ();
 
-    modelFileName = "../CoLBT/iaa_pt60_all.dat";
+    modelFileName = "../CoLBT/Iaa_pt_zpt60_cent0_10.dat";
     iPtZ = 4;
     f.open (modelFileName.c_str ());
-    f >> x >> y;
-    do {
-      g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, y);
-      f >> x >> y;
-    } while (f);
+    getline (f, dummyLine);
+    for (int i = 0; i < 6; i++) {
+      f >> x >> withResp >> noResp;
+      g_colbt_pth[iPtZ]->SetPoint (g_colbt_pth[iPtZ]->GetN (), x, withResp);
+    }
+    f.close ();
+
+    modelFileName = "../CoLBT/Iaa_zt_zpt30_cent0_10.dat";
+    iPtZ = 3;
+    f.open (modelFileName.c_str ());
+    getline (f, dummyLine);
+    for (int i = 0; i < 5; i++) {
+      f >> x >> withResp >> noResp;
+      g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, withResp);
+    }
+    f.close ();
+
+    modelFileName = "../CoLBT/Iaa_zt_zpt60_cent0_10.dat";
+    iPtZ = 4;
+    f.open (modelFileName.c_str ());
+    getline (f, dummyLine);
+    for (int i = 0; i < 6; i++) {
+      f >> x >> withResp >> noResp;
+      g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, withResp);
+    }
     f.close ();
   }
 
@@ -3686,6 +3727,20 @@ void MakeFinalPlots () {
     }
 
     {
+      TGraph* g = (TGraph*) g_colbt_pth[iPtZ]->Clone ();
+
+      TGAE* matched = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
+      RecenterGraph (matched);
+      RecenterGraph (g, matched);
+      SaferDelete (&matched);
+
+      g->SetLineColor (colbtColor);
+      g->SetLineWidth (4);
+      ((TGraph*) g->Clone ())->Draw ("L");
+      SaferDelete (&g);
+    }
+
+    {
       TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
 
       RecenterGraph (g_syst);
@@ -3769,19 +3824,21 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.50, 0.750, "30 < #it{p}_{T}^{Z} < 60 GeV");
+    //tl->SetTextSize (28);
+    //tl->DrawLatexNDC (0.50, 0.750, "30 < #it{p}_{T}^{Z} < 60 GeV");
 
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.59, 0.705-0.011, "ATLAS 0-10\%");
-    tl->DrawLatexNDC (0.59, 0.660-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.59, 0.615-0.011, "SCET_{G}");
-    tl->DrawLatexNDC (0.59, 0.570-0.011, "JEWEL");
+    tl->DrawLatexNDC (0.44, 0.755-0.011, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->DrawLatexNDC (0.44, 0.710-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.76, 0.710-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.44, 0.665-0.011, "SCET_{G}");
+    tl->DrawLatexNDC (0.76, 0.665-0.011, "JEWEL");
 
-    MakeDataBox   (0.60, 0.705, finalFillColors[2], 0.30, markerStyles[1], 1.8);
-    MakeTheoryBox (0.60, 0.660, hybridColor, hybridAlpha);
-    MakeTheoryBox (0.60, 0.615, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.60, 0.570, jewelColor, jewelAlpha);
+    MakeDataBox   (0.45, 0.755, finalFillColors[2], 0.30, markerStyles[1], 1.8);
+    MakeTheoryBox (0.45, 0.710, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.77, 0.710, colbtColor);
+    MakeTheoryBox (0.45, 0.665, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.77, 0.665, jewelColor, jewelAlpha);
 
     c12->SaveAs ("../Plots/FinalPlots/iaa_pTch_theoryComp_iPtZ3.pdf");
   }
@@ -3885,6 +3942,20 @@ void MakeFinalPlots () {
     }
 
     {
+      TGraph* g = (TGraph*) g_colbt_pth[iPtZ]->Clone ();
+
+      TGAE* matched = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
+      RecenterGraph (matched);
+      RecenterGraph (g, matched);
+      SaferDelete (&matched);
+
+      g->SetLineColor (colbtColor);
+      g->SetLineWidth (4);
+      ((TGraph*) g->Clone ())->Draw ("L");
+      SaferDelete (&g);
+    }
+
+    {
       TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
 
       RecenterGraph (g_syst);
@@ -3968,29 +4039,21 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.50, 0.750, "#it{p}_{T}^{Z} > 60 GeV");
+    //tl->SetTextSize (28);
+    //tl->DrawLatexNDC (0.50, 0.750, "#it{p}_{T}^{Z} > 60 GeV");
 
     tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.59, 0.705-0.011, "2018 Pb+Pb 0-10\%");
-    //tl->DrawLatexNDC (0.59, 0.660-0.011, "'18+'15 Pb+Pb (#it{proj.})");
-    //tl->DrawLatexNDC (0.59, 0.615-0.011, "Hybrid Model");
-    //tl->DrawLatexNDC (0.59, 0.570-0.011, "JEWEL");
+    tl->DrawLatexNDC (0.44, 0.755-0.011, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.44, 0.710-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.76, 0.710-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.44, 0.665-0.011, "SCET_{G}");
+    tl->DrawLatexNDC (0.76, 0.665-0.011, "JEWEL");
 
-    //MakeDataBox   (0.60, 0.705, finalFillColors[3], 0.30, kFullCircle, 2.3);
-    //MakeDataBox   (0.60, 0.660, finalFillColors[2], 0.30, kFullCircle, 2.3);
-    //MakeTheoryBox (0.60, 0.615, hybridColor, hybridAlpha);
-    //MakeTheoryBox (0.60, 0.570, jewelColor, jewelAlpha);
-
-    tl->DrawLatexNDC (0.59, 0.705-0.011, "ATLAS 0-10\%");
-    tl->DrawLatexNDC (0.59, 0.660-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.59, 0.615-0.011, "SCET_{G}");
-    tl->DrawLatexNDC (0.59, 0.570-0.011, "JEWEL");
-
-    MakeDataBox   (0.60, 0.705, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-    MakeTheoryBox (0.60, 0.660, hybridColor, hybridAlpha);
-    MakeTheoryBox (0.60, 0.615, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.60, 0.570, jewelColor, jewelAlpha);
+    MakeDataBox   (0.45, 0.755, finalFillColors[3], 0.30, markerStyles[2], 2.4);
+    MakeTheoryBox (0.45, 0.710, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.77, 0.710, colbtColor);
+    MakeTheoryBox (0.45, 0.665, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.77, 0.665, jewelColor, jewelAlpha);
 
     c13->SaveAs ("../Plots/FinalPlots/iaa_pTch_theoryComp_iPtZ4.pdf");
   }
@@ -5085,6 +5148,126 @@ void MakeFinalPlots () {
 
     c18->SaveAs ("../Plots/FinalPlots/iaa_xhZ_CONFComp.pdf");
   }
+
+
+
+
+  {
+    TCanvas* c19 = new TCanvas ("c19", "", 800, 800);
+
+    const double lMargin = 0.15;
+    const double rMargin = 0.04;
+    const double bMargin = 0.15;
+    const double tMargin = 0.04;
+
+    c19->SetLeftMargin (lMargin);
+    c19->SetRightMargin (rMargin);
+    c19->SetBottomMargin (bMargin);
+    c19->SetTopMargin (tMargin);
+
+    const short iPtZ = 3;
+
+    {
+      TH1D* h = new TH1D ("", "", 1, -pi/2., 3.*pi/2.);
+
+      TAxis* xax = h->GetXaxis ();
+      TAxis* yax = h->GetYaxis ();
+
+      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
+      xax->SetTitle ("#Delta#phi_{ch,Z}");
+      xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
+      xax->SetRangeUser (-pi/2., 3.*pi/2.);;
+      xax->SetLabelSize (0);
+
+      yax->SetTitle ("(1/N_{Z}) (dN_{ch} / d#Delta#phi)");
+      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      yax->SetMoreLogLabels ();
+      const double ymin = -3;
+      const double ymax = 15;
+      //const double ymin = 0.;
+      //const double ymax = 3.6;
+      yax->SetRangeUser (ymin, ymax);
+
+      h->SetLineWidth (0);
+
+      h->DrawCopy ("");
+      SaferDelete (&h);
+
+      tl->SetTextFont (43);
+      tl->SetTextSize (36);
+      tl->SetTextAlign (21);
+
+      const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
+      //tl->DrawLatex (-1.5,  yoff, "-1.5");
+      tl->DrawLatex (-1,  yoff, "-1");
+      //tl->DrawLatex (-0.5,  yoff, "-0.5");
+      tl->DrawLatex (0,  yoff, "0");
+      //tl->DrawLatex (0.5,  yoff, "0.5");
+      tl->DrawLatex (1,  yoff, "1");
+      //tl->DrawLatex (1.5,  yoff, "1.5");
+      tl->DrawLatex (2,  yoff, "2");
+      //tl->DrawLatex (2.5,  yoff, "2.5");
+      tl->DrawLatex (3,  yoff, "3");
+      //tl->DrawLatex (3.5,  yoff, "3.5");
+      tl->DrawLatex (4,  yoff, "4");
+      //tl->DrawLatex (4.5,  yoff, "4.5");
+    }
+
+    for (short iCent : {0, 4}) {
+      TGAE* g_stat = make_graph (h_trk_dphi_ptz_sub_stat[iPtZ][iCent]);
+
+      ResetXErrors (g_stat);
+
+      //Style_t markerStyle = (iCent == 0 ? kOpenCircle : kFullDiamond);
+      Style_t markerStyle = (iCent == 0 ? kOpenCircle : kFullSquare);
+      float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+
+      g_stat->SetMarkerStyle (markerStyle);
+      g_stat->SetMarkerSize (markerSize);
+      g_stat->SetLineWidth (3);
+      //g_stat->SetMarkerColor (iCent == 0 ? kBlack : finalColors[3]);
+      //g_stat->SetLineColor (iCent == 0 ? kBlack : finalColors[3]);
+      g_stat->SetMarkerColor (iCent == 0 ? kBlack : finalColors[2]);
+      g_stat->SetLineColor (iCent == 0 ? kBlack : finalColors[2]);
+
+      ((TGAE*) g_stat->Clone ())->Draw ("P");
+
+      markerStyle = FullToOpenMarker (markerStyle);
+      markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+      
+      g_stat->SetMarkerStyle (markerStyle);
+      g_stat->SetMarkerSize (markerSize);
+      if (iCent > 0) g_stat->SetLineWidth (0);
+      g_stat->SetMarkerColor (kBlack);
+
+      ((TGAE*) g_stat->Clone ())->Draw ("P");
+
+      SaferDelete (&g_stat);
+    }
+
+    tl->SetTextColor (kBlack);
+    tl->SetTextAlign (11);
+
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.24, 0.890, "#bf{#it{ATLAS}} Internal");
+    tl->SetTextSize (28);
+    tl->DrawLatexNDC (0.25, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.25, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    //tl->DrawLatexNDC (0.25, 0.745, "#it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.25, 0.745, "30 < #it{p}_{T}^{Z} < 60 GeV");
+
+    tl->DrawLatexNDC (0.27, 0.450-0.011, "#it{pp} #it{(with sub.)}");
+    tl->DrawLatexNDC (0.27, 0.405-0.011, "0-30% Pb+Pb");
+
+    MakeDataBox   (0.28, 0.450, finalFillColors[0], 0.30, kOpenCircle, 1.8);
+    MakeDataBox   (0.28, 0.405, finalFillColors[2], 0.30, kFullSquare, 2.4);
+    //MakeDataBox   (0.28, 0.405, finalFillColors[3], 0.30, kFullDiamond, 2.4);
+
+
+    c19->SaveAs ("../Plots/FinalPlots/yield_dphi.pdf");
+
+  }
+    
 
 } // end of macro
 

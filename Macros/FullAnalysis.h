@@ -101,6 +101,7 @@ class FullAnalysis : public PhysicsAnalysis {
   void PlotLeptonTrackDR ();
   void PlotLeptonTrackDRProjX ();
   void PlotZPtSpectra (FullAnalysis* a = nullptr);
+  void PlotZPtSpectraChannelCompare ();
   void PlotZYPhiMap ();
   void PlotZEtaMap (FullAnalysis* a = nullptr);
   void PlotZYMap (FullAnalysis* a = nullptr);
@@ -1711,6 +1712,142 @@ void FullAnalysis :: PlotZPtSpectra (FullAnalysis* a) {
       c->SaveAs (Form ("%s/ZPtSpectra/z_pt_spectrum_iCent%i_%s.pdf", plotPath.Data (), iCent, spc));
     }
   }
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Plot Z Pt spectra
+////////////////////////////////////////////////////////////////////////////////////////////////
+void FullAnalysis :: PlotZPtSpectraChannelCompare () {
+  for (short iCent = 0; iCent < numCentBins; iCent++) {
+    const char* canvasName = Form ("c_z_pt_iCent%i_channelCompare", iCent);
+    const bool canvasExists = (gDirectory->Get (canvasName) != nullptr);
+    TCanvas* c = nullptr;
+    TPad* uPad = nullptr, *dPad = nullptr;
+    if (canvasExists) {
+      c = dynamic_cast<TCanvas*>(gDirectory->Get (canvasName));
+      uPad = dynamic_cast<TPad*>(gDirectory->Get (Form ("%s_uPad", canvasName)));
+      dPad = dynamic_cast<TPad*>(gDirectory->Get (Form ("%s_dPad", canvasName)));
+    }
+    else {
+      c = new TCanvas (canvasName, "", 800, 800);
+      c->cd ();
+      uPad = new TPad (Form ("%s_uPad", canvasName), "", 0.0, 0.4, 1.0, 1.0);
+      dPad = new TPad (Form ("%s_dPad", canvasName), "", 0.0, 0.0, 1.0, 0.4);
+      uPad->SetBottomMargin (0);
+      dPad->SetTopMargin (0);
+      dPad->SetBottomMargin (0.25);
+      uPad->Draw ();
+      dPad->Draw ();
+      gDirectory->Add (c);
+      gDirectory->Add (uPad);
+      gDirectory->Add (dPad);
+    }
+    c->cd ();
+
+    uPad->cd ();
+    gPad->SetLogx ();
+    gPad->SetLogy ();
+
+    if (!canvasExists) {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 1, 250);
+      htemp->Reset ();
+      htemp->GetYaxis ()->SetRangeUser (1.2e-6, 0.90);
+      htemp->GetXaxis ()->SetTitle ("#it{p}_{T}^{ Z} [GeV]");
+      htemp->GetYaxis ()->SetTitle ("(1/N_{Z}) (dN/d#it{p}_{T}) [GeV^{-1}]");
+      htemp->GetXaxis ()->SetTitleSize (0);
+      htemp->GetYaxis ()->SetTitleSize (0.04/0.6);
+      htemp->GetXaxis ()->SetLabelSize (0);
+      htemp->GetYaxis ()->SetLabelSize (0.04/0.6);
+      htemp->GetYaxis ()->SetTitleOffset (1.1);
+      htemp->DrawCopy ("hist");
+      SaferDelete (&htemp);
+    }
+
+    for (short iSpc : {0, 1}) {
+      TH1D* h = h_z_pt[iCent][iSpc];
+
+      TGraphAsymmErrors* g = GetTGAE (h);
+      ResetXErrors (g);
+
+      Style_t markerStyle = kFullCircle;
+      const float markerSize = 1.25;
+      Color_t markerColor = (iSpc == 0 ? finalColors[3] : finalColors[1]);
+
+      g->SetMarkerStyle (markerStyle);
+      g->SetMarkerColor (markerColor);
+      g->SetMarkerSize (markerSize);
+      g->SetLineWidth (2);
+      g->SetLineColor (markerColor);
+      ((TGAE*) g->Clone ())->Draw ("P");
+
+      markerStyle = FullToOpenMarker (markerStyle);
+
+      g->SetMarkerStyle (markerStyle);
+      g->SetMarkerSize (markerSize); 
+      if (iCent > 0) g->SetLineWidth (0);
+      g->SetMarkerColor (kBlack);
+      
+      ((TGAE*) g->Clone ())->Draw ("P");
+
+      SaferDelete (&g);
+    }
+
+    dPad->cd ();
+    gPad->SetLogx ();
+
+    {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 1, 250);;
+      htemp->GetXaxis ()->SetMoreLogLabels ();
+      htemp->GetYaxis ()->SetRangeUser (0.1, 1.9);
+      htemp->GetXaxis ()->SetTitle ("#it{p}_{T}^{Z} [GeV]");
+      htemp->GetYaxis ()->SetTitle ("#it{ee} / #it{#mu#mu}");
+      htemp->GetXaxis ()->SetTitleSize (0.04/0.4);
+      htemp->GetYaxis ()->SetTitleSize (0.04/0.4);
+      htemp->GetXaxis ()->SetLabelSize (0.04/0.4);
+      htemp->GetYaxis ()->SetLabelSize (0.04/0.4);
+      htemp->GetXaxis ()->SetTitleOffset (1.2);
+      htemp->GetYaxis ()->SetTitleOffset (1.1);
+      htemp->GetYaxis ()->CenterTitle ();
+      htemp->DrawCopy ("hist");
+      SaferDelete (&htemp);
+
+      TLine* l = new TLine (0, 1, 300, 1);
+      l->SetLineColor (46);
+      l->SetLineWidth (2);
+      l->SetLineStyle (5);
+      l->Draw ("same");
+    }
+
+    TH1D* h = (TH1D*) h_z_pt[iCent][0]->Clone (Form ("h_z_pt_ratio_%s_iCent%i_ee_over_mumu", name.c_str (), iCent));
+    h->Divide (h_z_pt[iCent][1]);
+
+    TGraphAsymmErrors* g = GetTGAE (h);
+    ResetXErrors (g);
+
+    const int markerStyle = kFullCircle;
+    g->SetMarkerStyle (markerStyle);
+    g->SetMarkerStyle (markerStyle);
+    g->SetMarkerSize (1.25);
+    g->SetLineWidth (2);
+    g->SetLineColor (kBlack);
+    g->SetMarkerColor (kBlack);
+    g->Draw ("P");
+
+    uPad->cd ();
+
+    myText (0.62, 0.85, kBlack, "#bf{#it{ATLAS}} Internal", 0.045/0.6);
+    myMarkerText (0.81, 0.65, finalColors[3], kFullCircle, "#it{Z} #rightarrow #it{ee}", 1.25, 0.04/0.6, true);
+    myMarkerText (0.81, 0.58, finalColors[1], kFullCircle, "#it{Z} #rightarrow #it{#mu#mu}", 1.25, 0.04/0.6, true);
+
+    if (iCent == 0) myText (0.62, 0.75, kBlack, Form ("#it{pp}, 5.02 TeV"), 0.04/0.6);
+    else            myText (0.62, 0.75, kBlack, Form ("Pb+Pb, %i-%i%%", (int)centCuts[iCent], (int)centCuts[iCent-1]), 0.04/0.6);
+
+    c->SaveAs (Form ("%s/ZPtSpectra/z_pt_spectrum_iCent%i_channelCompare.pdf", plotPath.Data (), iCent));
+  }
+  
 }
 
 
