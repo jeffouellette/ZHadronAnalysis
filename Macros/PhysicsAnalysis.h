@@ -1040,12 +1040,9 @@ void PhysicsAnalysis :: SaveResults (const char* saveFileName) {
 
   for (short iCent = 0; iCent < numCentBins+1; iCent++) {
     for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
-      for (short iPtch = maxNPtchBins; iPtch < maxNPtchBins+1; iPtch++) {
-        SafeWrite (h_trk_dphi[2][iPtZ][maxNPtchBins][iCent],      Form ("h_trk_dphi_comb_iPtZ%i_iCent%i_%s", iPtZ, iCent, name.c_str ()));
-        SafeWrite (h_trk_dphi_sub[2][iPtZ][maxNPtchBins][iCent],  Form ("h_trk_dphi_sub_comb_iPtZ%i_iCent%i_%s", iPtZ, iCent, name.c_str ()));
-      } // end loop over iPtZ
-    }
-    
+      SafeWrite (h_trk_dphi[2][iPtZ][maxNPtchBins][iCent],      Form ("h_trk_dphi_comb_iPtZ%i_iCent%i_%s", iPtZ, iCent, name.c_str ()));
+      SafeWrite (h_trk_dphi_sub[2][iPtZ][maxNPtchBins][iCent],  Form ("h_trk_dphi_sub_comb_iPtZ%i_iCent%i_%s", iPtZ, iCent, name.c_str ()));
+    } // end loop over iPtZ
   }
 
   for (short iCent = 0; iCent < numCentBins; iCent++) {
@@ -1485,18 +1482,18 @@ void PhysicsAnalysis :: CombineHists () {
         } // end loop over iPtch
 
         for (int iPhi = 0; iPhi < numPhiBins; iPhi++) {
-          h_trk_pt_dphi[2][iPtZ][iPhi][iCent]->Add  (h_trk_pt_dphi[iSpc][iPtZ][iPhi][iCent], channelSumWgts/totalSumWgts);
+          h_trk_pt_dphi[2][iPtZ][iPhi][iCent]->Add  (h_trk_pt_dphi[iSpc][iPtZ][iPhi][iCent],  channelSumWgts/totalSumWgts);
           h_trk_xhz_dphi[2][iPtZ][iPhi][iCent]->Add (h_trk_xhz_dphi[iSpc][iPtZ][iPhi][iCent], channelSumWgts/totalSumWgts);
           if (hasBkg && backgroundSubtracted) {
-            h_trk_pt_dphi_sub[2][iPtZ][iPhi][iCent]->Add  (h_trk_pt_dphi_sub[iSpc][iPtZ][iPhi][iCent], channelSumWgts/totalSumWgts);
+            h_trk_pt_dphi_sub[2][iPtZ][iPhi][iCent]->Add  (h_trk_pt_dphi_sub[iSpc][iPtZ][iPhi][iCent],  channelSumWgts/totalSumWgts);
             h_trk_xhz_dphi_sub[2][iPtZ][iPhi][iCent]->Add (h_trk_xhz_dphi_sub[iSpc][iPtZ][iPhi][iCent], channelSumWgts/totalSumWgts);
           }
         } // end loop over iPhi
 
-        h_trk_pt_ptz[2][iPtZ][iCent]->Add  (h_trk_pt_ptz[iSpc][iPtZ][iCent], channelSumWgts/totalSumWgts);
+        h_trk_pt_ptz[2][iPtZ][iCent]->Add  (h_trk_pt_ptz[iSpc][iPtZ][iCent],  channelSumWgts/totalSumWgts);
         h_trk_xhz_ptz[2][iPtZ][iCent]->Add (h_trk_xhz_ptz[iSpc][iPtZ][iCent], channelSumWgts/totalSumWgts);
         if (hasBkg && backgroundSubtracted) {
-          h_trk_pt_ptz_sub[2][iPtZ][iCent]->Add  (h_trk_pt_ptz_sub[iSpc][iPtZ][iCent], channelSumWgts/totalSumWgts);
+          h_trk_pt_ptz_sub[2][iPtZ][iCent]->Add  (h_trk_pt_ptz_sub[iSpc][iPtZ][iCent],  channelSumWgts/totalSumWgts);
           h_trk_xhz_ptz_sub[2][iPtZ][iCent]->Add (h_trk_xhz_ptz_sub[iSpc][iPtZ][iCent], channelSumWgts/totalSumWgts);
         }
       } // end loop over iSpc
@@ -2945,10 +2942,10 @@ double PhysicsAnalysis :: GetTrackingEfficiency (const float fcal_et, float trk_
   else if (t->GetYaxis ()->GetNbins () < ybin)
     trk_pt = t->GetYaxis ()->GetBinCenter (t->GetYaxis ()->GetNbins ());
 
-  const double eff = t->GetBinContent (xbin, ybin);
+  //const double eff = t->GetBinContent (xbin, ybin);
 
-  //return t->GetBinContent (t->FindFixBin (trk_eta, trk_pt)) + trkEffNSigma * t->GetBinError (t->FindFixBin (trk_eta, trk_pt));
-  return eff + trkEffNSigma * t->GetBinError (xbin, ybin);
+  return t->GetBinContent (t->FindFixBin (trk_eta, trk_pt)) + trkEffNSigma * t->GetBinError (t->FindFixBin (trk_eta, trk_pt));
+  //return eff + trkEffNSigma * t->GetBinError (xbin, ybin);
 }
 
 
@@ -3085,8 +3082,8 @@ double PhysicsAnalysis :: GetTrackingPurity (const float fcal_et, float trk_pt, 
   else if (t->GetYaxis ()->GetNbins () < ybin)
     trk_pt = t->GetYaxis ()->GetBinCenter (t->GetYaxis ()->GetNbins ());
 
-  const double pur = t->GetBinContent (xbin, ybin);
-  //const double pur = t->GetBinContent (t->FindFixBin (trk_eta, trk_pt));
+  //const double pur = t->GetBinContent (xbin, ybin);
+  const double pur = t->GetBinContent (t->FindFixBin (trk_eta, trk_pt));
 
   return pur;
 }

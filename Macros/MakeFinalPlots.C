@@ -169,7 +169,7 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Load our histograms and systematics graphs
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults_new.root", "read");
+  TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults.root", "read");
   TFile* sysFile = new TFile ("../rootFiles/Systematics/CombinedSys.root", "read");
 
   TH1D*** h_trk_pt_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
