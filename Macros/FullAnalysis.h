@@ -464,7 +464,7 @@ void FullAnalysis :: ScaleHists () {
       }
 
       if (h_z_pt[iCent][iSpc]) {
-        h_z_pt[iCent][iSpc]->Rebin (10);
+        h_z_pt[iCent][iSpc]->Rebin (3);
         //h_z_pt[iCent][iSpc]->Scale (1./10.);
         if (h_z_pt[iCent][iSpc]->Integral () > 0)
           h_z_pt[iCent][iSpc]->Scale (1 / h_z_pt[iCent][iSpc]->Integral (), "width");

@@ -256,10 +256,11 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
   }
   if (!doSameFileMixing) {
     std::srand (1);
+    std::random_shuffle (mbEventOrder.begin (), mbEventOrder.end ());
 
-    std::random_device rd;
-    std::mt19937 mersenneTwister (rd ()); 
-    std::shuffle (mbEventOrder.begin (), mbEventOrder.end (), mersenneTwister);
+    //std::random_device rd;
+    //std::mt19937 mersenneTwister (rd ()); 
+    //std::shuffle (mbEventOrder.begin (), mbEventOrder.end (), mersenneTwister);
 
     cout << "Shuffled minimum bias events randomly; first ten events are ";
     for (int i = 0; i < 10; i++) {
@@ -306,10 +307,11 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
 
   if (doShuffle) {
     std::srand (1);
+    std::random_shuffle (zEventOrder.begin (), zEventOrder.end ());
 
-    std::random_device rd;
-    std::mt19937 mersenneTwister (rd ()); 
-    std::shuffle (zEventOrder.begin (), zEventOrder.end (), mersenneTwister);
+    //std::random_device rd;
+    //std::mt19937 mersenneTwister (rd ()); 
+    //std::shuffle (zEventOrder.begin (), zEventOrder.end (), mersenneTwister);
 
     cout << "Shuffled Z boson events randomly; first ten events are ";
     for (int i = 0; i < 10; i++) {
