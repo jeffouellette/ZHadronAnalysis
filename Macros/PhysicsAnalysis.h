@@ -304,10 +304,10 @@ class PhysicsAnalysis {
   virtual void LoadEventWeights ();
 
   virtual void LoadTrackingEfficiencies (const bool doRebin = false); // defaults to HILoose
-  virtual double GetTrackingEfficiency (const float fcal_et, float trk_pt, const float trk_eta, const bool isPbPb = true);
+  virtual double GetTrackingEfficiency (const float fcal_et, double trk_pt, const float trk_eta, const bool isPbPb = true);
 
   virtual void LoadTrackingPurities (const bool doRebin = false); // defaults to HILoose
-  virtual double GetTrackingPurity (const float fcal_et, float trk_pt, const float trk_eta, const bool isPbPb = true);
+  virtual double GetTrackingPurity (const float fcal_et, double trk_pt, const float trk_eta, const bool isPbPb = true);
 
   void CorrectQ2Vector (float& q2x_a, float& q2y_a, float& q2x_c, float& q2y_c);
 
@@ -2904,7 +2904,7 @@ void PhysicsAnalysis :: LoadTrackingEfficiencies (const bool doRebin) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Returns the appropriate tracking efficiency for this track and centrality.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-double PhysicsAnalysis :: GetTrackingEfficiency (const float fcal_et, float trk_pt, const float trk_eta, const bool isPbPb) {
+double PhysicsAnalysis :: GetTrackingEfficiency (const float fcal_et, double trk_pt, const float trk_eta, const bool isPbPb) {
   if (!effsLoaded)
     LoadTrackingEfficiencies ();
 
@@ -3045,7 +3045,7 @@ void PhysicsAnalysis :: LoadTrackingPurities (const bool doRebin) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Returns the appropriate tracking purity factor for this track and centrality.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-double PhysicsAnalysis :: GetTrackingPurity (const float fcal_et, float trk_pt, const float trk_eta, const bool isPbPb) {
+double PhysicsAnalysis :: GetTrackingPurity (const float fcal_et, double trk_pt, const float trk_eta, const bool isPbPb) {
   if (!pursLoaded)
     LoadTrackingPurities ();
 

@@ -124,7 +124,7 @@ void Run () {
   //  mcBkg_statDownVar       = new MixingAnalysis ("mcBkg_statDownVar");
   //}
 
-  //data18->Execute   ("DataAnalysis/Nominal/data18hi.root",   "DataAnalysis/Nominal/data18hi_hists.root");
+  data18->Execute   ("DataAnalysis/Nominal/data18hi.root",   "DataAnalysis/Nominal/data18hi_hists.root");
 
   //if (doSys) {
   //  data_leptonRejVar       = new PhysicsAnalysis ("data_leptonRejVar");
@@ -147,7 +147,7 @@ void Run () {
   //  data_trkPurDownVar->doTrackPurVar = true; data_trkPurDownVar->trkPurNSigma = -1;
   //  data_trkPurDownVar->Execute     ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackPurityDownVariation/data18hi_hists.root");
   //}
-
+  return;
 
   mc->LoadHists ("MCAnalysis/Nominal/savedHists.root");
   mc->CombineHists ();

@@ -1,44 +1,44 @@
 Universe = vanilla
 Notification = Complete
-Executable = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros/ProcessFile
+Executable = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Macros/ProcessFile.exe
 Priority = +1
 GetEnv = True
-InitialDir = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros
+InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Macros
 accounting_group = group_atlas.boulder
 
 sysFlags = false none
 
 
 Arguments = hijing HijingOverlay/Combined_iCent$(iCent).root 0 Hijing/Histograms/Combined_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Hijing_Combined_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Hijing_Combined_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Hijing_Combined_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/Hijing_Combined_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/Hijing_Combined_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/Hijing_Combined_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78)
 
 
 Arguments = hijing_mixing HijingOverlay/Combined_iCent$(iCent).root 0 Hijing/Histograms/Combined_iCent$(iCent)_mixedHists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Hijing_Combined_MixHists_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Hijing_Combined_MixHists_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Hijing_Combined_MixHists_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/Hijing_Combined_MixHists_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/Hijing_Combined_MixHists_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/Hijing_Combined_MixHists_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78)
 
 
 Arguments = hijing_truth HijingOverlay/Combined_iCent$(iCent).root 0 Hijing/Histograms/Combined_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Hijing_Combined_Truth_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Hijing_Combined_Truth_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Hijing_Combined_Truth_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/Hijing_Combined_Truth_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/Hijing_Combined_Truth_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/Hijing_Combined_Truth_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78)
 
 
 #Arguments = hijing CombinedTrees/pp_all.root 0 Hijing/Histograms/pp_all_hists.root 0 false $(sysFlags)
-#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Hijing_pp_all.err
-#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Hijing_pp_all.log
-#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Hijing_pp_all.out
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/Hijing_pp_all.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/Hijing_pp_all.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/Hijing_pp_all.out
 #Queue 1
 
 
 #Arguments = hijing_truth CombinedTrees/pp_all.root 0 Hijing/Histograms/pp_all_hists.root 0 false $(sysFlags)
-#Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/Hijing_pp_all.err
-#Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/Hijing_pp_all.log
-#Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/Hijing_pp_all.out
+#Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/Hijing_pp_all.err
+#Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/Hijing_pp_all.log
+#Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/Hijing_pp_all.out
 #Queue 1

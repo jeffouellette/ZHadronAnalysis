@@ -1,64 +1,64 @@
 Universe = vanilla
 Notification = Complete
-Executable = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros/ProcessFile
+Executable = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Macros/ProcessFile.exe
 Priority = +1
 GetEnv = True
-InitialDir = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Macros
+InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Macros
 accounting_group = group_atlas.boulder
 
 sysFlags = false none
 
 
 Arguments = mc CombinedTrees/pp_all.root 0 Histograms/pp_all_hists.root 0 false $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/pp_all.err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/pp_all.log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/pp_all.out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/pp_all.err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/pp_all.log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/pp_all.out
 Queue 1
 
 Arguments = mc CombinedTrees/GroupD_iCent$(iCent).root 0 Histograms/GroupD_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupD_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupD_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupD_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupD_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupD_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupD_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupE_iCent$(iCent).root 0 Histograms/GroupE_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupE_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupE_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupE_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupE_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupE_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupE_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupF_iCent$(iCent).root 0 Histograms/GroupF_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupF_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupF_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupF_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupF_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupF_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupF_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupG_iCent$(iCent).root 0 Histograms/GroupG_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupG_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupG_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupG_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupG_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupG_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupG_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupH_iCent$(iCent).root 0 Histograms/GroupH_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupH_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupH_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupH_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupH_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupH_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupH_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupI_iCent$(iCent).root 0 Histograms/GroupI_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupI_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupI_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupI_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupI_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupI_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupI_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupJ_iCent$(iCent).root 0 Histograms/GroupJ_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupJ_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupJ_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupJ_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupJ_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupJ_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupJ_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
 
 Arguments = mc CombinedTrees/GroupK_iCent$(iCent).root 0 Histograms/GroupK_iCent$(iCent)_hists.root 0 true $(sysFlags)
-Error = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/errors/GroupK_iCent$(iCent).err
-Log = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/logs/GroupK_iCent$(iCent).log
-Output = /atlasgpfs01/usatlas/workarea/jeff/atlas-hi/ZTrackAnalysis/Submit/outputs/GroupK_iCent$(iCent).out
+Error = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/errors/GroupK_iCent$(iCent).err
+Log = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/logs/GroupK_iCent$(iCent).log
+Output = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Submit/outputs/GroupK_iCent$(iCent).out
 Queue iCent in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28)
