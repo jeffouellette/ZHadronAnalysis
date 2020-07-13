@@ -169,7 +169,7 @@ void LowPtVariation :: GetRelativeVariations (PhysicsAnalysis* nominal, PhysicsA
       h = (TH1D*) nominal->h_trk_pt_ptz_sub[2][iPtZ][iCent]->Clone (Form ("h_relVarPt_comb_iPtZ%i_iCent%i_%s", iPtZ, iCent, name.c_str ()));
       relVarPt[2][iPtZ][iCent] = h;
       for (short iX = 1; iX <= h->GetNbinsX (); iX++) {
-        const double rUnc = (iPtZ != 2 ? 0 : fmax (fabs (f_ratio_pTch[0][iCent]->Eval (h->GetBinCenter (iX))), fabs (f_ratio_pTch[1][iCent]->Eval (h->GetBinCenter (iX)))) / sqrt (12.));
+        const double rUnc = (iPtZ != 2 ? 0 : 2.*fmax (fabs (f_ratio_pTch[0][iCent]->Eval (h->GetBinCenter (iX))), fabs (f_ratio_pTch[1][iCent]->Eval (h->GetBinCenter (iX)))) / sqrt (12.));
         h->SetBinContent (iX, rUnc * h->GetBinContent (iX));
         h->SetBinError (iX, 0);
       }
@@ -178,7 +178,7 @@ void LowPtVariation :: GetRelativeVariations (PhysicsAnalysis* nominal, PhysicsA
       relVarX[2][iPtZ][iCent] = h;
       for (short iX = 1; iX <= h->GetNbinsX (); iX++) {
         // systematic uncertainty vs. x_hZ deemed not needed.
-        const double rUnc = 0;//(iPtZ != 2 ? 0 : fmax (fabs (f_ratio_xhZ[0][iCent]->Eval (h->GetBinCenter (iX))), fabs (f_ratio_xhZ[1][iCent]->Eval (h->GetBinCenter (iX)))) / sqrt (12.));
+        const double rUnc = 0;//(iPtZ != 2 ? 0 : 2.*fmax (fabs (f_ratio_xhZ[0][iCent]->Eval (h->GetBinCenter (iX))), fabs (f_ratio_xhZ[1][iCent]->Eval (h->GetBinCenter (iX)))) / sqrt (12.));
         h->SetBinContent (iX, rUnc * h->GetBinContent (iX));
         h->SetBinError (iX, 0);
       }

@@ -17,8 +17,6 @@
 #include "BinWidthSystematic.h"
 #include "NonClosureVariation.h"
 
-#include "PlotHybridModel.h"
-
 const bool doSys = false;
 int mixingFraction = 0;
 
@@ -106,7 +104,7 @@ void Run () {
   bkg18     = new MixingAnalysis ("bkg");
 
   mc      = new MCAnalysis ();
-  mc_bkg  = new MixingAnalysis ("mc_bkg");
+  //mc_bkg  = new MixingAnalysis ("mc_bkg");
 
   //hijing  = new HijingAnalysis ("hijing");
   //hijing->subtractPP = false;
@@ -114,8 +112,8 @@ void Run () {
   //hijing_bkg->subtractPP = false;
   //hijing_truth = new TruthAnalysis ("hijing_truth");
 
-  truth = new TruthAnalysis ("truth");
-  smeared_truth = new TruthAnalysis ("smeared");
+  //truth = new TruthAnalysis ("truth");
+  //smeared_truth = new TruthAnalysis ("smeared");
 
   //if (doSys) {
   //  mc_bkgStatUpVar         = new PhysicsAnalysis ("mc_bkgStatUpVar");
@@ -124,7 +122,7 @@ void Run () {
   //  mcBkg_statDownVar       = new MixingAnalysis ("mcBkg_statDownVar");
   //}
 
-  data18->Execute   ("DataAnalysis/Nominal/data18hi.root",   "DataAnalysis/Nominal/data18hi_hists.root");
+  //data18->Execute   ("DataAnalysis/Nominal/data18hi.root",   "DataAnalysis/Nominal/data18hi_hists.root");
 
   //if (doSys) {
   //  data_leptonRejVar       = new PhysicsAnalysis ("data_leptonRejVar");
@@ -147,27 +145,27 @@ void Run () {
   //  data_trkPurDownVar->doTrackPurVar = true; data_trkPurDownVar->trkPurNSigma = -1;
   //  data_trkPurDownVar->Execute     ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackPurityDownVariation/data18hi_hists.root");
   //}
-  return;
 
   mc->LoadHists ("MCAnalysis/Nominal/savedHists.root");
-  mc->CombineHists ();
+  //mc->CombineHists ();
 
   //mc->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/savedHists.root");
   //mc_bkg->LoadHists ("MCAnalysis/Variations/PPMixingVariation/mixedHists.root");
-  mc_bkg->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/mixedHists.root");
+  //mc_bkg->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/mixedHists.root");
+  //mc_bkg->LoadHists ("MCAnalysis/Nominal/MixedHistograms/pp_all_hists.root");
   //mc_bkg->LoadHists ("MCAnalysis/Nominal/mixedHists.root");
-  mc->SubtractBackground (mc_bkg);
+  //mc->SubtractBackground (mc_bkg);
   //mc->CalculateIAA ();
   //SaferDelete (&mc_bkg);
-  mc->TruncatePhysicsPlots ();
+  //mc->TruncatePhysicsPlots ();
 
   //hijing->LoadHists ("MCAnalysis/Hijing/savedHists.root");
   //hijing_bkg->LoadHists ("MCAnalysis/Hijing/mixedHists.root");
   //hijing->SubtractBackground (hijing_bkg);
   //hijing_truth->LoadHists ("TruthAnalysis/Hijing/savedHists.root");
 
-  truth->LoadHists ("TruthAnalysis/Nominal/pp_all_hists.root");
-  smeared_truth->LoadHists ("TruthAnalysis/Variations/SmearingVariation/pp_all_hists.root");
+  //truth->LoadHists ("TruthAnalysis/Nominal/pp_all_hists.root");
+  //smeared_truth->LoadHists ("TruthAnalysis/Variations/SmearingVariation/pp_all_hists.root");
 
   data18->LoadHists ("DataAnalysis/Nominal/data18hi_hists.root");
   bkg18->LoadHists ("MixingAnalysis/Nominal/data18hi_hists.root");
@@ -363,7 +361,6 @@ void Run () {
 
 
 
-    /*
     cout << "Calculating track ID relative systematic errors." << endl;
     trkSys = new TrackIDSystematic (data18, "trkSys", "Track ID Cuts");
     data_trackHItight = new PhysicsAnalysis ("data_trackHITightVar");
@@ -664,9 +661,8 @@ void Run () {
     combSys->AddSystematic (nonClosureSys);
     combSys->AddSystematic (binCenterSys);
     combSys->AddSystematics ();
-    */
 
-    //combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
+    combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
   }
 
   data18->CalculateTrackMeans (data18, data18->h_z_pt);

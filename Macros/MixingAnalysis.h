@@ -257,11 +257,11 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
   }
   if (!doSameFileMixing) {
     std::srand (1);
-    std::random_shuffle (mbEventOrder.begin (), mbEventOrder.end ());
+    //std::random_shuffle (mbEventOrder.begin (), mbEventOrder.end ());
 
-    //std::random_device rd;
-    //std::mt19937 mersenneTwister (rd ()); 
-    //std::shuffle (mbEventOrder.begin (), mbEventOrder.end (), mersenneTwister);
+    std::random_device rd;
+    std::mt19937 mersenneTwister (rd ()); 
+    std::shuffle (mbEventOrder.begin (), mbEventOrder.end (), mersenneTwister);
 
     cout << "Shuffled minimum bias events randomly; first ten events are ";
     for (int i = 0; i < 10; i++) {
@@ -308,11 +308,11 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
 
   if (doShuffle) {
     std::srand (1);
-    std::random_shuffle (zEventOrder.begin (), zEventOrder.end ());
+    //std::random_shuffle (zEventOrder.begin (), zEventOrder.end ());
 
-    //std::random_device rd;
-    //std::mt19937 mersenneTwister (rd ()); 
-    //std::shuffle (zEventOrder.begin (), zEventOrder.end (), mersenneTwister);
+    std::random_device rd;
+    std::mt19937 mersenneTwister (rd ()); 
+    std::shuffle (zEventOrder.begin (), zEventOrder.end (), mersenneTwister);
 
     cout << "Shuffled Z boson events randomly; first ten events are ";
     for (int i = 0; i < 10; i++) {
@@ -676,7 +676,7 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
 
         if (iPtch != -1 && iPtch < maxNPtchBins) {
           short idPhi = 0;
-          while (idPhi < GetNdPhiBins (iPtch, iCent) && (-pi/2.)+(2.*pi/GetNdPhiBins (iPtch, iCent))*(idPhi+1) < dPhi) idPhi++;
+          while (idPhi < GetNdPhiBins (0, 0) && (-pi/2.)+(2.*pi/GetNdPhiBins (0, 0))*(idPhi+1) < dPhi) idPhi++;
 
           trks_counts_inPhi[iPtch][idPhi]   += 1;
           trks_weights1_inPhi[iPtch][idPhi] += trkWeight;
@@ -721,10 +721,10 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
       
       // fill phi correlation histograms and covariance matrices
       for (int iPtch = 0; iPtch < maxNPtchBins; iPtch++) {
-        for (int idPhi1 = 0; idPhi1 < GetNdPhiBins (iPtch, iCent); idPhi1++) {
+        for (int idPhi1 = 0; idPhi1 < GetNdPhiBins (0, 0); idPhi1++) {
           h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->SetBinContent (idPhi1+1, h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->GetBinContent (idPhi1+1) + (event_weight) * (trks_weights1_inPhi[iPtch][idPhi1]));
           h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->SetBinError (idPhi1+1, sqrt (pow (h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->GetBinError (idPhi1+1), 2) + pow (event_weight, 2) * (trks_weights2_inPhi[iPtch][idPhi1])));
-          for (int idPhi2 = 0; idPhi2 < GetNdPhiBins (iPtch, iCent); idPhi2++)
+          for (int idPhi2 = 0; idPhi2 < GetNdPhiBins (0, 0); idPhi2++)
             h2_trk_dphi_cov[iSpc][iPtZ][iPtch][iCent]->SetBinContent (idPhi1+1, idPhi2+1, h2_trk_dphi_cov[iSpc][iPtZ][iPtch][iCent]->GetBinContent (idPhi1+1, idPhi2+1) + (event_weight) * (trks_weights1_inPhi[iPtch][idPhi1]) * (trks_weights1_inPhi[iPtch][idPhi2]));
         } // end loop over iPtch
       } // end loop over idPhi1
@@ -1003,7 +1003,7 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
 
         if (iPtch != -1 && iPtch < maxNPtchBins) {
           short idPhi = 0;
-          while (idPhi < GetNdPhiBins (iPtch, iCent) && (-pi/2.)+(2.*pi/GetNdPhiBins (iPtch, iCent))*(idPhi+1) < dPhi) idPhi++;
+          while (idPhi < GetNdPhiBins (0, 0) && (-pi/2.)+(2.*pi/GetNdPhiBins (0, 0))*(idPhi+1) < dPhi) idPhi++;
 
           trks_counts_inPhi[iPtch][idPhi]   += 1;
           trks_weights1_inPhi[iPtch][idPhi] += trkWeight;
@@ -1048,10 +1048,10 @@ void MixingAnalysis :: Execute (const bool isPbPb, const char* inFileName, const
       
       // fill phi correlation histograms and covariance matrices
       for (int iPtch = 0; iPtch < maxNPtchBins; iPtch++) {
-        for (int idPhi1 = 0; idPhi1 < GetNdPhiBins (iPtch, iCent); idPhi1++) {
+        for (int idPhi1 = 0; idPhi1 < GetNdPhiBins (0, 0); idPhi1++) {
           h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->SetBinContent (idPhi1+1, h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->GetBinContent (idPhi1+1) + (event_weight) * (trks_weights1_inPhi[iPtch][idPhi1]));
           h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->SetBinError (idPhi1+1, sqrt (pow (h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->GetBinError (idPhi1+1), 2) + pow (event_weight, 2) * (trks_weights2_inPhi[iPtch][idPhi1])));
-          for (int idPhi2 = 0; idPhi2 < GetNdPhiBins (iPtch, iCent); idPhi2++)
+          for (int idPhi2 = 0; idPhi2 < GetNdPhiBins (0, 0); idPhi2++)
             h2_trk_dphi_cov[iSpc][iPtZ][iPtch][iCent]->SetBinContent (idPhi1+1, idPhi2+1, h2_trk_dphi_cov[iSpc][iPtZ][iPtch][iCent]->GetBinContent (idPhi1+1, idPhi2+1) + (event_weight) * (trks_weights1_inPhi[iPtch][idPhi1]) * (trks_weights1_inPhi[iPtch][idPhi2]));
         } // end loop over iPtch
       } // end loop over idPhi1

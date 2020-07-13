@@ -38,7 +38,7 @@ const Color_t atlasColor    = finalColors[3];
 const Color_t atlasFillColor = finalFillColors[3];
 
 const Color_t hybridColor = (Color_t) tcolor->GetColor (82, 82, 173);
-const double  hybridAlpha = 0.7;
+const double  hybridAlpha = 0.5;
 const Color_t scetgColor  = (Color_t) tcolor->GetColor (39, 180, 66);
 const double  scetgAlpha  = 0.6;
 const Color_t jewelColor  = tcolor->GetColor (255, 170, 50);
@@ -169,7 +169,7 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Load our histograms and systematics graphs
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults.root", "read");
+  TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults_new.root", "read");
   TFile* sysFile = new TFile ("../rootFiles/Systematics/CombinedSys.root", "read");
 
   TH1D*** h_trk_pt_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
@@ -1362,11 +1362,17 @@ void MakeFinalPlots () {
       xax->SetTickLength (0.04 * (1.-gPad->GetTopMargin ()-gPad->GetBottomMargin ()) / gPad->GetHNDC ());
       xax->SetTickLength (0.04);
 
-      yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
       yax->SetRangeUser (yminvals[pad], ymaxvals[pad]);
-      yax->SetTitleFont (43);
-      yax->SetTitleSize (30);
-      yax->SetTitleOffset (1.80);
+      if (pad == uPad) {
+        yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
+        //yax->CenterTitle (true);
+        yax->SetTitleFont (43);
+        yax->SetTitleSize (30);
+        yax->SetTitleOffset (1.80);
+      }
+      else {
+        yax->SetTitleSize (0);
+      }
       //yax->SetLabelFont (43);
       //yax->SetLabelSize (28);
       yax->SetLabelSize (0);
@@ -1482,12 +1488,12 @@ void MakeFinalPlots () {
     tl->SetTextColor (kBlack);
     tl->SetTextAlign (11);
 
-    tl->SetTextSize (28);
     c2_3plots->cd ();
-    tl->DrawLatexNDC (0.41, 0.930, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (26);
-    tl->DrawLatexNDC (0.43, 0.880, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.43, 0.845, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->SetTextSize (30);
+    tl->DrawLatexNDC (0.39, 0.930, "#bf{#it{ATLAS}} Internal");
+    tl->SetTextSize (28);
+    tl->DrawLatexNDC (0.41, 0.885, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.41, 0.845, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (28);
     tl->DrawLatexNDC (0.745, 0.938, "#it{p}_{T}^{Z} > 60 GeV");
@@ -2625,11 +2631,11 @@ void MakeFinalPlots () {
     tl->SetTextColor (kBlack);
     tl->SetTextAlign (11);
 
+    tl->SetTextSize (30);
+    tl->DrawLatexNDC (0.37, 0.900, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.41, 0.900, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (26);
-    tl->DrawLatexNDC (0.43, 0.865, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.43, 0.830, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.39, 0.8625, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.39, 0.825, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (24);
     tl->SetTextAngle (322);
@@ -2841,7 +2847,9 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      yax->SetTitleOffset (1.0 * yax->GetTitleOffset ());
+      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      yax->SetLabelSize (0);
       const double ymin = 0.;//0.18;
       const double ymax = 3.6;//7;
       yax->SetRangeUser (ymin, ymax);
@@ -2876,6 +2884,21 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+
+      tl->SetTextAlign (32);
+
+      tl->DrawLatex (xoff, 0, "0");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 1.5, "1.5");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 2.5, "2.5");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 3.5, "3.5");
+
       l->SetLineStyle (2);
       l->SetLineWidth (2);
       //l->SetLineColor (kPink-8);
@@ -2891,7 +2914,7 @@ void MakeFinalPlots () {
       deltaize (g, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
       ResetXErrors (g);
 
-      g->SetFillColorAlpha (finalModelFillColors[iPtZ-1], 0.6);
+      g->SetFillColorAlpha (finalModelFillColors[iPtZ-1], 0.4);
       ((TGAE*) g->Clone ())->Draw ("3");
       SaferDelete (&g);
     }
@@ -2954,22 +2977,22 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (30);
+    tl->SetTextSize (27);
     tl->SetTextAlign (21);
-    tl->DrawLatexNDC (0.378, 0.71, "15-30");
-    tl->DrawLatexNDC (0.485, 0.71, "30-60");
-    tl->DrawLatexNDC (0.590, 0.71, "60+");
+    tl->DrawLatexNDC (0.418, 0.74, "15-30");
+    tl->DrawLatexNDC (0.518, 0.74, "30-60");
+    tl->DrawLatexNDC (0.610, 0.74, "60+");
 
     tl->SetTextAlign (11);
-    tl->DrawLatexNDC (0.64, 0.71, "#it{p}_{T}^{Z} [GeV]");
-    tl->DrawLatexNDC (0.64, 0.65, "ATLAS 0-10\%");
-    tl->DrawLatexNDC (0.64, 0.59, "Hybrid Model");
-    myMarkerAndBoxAndLineText (0.634, 0.65, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "", 0.045);
-    myMarkerAndBoxAndLineText (0.530, 0.65, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "", 0.045);
-    myMarkerAndBoxAndLineText (0.424, 0.65, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "", 0.045);
-    myMarkerAndBoxAndLineText (0.634, 0.59, 1.4, 1001, finalModelFillColors[3], 0.60, finalModelFillColors[3], -1, 1, "", 0.045);
-    myMarkerAndBoxAndLineText (0.530, 0.59, 1.4, 1001, finalModelFillColors[2], 0.60, finalModelFillColors[2], -1, 1, "", 0.045);
-    myMarkerAndBoxAndLineText (0.424, 0.59, 1.4, 1001, finalModelFillColors[1], 0.60, finalModelFillColors[1], -1, 1, "", 0.045);
+    tl->DrawLatexNDC (0.66, 0.74, "#it{p}_{T}^{Z} [GeV]");
+    tl->DrawLatexNDC (0.66, 0.685+0.007, "ATLAS 0-10\%");
+    tl->DrawLatexNDC (0.66, 0.630+0.014, "Hybrid Model");
+    myMarkerAndBoxAndLineText (0.654, 0.685+0.007, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "", 0.045);
+    myMarkerAndBoxAndLineText (0.560, 0.685+0.007, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "", 0.045);
+    myMarkerAndBoxAndLineText (0.464, 0.685+0.007, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "", 0.045);
+    myMarkerAndBoxAndLineText (0.654, 0.630+0.014, 1.4, 1001, finalModelFillColors[3], 0.40, finalModelFillColors[3], -1, 1, "", 0.045);
+    myMarkerAndBoxAndLineText (0.560, 0.630+0.014, 1.4, 1001, finalModelFillColors[2], 0.40, finalModelFillColors[2], -1, 1, "", 0.045);
+    myMarkerAndBoxAndLineText (0.464, 0.630+0.014, 1.4, 1001, finalModelFillColors[1], 0.40, finalModelFillColors[1], -1, 1, "", 0.045);
 
     l->SetLineStyle (2);
     l->SetLineWidth (2);
@@ -3017,8 +3040,10 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      yax->SetTitleOffset (1.0 * yax->GetTitleOffset ());
+      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
       //yax->SetRangeUser (0.05, 10);
+      yax->SetLabelSize (0);
       const double ymin = 0.;
       const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
@@ -3052,6 +3077,21 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+
+      tl->SetTextAlign (32);
+
+      tl->DrawLatex (xoff, 0, "0");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 1.5, "1.5");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 2.5, "2.5");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 3.5, "3.5");
+
       l->SetLineStyle (2);
       l->SetLineWidth (2);
       //l->SetLineColor (kPink-8);
@@ -3068,7 +3108,7 @@ void MakeFinalPlots () {
       deltaize (g, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
       ResetXErrors (g);
 
-      g->SetFillColorAlpha (finalModelFillColors[iPtZ-1], 0.6);
+      g->SetFillColorAlpha (finalModelFillColors[iPtZ-1], 0.4);
       ((TGAE*) g->Clone ())->Draw ("3");
       SaferDelete (&g);
     }
@@ -3133,22 +3173,22 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (30);
+    tl->SetTextSize (27);
     tl->SetTextAlign (21);
-    tl->DrawLatexNDC (0.378, 0.71, "15-30");
-    tl->DrawLatexNDC (0.485, 0.71, "30-60");
-    tl->DrawLatexNDC (0.590, 0.71, "60+");
+    tl->DrawLatexNDC (0.418, 0.74, "15-30");
+    tl->DrawLatexNDC (0.518, 0.74, "30-60");
+    tl->DrawLatexNDC (0.610, 0.74, "60+");
 
     tl->SetTextAlign (11);
-    tl->DrawLatexNDC (0.64, 0.71, "#it{p}_{T}^{Z} [GeV]");
-    tl->DrawLatexNDC (0.64, 0.65, "ATLAS 0-10\%");
-    tl->DrawLatexNDC (0.64, 0.59, "JEWEL");
-    myMarkerAndBoxAndLineText (0.634, 0.65, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "", 0.045);
-    myMarkerAndBoxAndLineText (0.530, 0.65, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "", 0.045);
-    myMarkerAndBoxAndLineText (0.424, 0.65, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "", 0.045);
-    myMarkerAndBoxAndLineText (0.634, 0.59, 1.4, 1001, finalModelFillColors[3], 0.60, finalModelFillColors[3], -1, 1, "", 0.045);
-    myMarkerAndBoxAndLineText (0.530, 0.59, 1.4, 1001, finalModelFillColors[2], 0.60, finalModelFillColors[2], -1, 1, "", 0.045);
-    myMarkerAndBoxAndLineText (0.424, 0.59, 1.4, 1001, finalModelFillColors[1], 0.60, finalModelFillColors[1], -1, 1, "", 0.045);
+    tl->DrawLatexNDC (0.66, 0.74, "#it{p}_{T}^{Z} [GeV]");
+    tl->DrawLatexNDC (0.66, 0.685+0.007, "ATLAS 0-10\%");
+    tl->DrawLatexNDC (0.66, 0.630+0.014, "JEWEL");
+    myMarkerAndBoxAndLineText (0.654, 0.685+0.007, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "", 0.045);
+    myMarkerAndBoxAndLineText (0.560, 0.685+0.007, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "", 0.045);
+    myMarkerAndBoxAndLineText (0.464, 0.685+0.007, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "", 0.045);
+    myMarkerAndBoxAndLineText (0.654, 0.630+0.014, 1.4, 1001, finalModelFillColors[3], 0.40, finalModelFillColors[3], -1, 1, "", 0.045);
+    myMarkerAndBoxAndLineText (0.560, 0.630+0.014, 1.4, 1001, finalModelFillColors[2], 0.40, finalModelFillColors[2], -1, 1, "", 0.045);
+    myMarkerAndBoxAndLineText (0.464, 0.630+0.014, 1.4, 1001, finalModelFillColors[1], 0.40, finalModelFillColors[1], -1, 1, "", 0.045);
 
     l->SetLineStyle (2);
     l->SetLineWidth (2);
@@ -3633,7 +3673,7 @@ void MakeFinalPlots () {
 
   {
     TCanvas* c12 = new TCanvas ("c12", "", 800, 800);
-    const double lMargin = 0.15;
+    const double lMargin = 0.12;
     const double rMargin = 0.04;
     const double bMargin = 0.15;
     const double tMargin = 0.04;
@@ -3661,8 +3701,10 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
+      yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
+      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      //yax->SetMoreLogLabels ();
+      yax->SetLabelSize (0);
       const double ymin = 0.18;
       const double ymax = 7;
       //const double ymin = 0.;
@@ -3692,6 +3734,23 @@ void MakeFinalPlots () {
       tl->DrawLatex (30, yoff, "30");
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
+
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+
+      tl->SetTextAlign (32);
+
+      tl->DrawLatex (xoff, 0.2, "0.2");
+      tl->DrawLatex (xoff, 0.3, "0.3");
+      tl->DrawLatex (xoff, 0.4, "0.4");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 0.7, "0.7");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 4, "4");
+      tl->DrawLatex (xoff, 5, "5");
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
@@ -3827,18 +3886,18 @@ void MakeFinalPlots () {
     //tl->SetTextSize (28);
     //tl->DrawLatexNDC (0.50, 0.750, "30 < #it{p}_{T}^{Z} < 60 GeV");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.44, 0.755-0.011, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
-    tl->DrawLatexNDC (0.44, 0.710-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.76, 0.710-0.011, "CoLBT");
-    tl->DrawLatexNDC (0.44, 0.665-0.011, "SCET_{G}");
-    tl->DrawLatexNDC (0.76, 0.665-0.011, "JEWEL");
+    tl->SetTextSize (27);
+    tl->DrawLatexNDC (0.44-0.007, 0.760-0.011, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->DrawLatexNDC (0.44-0.007, 0.715-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.84-0.007, 0.715-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.44-0.007, 0.670-0.011, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.84-0.007, 0.670-0.011, "JEWEL");
 
-    MakeDataBox   (0.45, 0.755, finalFillColors[2], 0.30, markerStyles[1], 1.8);
-    MakeTheoryBox (0.45, 0.710, hybridColor, hybridAlpha);
-    MakeTheoryLine (0.77, 0.710, colbtColor);
-    MakeTheoryBox (0.45, 0.665, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.77, 0.665, jewelColor, jewelAlpha);
+    MakeDataBox   (0.45, 0.760, finalFillColors[2], 0.30, markerStyles[1], 1.8);
+    MakeTheoryBox (0.45, 0.715, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.85, 0.715, colbtColor);
+    MakeTheoryBox (0.45, 0.670, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.85, 0.670, jewelColor, jewelAlpha);
 
     c12->SaveAs ("../Plots/FinalPlots/iaa_pTch_theoryComp_iPtZ3.pdf");
   }
@@ -3848,7 +3907,7 @@ void MakeFinalPlots () {
 
   {
     TCanvas* c13 = new TCanvas ("c13", "", 800, 800);
-    const double lMargin = 0.15;
+    const double lMargin = 0.12;
     const double rMargin = 0.04;
     const double bMargin = 0.15;
     const double tMargin = 0.04;
@@ -3876,8 +3935,10 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
+      yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
+      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      //yax->SetMoreLogLabels ();
+      yax->SetLabelSize (0);
       const double ymin = 0.18;
       const double ymax = 7;
       //const double ymin = 0.;
@@ -3907,6 +3968,23 @@ void MakeFinalPlots () {
       tl->DrawLatex (30, yoff, "30");
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
+
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+
+      tl->SetTextAlign (32);
+
+      tl->DrawLatex (xoff, 0.2, "0.2");
+      tl->DrawLatex (xoff, 0.3, "0.3");
+      tl->DrawLatex (xoff, 0.4, "0.4");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 0.7, "0.7");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 4, "4");
+      tl->DrawLatex (xoff, 5, "5");
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
@@ -4042,18 +4120,18 @@ void MakeFinalPlots () {
     //tl->SetTextSize (28);
     //tl->DrawLatexNDC (0.50, 0.750, "#it{p}_{T}^{Z} > 60 GeV");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.44, 0.755-0.011, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
-    tl->DrawLatexNDC (0.44, 0.710-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.76, 0.710-0.011, "CoLBT");
-    tl->DrawLatexNDC (0.44, 0.665-0.011, "SCET_{G}");
-    tl->DrawLatexNDC (0.76, 0.665-0.011, "JEWEL");
+    tl->SetTextSize (27);
+    tl->DrawLatexNDC (0.44-0.007, 0.760-0.011, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.44-0.007, 0.715-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.84-0.007, 0.715-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.44-0.007, 0.670-0.011, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.84-0.007, 0.670-0.011, "JEWEL");
 
-    MakeDataBox   (0.45, 0.755, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-    MakeTheoryBox (0.45, 0.710, hybridColor, hybridAlpha);
-    MakeTheoryLine (0.77, 0.710, colbtColor);
-    MakeTheoryBox (0.45, 0.665, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.77, 0.665, jewelColor, jewelAlpha);
+    MakeDataBox   (0.45, 0.760, finalFillColors[3], 0.30, markerStyles[2], 2.4);
+    MakeTheoryBox (0.45, 0.715, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.85, 0.715, colbtColor);
+    MakeTheoryBox (0.45, 0.670, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.85, 0.670, jewelColor, jewelAlpha);
 
     c13->SaveAs ("../Plots/FinalPlots/iaa_pTch_theoryComp_iPtZ4.pdf");
   }
@@ -4063,7 +4141,7 @@ void MakeFinalPlots () {
 
   {
     TCanvas* c14 = new TCanvas ("c14", "", 800, 800);
-    const double lMargin = 0.15;
+    const double lMargin = 0.12;
     const double rMargin = 0.04;
     const double bMargin = 0.15;
     const double tMargin = 0.04;
@@ -4091,8 +4169,10 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
+      yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
+      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      //yax->SetMoreLogLabels ();
+      yax->SetLabelSize (0);
       const double ymin = 0.05;
       const double ymax = 7;
       //const double ymin = 0.;
@@ -4118,6 +4198,21 @@ void MakeFinalPlots () {
       tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
       tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
       tl->DrawLatex (1,     yoff, "1");
+
+      const double xmin = xhZBins[iPtZ][0];
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+
+      tl->SetTextAlign (32);
+
+      tl->DrawLatex (xoff, 0.1, "0.1");
+      tl->DrawLatex (xoff, 0.2, "0.2");
+      tl->DrawLatex (xoff, 0.3, "0.3");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 5, "5");
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
@@ -4223,21 +4318,18 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    //tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.24, 0.335, "30 < #it{p}_{T}^{Z} < 60 GeV");
-
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.33, 0.294-0.011, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
-    tl->DrawLatexNDC (0.33, 0.247-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.33, 0.200-0.011, "CoLBT");
-    tl->DrawLatexNDC (0.65, 0.247-0.011, "SCET_{G}");
-    tl->DrawLatexNDC (0.65, 0.200-0.011, "JEWEL");
+    tl->SetTextSize (27);
+    tl->DrawLatexNDC (0.33-0.007, 0.294-0.011, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->DrawLatexNDC (0.33-0.007, 0.247-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.73-0.007, 0.247-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.33-0.007, 0.200-0.011, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.73-0.007, 0.200-0.011, "JEWEL");
 
     MakeDataBox   (0.34, 0.294, finalFillColors[2], 0.30, markerStyles[1], 1.8);
     MakeTheoryBox (0.34, 0.247, hybridColor, hybridAlpha);
-    MakeTheoryLine (0.34, 0.200, colbtColor);
-    MakeTheoryBox (0.66, 0.247, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.66, 0.200, jewelColor, jewelAlpha);
+    MakeTheoryLine (0.74, 0.247, colbtColor);
+    MakeTheoryBox (0.34, 0.200, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.74, 0.200, jewelColor, jewelAlpha);
 
     c14->SaveAs ("../Plots/FinalPlots/iaa_xhZ_theoryComp_iPtZ3.pdf");
   }
@@ -4247,7 +4339,7 @@ void MakeFinalPlots () {
 
   {
     TCanvas* c15 = new TCanvas ("c15", "", 800, 800);
-    const double lMargin = 0.15;
+    const double lMargin = 0.12;
     const double rMargin = 0.04;
     const double bMargin = 0.15;
     const double tMargin = 0.04;
@@ -4275,8 +4367,10 @@ void MakeFinalPlots () {
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
+      yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
+      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
+      //yax->SetMoreLogLabels ();
+      yax->SetLabelSize (0);
       const double ymin = 0.05;
       const double ymax = 7;
       //const double ymin = 0.;
@@ -4302,6 +4396,21 @@ void MakeFinalPlots () {
       tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
       tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
       tl->DrawLatex (1,     yoff, "1");
+
+      const double xmin = xhZBins[iPtZ][0];
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+
+      tl->SetTextAlign (32);
+
+      tl->DrawLatex (xoff, 0.1, "0.1");
+      tl->DrawLatex (xoff, 0.2, "0.2");
+      tl->DrawLatex (xoff, 0.3, "0.3");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 5, "5");
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
@@ -4410,18 +4519,18 @@ void MakeFinalPlots () {
     //tl->SetTextSize (28);
     //tl->DrawLatexNDC (0.24, 0.335, "#it{p}_{T}^{Z} > 60 GeV");
 
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.33, 0.294-0.011, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
-    tl->DrawLatexNDC (0.33, 0.247-0.011, "Hybrid Model");
-    tl->DrawLatexNDC (0.33, 0.200-0.011, "CoLBT");
-    tl->DrawLatexNDC (0.65, 0.247-0.011, "SCET_{G}");
-    tl->DrawLatexNDC (0.65, 0.200-0.011, "JEWEL");
+    tl->SetTextSize (27);
+    tl->DrawLatexNDC (0.33-0.007, 0.294-0.011, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.33-0.007, 0.247-0.011, "Hybrid Model");
+    tl->DrawLatexNDC (0.73-0.007, 0.247-0.011, "CoLBT");
+    tl->DrawLatexNDC (0.33-0.007, 0.200-0.011, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.73-0.007, 0.200-0.011, "JEWEL");
 
     MakeDataBox   (0.34, 0.294, finalFillColors[3], 0.30, markerStyles[2], 2.4);
     MakeTheoryBox (0.34, 0.247, hybridColor, hybridAlpha);
-    MakeTheoryLine (0.34, 0.200, colbtColor);
-    MakeTheoryBox (0.66, 0.247, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.66, 0.200, jewelColor, jewelAlpha);
+    MakeTheoryLine (0.74, 0.247, colbtColor);
+    MakeTheoryBox (0.34, 0.200, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.74, 0.200, jewelColor, jewelAlpha);
 
     c15->SaveAs ("../Plots/FinalPlots/iaa_xhZ_theoryComp_iPtZ4.pdf");
   }

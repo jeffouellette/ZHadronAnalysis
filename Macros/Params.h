@@ -32,6 +32,7 @@ const Color_t modelFillColors[8] = {kGray, kRed+2, kBlue-3, kGreen+3, kViolet-6,
 const Color_t finalColors[4]          = {(Color_t) tcolor->GetColor (0, 0, 0), (Color_t) tcolor->GetColor ( 87, 132, 198), (Color_t) tcolor->GetColor (130,  10, 130), (Color_t) tcolor->GetColor (255,  12,  73)};
 const Color_t finalFillColors[4]      = {(Color_t) tcolor->GetColor (0, 0, 0), (Color_t) tcolor->GetColor ( 87, 132, 198), (Color_t) tcolor->GetColor (130,  10, 130), (Color_t) tcolor->GetColor (255,  12,  73)};
 const Color_t finalModelFillColors[4] = {(Color_t) tcolor->GetColor (0, 0, 0), (Color_t) tcolor->GetColor ( 87, 132, 198), (Color_t) tcolor->GetColor (130,  10, 130), (Color_t) tcolor->GetColor (255,  12,  73)};
+//const Color_t finalModelFillColors[4] = {kBlack, kAzure-9, kViolet-9, kRed-9};
 const float fillAlpha = 1;
 
 const double pi = M_PI;
