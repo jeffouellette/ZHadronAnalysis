@@ -528,16 +528,26 @@ void Systematic :: AddVariations () {
           //  } // end loop over iCent
           //} // end loop over iPhi
 
-          for (int iPtch = 0; iPtch < nPtchBins[iPtZ]; iPtch++) {
-            for (short iCent = 0; iCent < numCentBins; iCent++) {
+          for (short iCent = 0; iCent <= numCentBins; iCent++) {
+            for (int iPtch : {maxNPtchBins, maxNPtchBins+1}) {
               sys = GetOrigTGAE (h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
               var = a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent];
               if (sys && var) CalcSystematics (sys, var, variationDirs[a]);
               sys = GetOrigTGAE (h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent]);
               var = a->h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent];
               if (sys && var) CalcSystematics (sys, var, variationDirs[a]);
-            } // end loop over iCent
-          } // end loop over iPtch
+            }
+          }
+          //for (int iPtch = 0; iPtch < nPtchBins[iPtZ]; iPtch++) {
+          //  for (short iCent = 0; iCent < numCentBins; iCent++) {
+          //    sys = GetOrigTGAE (h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
+          //    var = a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent];
+          //    if (sys && var) CalcSystematics (sys, var, variationDirs[a]);
+          //    sys = GetOrigTGAE (h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent]);
+          //    var = a->h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent];
+          //    if (sys && var) CalcSystematics (sys, var, variationDirs[a]);
+          //  } // end loop over iCent
+          //} // end loop over iPtch
 
           for (short iCent = 0; iCent < numCentBins; iCent++) {
             sys = GetOrigTGAE (h_trk_pt_ptz[iSpc][iPtZ][iCent]);
@@ -1221,8 +1231,8 @@ void Systematic :: AddSystematics () {
           //  } // end loop over iCent
           //} // end loop over iPhi
 
-          for (int iPtch = 0; iPtch < nPtchBins[iPtZ]; iPtch++) {
-            for (short iCent = 0; iCent < numCentBins; iCent++) {
+          for (short iCent = 0; iCent <= numCentBins; iCent++) {
+            for (int iPtch : {maxNPtchBins, maxNPtchBins+1}) {
               master = GetOrigTGAE (h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
               sys = s->GetOrigTGAE (s->h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
               if (master && sys) AddErrorsInQuadrature (master, sys);
@@ -1230,8 +1240,19 @@ void Systematic :: AddSystematics () {
               master = GetOrigTGAE (h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent]);
               sys = s->GetOrigTGAE (s->h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent]);
               if (master && sys) AddErrorsInQuadrature (master, sys);
-            } // end loop over iCent
-          } // end loop over iPtch
+            }
+          }
+          //for (int iPtch = 0; iPtch < nPtchBins[iPtZ]; iPtch++) {
+          //  for (short iCent = 0; iCent < numCentBins; iCent++) {
+          //    master = GetOrigTGAE (h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
+          //    sys = s->GetOrigTGAE (s->h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
+          //    if (master && sys) AddErrorsInQuadrature (master, sys);
+
+          //    master = GetOrigTGAE (h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent]);
+          //    sys = s->GetOrigTGAE (s->h_trk_dphi_sub[iSpc][iPtZ][iPtch][iCent]);
+          //    if (master && sys) AddErrorsInQuadrature (master, sys);
+          //  } // end loop over iCent
+          //} // end loop over iPtch
 
           for (short iCent = 0; iCent < numCentBins; iCent++) {
             master = GetOrigTGAE (h_trk_pt_ptz[iSpc][iPtZ][iCent]);

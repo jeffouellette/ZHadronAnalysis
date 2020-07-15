@@ -41,8 +41,8 @@ void CompareHijingTrackEff () {
       //}
     }
 
-    RebinSomeBins (num, newNPtTrkBins, newPtTrkBins);
-    RebinSomeBins (den, newNPtTrkBins, newPtTrkBins);
+    RebinSomeBins (&num, newNPtTrkBins, newPtTrkBins);
+    RebinSomeBins (&den, newNPtTrkBins, newPtTrkBins);
 
     h_pythia_trk_effs[iMult] = (TH1D*) num->Clone (Form ("h_pythia_trk_eff_iMult%i", iMult));
     h_pythia_trk_effs[iMult]->Divide (den);
@@ -71,8 +71,8 @@ void CompareHijingTrackEff () {
       //}
     }
 
-    RebinSomeBins (num, newNPtTrkBins, newPtTrkBins);
-    RebinSomeBins (den, newNPtTrkBins, newPtTrkBins);
+    RebinSomeBins (&num, newNPtTrkBins, newPtTrkBins);
+    RebinSomeBins (&den, newNPtTrkBins, newPtTrkBins);
 
     h_hijing_trk_effs[iMult] = (TH1D*) num->Clone (Form ("h_hijing_trk_eff_iMult%i", iMult));
     h_hijing_trk_effs[iMult]->Divide (den);

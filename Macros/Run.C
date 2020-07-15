@@ -147,7 +147,7 @@ void Run () {
   //}
 
   mc->LoadHists ("MCAnalysis/Nominal/savedHists.root");
-  //mc->CombineHists ();
+  mc->CombineHists (); // necessary for calculating electron & muon ES systematics in the combined channel result
 
   //mc->LoadHists ("MCAnalysis/Nominal/PbPb18_pp_Zee_Hijing/savedHists.root");
   //mc_bkg->LoadHists ("MCAnalysis/Variations/PPMixingVariation/mixedHists.root");
@@ -366,7 +366,7 @@ void Run () {
     data_trackHItight = new PhysicsAnalysis ("data_trackHITightVar");
     data_trackHItight->useHITight = true;
     data_trackHItight->LoadHists ("DataAnalysis/Variations/TrackHITightWPVariation/data18hi_hists.root");
-    trkSys->GetRelativeVariation (data18, data_trackHItight);
+    trkSys->GetRelativeVariations (data18, data_trackHItight);
     SaferDelete (&data_trackHItight);
     cout << "Applying track ID systematic errors." << endl;
     data_trkIDUpVar = new PhysicsAnalysis ("data_trkIDUpVar");
@@ -382,10 +382,10 @@ void Run () {
     bkg_trkIDDownVar->useHITight = true;
     bkg_trkIDDownVar->CopyAnalysis (bkg18, false);
 
-    data_trkIDUpVar->ApplyRelativeVariation (trkSys->relVar, true); // track yields go up
-    data_trkIDDownVar->ApplyRelativeVariation (trkSys->relVar, false); // track yields go down
-    bkg_trkIDUpVar->ApplyRelativeVariation (trkSys->relVar, true); // track yields go up
-    bkg_trkIDDownVar->ApplyRelativeVariation (trkSys->relVar, false); // track yields go down
+    trkSys->ApplyRelativeVariations (data_trkIDUpVar, true); // track yields go up
+    trkSys->ApplyRelativeVariations (data_trkIDDownVar, false); // track yields go down
+    trkSys->ApplyRelativeVariations (bkg_trkIDUpVar, true); // track yields go up
+    trkSys->ApplyRelativeVariations (bkg_trkIDDownVar, false); // track yields go down
 
     data_trkIDUpVar->SubtractBackground (bkg_trkIDUpVar);
     data_trkIDDownVar->SubtractBackground (bkg_trkIDDownVar);
@@ -583,6 +583,7 @@ void Run () {
 
 
 
+
     cout << "Calculating low pT additional systematic errors." << endl;
     lowPtSys = new Systematic (data18, "lowPtSys", "Channel dependence");
     lowPtSysWeights = new LowPtVariation ("lowPtSysWeights");
@@ -662,7 +663,7 @@ void Run () {
     combSys->AddSystematic (binCenterSys);
     combSys->AddSystematics ();
 
-    combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
+    //combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
   }
 
   data18->CalculateTrackMeans (data18, data18->h_z_pt);

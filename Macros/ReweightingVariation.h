@@ -17,8 +17,9 @@ class ReweightingVariation {
   string name;
 
   public:
-  TH1D**** relVarPt = Get3DArray <TH1D*> (3, nPtZBins, numCentBins); // iSpc, iPtZ, iCent
-  TH1D**** relVarX  = Get3DArray <TH1D*> (3, nPtZBins, numCentBins); // iSpc, iPtZ, iCent
+  TH1D**** relVarPt     = Get3DArray <TH1D*> (3, nPtZBins, numCentBins); // iSpc, iPtZ, iCent
+  TH1D**** relVarX      = Get3DArray <TH1D*> (3, nPtZBins, numCentBins); // iSpc, iPtZ, iCent
+  TH1D***** relVardPhi  = Get4DArray <TH1D*> (3, nPtZBins, maxNPtchBins, numCentBins); // iSpc, iPtZ, iPtch, iCent
 
   //ReweightingVariation (PhysicsAnalysis* nom, const char* _name = "systematics", const char* _desc = "systematic") : Systematic (nom, _name, _desc) { }
   ReweightingVariation (const char* _name = "reweightingVariation") {
@@ -31,11 +32,15 @@ class ReweightingVariation {
         for (short iCent = 0; iCent < numCentBins; iCent++) {
           SaferDelete (&relVarPt[iSpc][iPtZ][iCent]);
           SaferDelete (&relVarX[iSpc][iPtZ][iCent]);
+          for (short iPtch = 0; iPtch < maxNPtchBins; iPtch++) {
+            SaferDelete (&relVardPhi[iSpc][iPtZ][iPtch][iCent]);
+          }
         } // end loop over iCent
       } // end loop over iPtZ
     } // end loop over iSpc
     Delete3DArray (&relVarPt, 3, nPtZBins, numCentBins);
     Delete3DArray (&relVarX, 3, nPtZBins, numCentBins);
+    Delete4DArray (&relVardPhi, 3, nPtZBins, maxNPtchBins, numCentBins);
   }
 
   string Name ()              { return name; }
@@ -97,6 +102,14 @@ void ReweightingVariation :: GetRelativeVariations (PhysicsAnalysis* nominal, Ph
         h = (TH1D*) nominal->h_trk_xhz_ptz[iSpc][iPtZ][iCent]->Clone (Form ("h_relVarX_%s_iPtZ%i_iCent%i_%s", spc, iPtZ, iCent, name.c_str ()));
         relVarX[iSpc][iPtZ][iCent] = h;
         h->Divide (var->h_trk_xhz_ptz[iSpc][iPtZ][iCent]);
+
+        for (short iPtch = 0; iPtch < maxNPtchBins; iPtch++) {
+          h = (TH1D*) nominal->h_trk_dphi[iSpc][iPtZ][iPtch][iCent];
+          if (h) h = (TH1D*) h->Clone (Form ("h_relVardPhi_%s_iPtZ%i_iPtch%i_iCent%i_%s", spc, iPtZ, iPtch, iCent, name.c_str ()));
+          else continue;
+          relVardPhi[iSpc][iPtZ][iPtch][iCent] = h; 
+          h->Divide (var->h_trk_dphi[iSpc][iPtZ][iPtch][iCent]);
+        }
       } // end loop over iCent
     } // end loop over iPtZ
   } // end loop over iSpc
@@ -118,18 +131,21 @@ void ReweightingVariation :: ApplyRelativeVariations (PhysicsAnalysis* a, const 
         if (upVar) {
           a->h_trk_pt_ptz[iSpc][iPtZ][iCent]->Multiply (relVarPt[iSpc][iPtZ][iCent]);
           a->h_trk_xhz_ptz[iSpc][iPtZ][iCent]->Multiply (relVarX[iSpc][iPtZ][iCent]);
-          //a->h_trk_pt_ptz_sub[iSpc][iPtZ][iCent]->Multiply (relVarPt[iSpc][iPtZ][iCent]);
-          //a->h_trk_xhz_ptz_sub[iSpc][iPtZ][iCent]->Multiply (relVarX[iSpc][iPtZ][iCent]);
-          //a->h_trk_pt_ptz_iaa[iSpc][iPtZ][iCent]->Multiply (relVarPt[iSpc][iPtZ][iCent]);
-          //a->h_trk_xhz_ptz_iaa[iSpc][iPtZ][iCent]->Multiply (relVarX[iSpc][iPtZ][iCent]);
         }
         else {
           a->h_trk_pt_ptz[iSpc][iPtZ][iCent]->Divide (relVarPt[iSpc][iPtZ][iCent]);
           a->h_trk_xhz_ptz[iSpc][iPtZ][iCent]->Divide (relVarX[iSpc][iPtZ][iCent]);
-          //a->h_trk_pt_ptz_sub[iSpc][iPtZ][iCent]->Divide (relVarPt[iSpc][iPtZ][iCent]);
-          //a->h_trk_xhz_ptz_sub[iSpc][iPtZ][iCent]->Divide (relVarX[iSpc][iPtZ][iCent]);
-          //a->h_trk_pt_ptz_iaa[iSpc][iPtZ][iCent]->Divide (relVarPt[iSpc][iPtZ][iCent]);
-          //a->h_trk_xhz_ptz_iaa[iSpc][iPtZ][iCent]->Divide (relVarX[iSpc][iPtZ][iCent]);
+        }
+
+        for (short iPtch = 0; iPtch < maxNPtchBins; iPtch++) {
+          if (upVar) {
+            if (a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent])
+              a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->Multiply (relVardPhi[iSpc][iPtZ][iPtch][iCent]);
+          }
+          else {
+            if (a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent])
+              a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->Divide (relVardPhi[iSpc][iPtZ][iPtch][iCent]);
+          }
         }
       } // end loop over iCent
     } // end loop over iPtZ
