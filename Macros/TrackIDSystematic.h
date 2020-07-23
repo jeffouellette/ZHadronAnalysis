@@ -39,7 +39,7 @@ void TrackIDSystematic :: GetRelativeVariations (PhysicsAnalysis* nominal, Physi
 
   cout << "Calculating track ID variation on total yields." << endl;
 
-  for (short iSpc = 2; iSpc < 3; iSpc++) {
+  for (short iSpc = 0; iSpc < 3; iSpc++) {
     for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) { 
 
       //for (int iPhi = 0; iPhi < numPhiBins; iPhi++) {
@@ -178,9 +178,32 @@ void TrackIDSystematic :: ApplyRelativeVariations (PhysicsAnalysis* a, const boo
         a->h_trk_pt_ptz[iSpc][iPtZ][iCent]->Scale (upVar ? relVar[iSpc][iPtZ][numPhiBins][iCent] : 1/relVar[iSpc][iPtZ][numPhiBins][iCent]);
         a->h_trk_xhz_ptz[iSpc][iPtZ][iCent]->Scale (upVar ? relVar[iSpc][iPtZ][numPhiBins][iCent] : 1/relVar[iSpc][iPtZ][numPhiBins][iCent]);
 
-        for (short iPtch = 0; iPtch < maxNPtchBins; iPtch++) {
-          if (a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent])
-            a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent]->Scale (upVar ? relVar[iSpc][iPtZ][numPhiBins][iCent] : 1/relVar[iSpc][iPtZ][numPhiBins][iCent]);
+        for (short iPtch = maxNPtchBins; iPtch < maxNPtchBins+2; iPtch++) {
+          TH1D* h = a->h_trk_dphi[iSpc][iPtZ][iPtch][iCent];
+          if (!h) continue;
+
+          float avg_y = 0; 
+          short num_points = 0;
+          for (int iX = 1; iX <= h->GetNbinsX (); iX++) {
+            if (h->GetBinCenter (iX) > 3.*pi/4.) continue;
+            avg_y += h->GetBinContent (iX);
+            num_points++;
+          }
+          assert (num_points > 0);
+          avg_y = avg_y / num_points;
+
+          const float avg_abs_err = avg_y * fabs (relVar[iSpc][iPtZ][numPhiBins][iCent] - 1.);
+
+          for (int iX = 1; iX <= h->GetNbinsX (); iX++) {
+            if (h->GetBinCenter (iX) < 3.*pi/4.) {
+              h->SetBinContent (iX, h->GetBinContent (iX) + (upVar ? 1. : -1) * avg_abs_err);
+              h->SetBinError (iX, h->GetBinError (iX) + (upVar ? 1. : -1) * avg_abs_err);
+            }
+            else {
+              h->SetBinContent (iX, h->GetBinContent (iX) * pow (relVar[iSpc][iPtZ][numPhiBins][iCent], upVar ? 1. : -1.));
+              h->SetBinError (iX, h->GetBinError (iX) * pow (relVar[iSpc][iPtZ][numPhiBins][iCent], upVar ? 1. : -1.));
+            }
+          } // end loop over iX
         } // end loop over iPtch
       } // end loop over iCent
     } // end loop over iPtZ

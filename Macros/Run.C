@@ -17,7 +17,7 @@
 #include "BinWidthSystematic.h"
 #include "NonClosureVariation.h"
 
-const bool doSys = false;
+const bool doSys = true;
 int mixingFraction = 0;
 
 // nominal analyses
@@ -173,6 +173,21 @@ void Run () {
   data18->SubtractBackground (bkg18);
   //data18->CalculateTrackMeans (data18, data18->h_z_pt);
   //data18->CalculateIAA ();
+
+  //{
+  //  mc_electronPtUp = new MCAnalysis ("mc_electronPtUpVar");
+  //  mc_electronPtUp->LoadHists ("MCAnalysis/Variations/ElectronPtUpVariation/savedHists.root");
+  //  mc_electronPtUp->CombineHists ();
+  //  mc_electronPtDown = new MCAnalysis ("mc_electronPtDownVar");
+  //  mc_electronPtDown->LoadHists ("MCAnalysis/Variations/ElectronPtDownVariation/savedHists.root");
+  //  mc_electronPtDown->CombineHists ();
+  //  mc_muonPtUp = new MCAnalysis ("mc_muonPtUpVar");
+  //  mc_muonPtUp->LoadHists ("MCAnalysis/Variations/MuonPtUpVariation/savedHists.root");
+  //  mc_muonPtUp->CombineHists ();
+  //  mc_muonPtDown = new MCAnalysis ("mc_muonPtDownVar");
+  //  mc_muonPtDown->LoadHists ("MCAnalysis/Variations/MuonPtDownVariation/savedHists.root");
+  //  mc_muonPtDown->CombineHists ();
+  //}
 
   if (doSys) {
     cout << "Initializing systematic objects. " << endl;
@@ -362,10 +377,11 @@ void Run () {
 
 
     cout << "Calculating track ID relative systematic errors." << endl;
-    trkSys = new TrackIDSystematic (data18, "trkSys", "Track ID Cuts");
     data_trackHItight = new PhysicsAnalysis ("data_trackHITightVar");
     data_trackHItight->useHITight = true;
     data_trackHItight->LoadHists ("DataAnalysis/Variations/TrackHITightWPVariation/data18hi_hists.root");
+    data_trackHItight->CombineHists ();
+    trkSys = new TrackIDSystematic (data18, "trkSys", "Track ID Cuts");
     trkSys->GetRelativeVariations (data18, data_trackHItight);
     SaferDelete (&data_trackHItight);
     cout << "Applying track ID systematic errors." << endl;
@@ -410,7 +426,9 @@ void Run () {
     data_partComp        = new PhysicsAnalysis ("data_trackEffVar");
     data_partComp->doTrackEffVar = true;
     data_partComp->LoadHists ("DataAnalysis/Variations/TrackEffPionsVariation/data18hi_hists.root");
+    data_partComp->CombineHists ();
     trkEffSysWeights->GetRelativeVariations (data18, data_partComp);
+    SaferDelete (&data_partComp);
     data_partCompUpVar = new PhysicsAnalysis ("data_partCompUpVar");
     data_partCompUpVar->doTrackEffVar = true;
     data_partCompUpVar->CopyAnalysis (data18, false);
@@ -451,6 +469,7 @@ void Run () {
     data_trkPurUpVar->doTrackPurVar = true;
     data_trkPurUpVar->trkPurNSigma = 1;
     data_trkPurUpVar->LoadHists ("DataAnalysis/Variations/TrackPurityUpVariation/data18hi_hists.root");
+    data_trkPurUpVar->CombineHists ();
     trkPurSysWeights = new ReweightingVariation ("trkPurSysWeights");
     trkPurSysWeights->GetRelativeVariations (data18, data_trkPurUpVar);
     data_trkPurUpVar->CopyAnalysis (data18, false);
@@ -466,6 +485,7 @@ void Run () {
     data_trkPurDownVar->doTrackPurVar = true;
     data_trkPurDownVar->trkPurNSigma = -1;
     data_trkPurDownVar->LoadHists ("DataAnalysis/Variations/TrackPurityDownVariation/data18hi_hists.root");
+    data_trkPurDownVar->CombineHists ();
     trkPurSysWeights = new ReweightingVariation ("trkPurSysWeights");
     trkPurSysWeights->GetRelativeVariations (data18, data_trkPurDownVar);
     data_trkPurDownVar->CopyAnalysis (data18, false);
@@ -663,7 +683,7 @@ void Run () {
     combSys->AddSystematic (binCenterSys);
     combSys->AddSystematics ();
 
-    //combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
+    combSys->SaveGraphs ("Systematics/CombinedSys.root"); 
   }
 
   data18->CalculateTrackMeans (data18, data18->h_z_pt);

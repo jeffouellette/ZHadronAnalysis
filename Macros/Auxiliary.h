@@ -127,8 +127,8 @@ void DoMuonESSystStudy (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, PhysicsAn
   for (int iCent = 0; iCent < numCentBins; iCent++) {
     c->cd ();
 
-    const char* uPadName = Form ("uPad_%i", iCent);
-    const char* dPadName = Form ("dPad_%i", iCent);
+    const char* uPadName = Form ("%s_uPad_iCent%i", canvasName, iCent);
+    const char* dPadName = Form ("%s_dPad_iCent%i", canvasName, iCent);
 
     TPad* uPad = new TPad (uPadName, "", (1./(numCentBins))*(iCent), dPadY, (1./(numCentBins))*(iCent+1), 1);
     TPad* dPad = new TPad (dPadName, "", (1./(numCentBins))*(iCent), 0, (1./(numCentBins))*(iCent+1), dPadY);
@@ -368,6 +368,343 @@ void DoMuonESSystStudy (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, PhysicsAn
 
 
 /**
+ * Plots nominal vs. up/down variations on the muon energy scale vs. deltaPhi, then fits to a fourier series.. (This is how the muon ES systematic is evaluated.)
+ */
+void DoMuonESSystStudyDPhi (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, PhysicsAnalysis* a_down, const short iPtZ = nPtZBins-1, const bool doGt4 = false) {
+  const char* canvasName = Form ("c_muonES_dphi_syst_%s_iPtZ%i", doGt4 ? "gt4" : "lt4", iPtZ);
+  const bool canvasExists = (gDirectory->Get (canvasName) != nullptr);
+  TCanvas* c = nullptr;
+  if (canvasExists)
+    c = dynamic_cast <TCanvas*> (gDirectory->Get (canvasName));
+  else {
+    c = new TCanvas (canvasName, "", 1200, 800);
+    gDirectory->Add (c);
+    c->cd ();
+  }
+
+  const double dPadY = 0.5;
+  const double uPadY = 1. - dPadY;
+  const int axisTextSize = 23;
+
+  TH1D* h_nom = nullptr, *h_up = nullptr, *h_down = nullptr, *h_ratio = nullptr;
+  TGraphAsymmErrors* g = nullptr;
+
+  const short iPtch = (doGt4 ? maxNPtchBins : maxNPtchBins+1);
+
+  for (int iCent : {0, 1}) {
+    c->cd ();
+
+    const char* uPadName = Form ("%s_uPad_iCent%i", canvasName, iCent);
+    const char* dPadName = Form ("%s_dPad_iCent%i", canvasName, iCent);
+
+    TPad* uPad = new TPad (uPadName, "", 0.5*iCent, dPadY, 0.5*(iCent+1), 1);
+    TPad* dPad = new TPad (dPadName, "", 0.5*iCent, 0, 0.5*(iCent+1), dPadY);
+
+    uPad->SetTopMargin (0.04);
+    uPad->SetBottomMargin (0);
+    uPad->SetLeftMargin (0.17);
+    uPad->SetRightMargin (0.06);
+    dPad->SetTopMargin (0);
+    dPad->SetBottomMargin (0.25);
+    dPad->SetLeftMargin (0.17);
+    dPad->SetRightMargin (0.06);
+    uPad->Draw ();
+    dPad->Draw ();
+
+
+    uPad->cd ();
+
+    h_nom = (TH1D*) a_nom->h_trk_dphi[2][iPtZ][iPtch][numCentBins*iCent]->Clone ("h_nom");
+    h_up = (TH1D*) a_up->h_trk_dphi[2][iPtZ][iPtch][numCentBins*iCent]->Clone ("h_up");
+    h_down = (TH1D*) a_down->h_trk_dphi[2][iPtZ][iPtch][numCentBins*iCent]->Clone ("h_down");
+
+    const float min = fmin (fmin (h_nom->GetMinimum (), h_up->GetMinimum ()), h_down->GetMinimum ());
+    const float max = fmax (fmax (h_nom->GetMaximum (),  h_up->GetMaximum ()), h_down->GetMaximum ());
+
+    {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 0, pi);
+
+      TAxis* xax = htemp->GetXaxis ();
+      TAxis* yax = htemp->GetYaxis ();
+
+      yax->SetRangeUser ((min < 0 ? 1.1 : 0.9)*min, (max > 0 ? 1.1 : 0.9)*max);
+
+      xax->SetTitle ("#Delta#phi_{hZ}");
+      yax->SetTitle ("dY / d#Delta#phi");
+
+      xax->SetTitleFont (43);
+      xax->SetTitleSize (axisTextSize);
+      xax->SetLabelFont (43);
+      xax->SetLabelSize (axisTextSize);
+
+      yax->SetTitleFont (43);
+      yax->SetTitleSize (axisTextSize);
+      yax->SetLabelFont (43);
+      yax->SetLabelSize (axisTextSize);
+
+      xax->SetTitleOffset (2.0 * xax->GetTitleOffset ());
+      yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
+
+      htemp->SetLineWidth (0);
+
+      htemp->DrawCopy ("");
+      SaferDelete (&htemp);
+    }
+
+    g = a_nom->GetTGAE (h_nom);
+
+    g->SetMarkerStyle (kFullCircle);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kBlack);
+    g->SetLineColor (kBlack);
+
+    g->Draw ("P");
+
+    g = a_up->GetTGAE (h_up);
+    deltaize (g, -0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kRed+1);
+    g->SetLineColor (kRed+1);
+
+    g->Draw ("P");
+
+    g = a_down->GetTGAE (h_down);
+    deltaize (g, 0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kAzure-1);
+    g->SetLineColor (kAzure-1);
+
+    g->Draw ("P");
+
+
+    if (iCent == 0) {
+      myText (0.22, 0.85, kBlack, "#bf{#it{ATLAS}} Internal", 0.040/uPadY);
+      myText (0.22, 0.06, kBlack, "#it{pp}, 5.02 TeV", 0.036/uPadY);
+      if (iPtZ == nPtZBins-1) myText (0.22, 0.75, kBlack, Form ("#it{p}_{T}^{Z} > %g GeV", zPtBins[iPtZ]), 0.036/uPadY);
+      else                    myText (0.22, 0.75, kBlack, Form ("%g < #it{p}_{T}^{Z} < %g GeV", zPtBins[iPtZ], zPtBins[iPtZ+1]), 0.036/uPadY);
+      if (doGt4)  myText (0.22, 0.67, kBlack, "#it{p}_{T}^{ch} > 4 GeV", 0.036/uPadY);
+      else        myText (0.22, 0.67, kBlack, "2 < #it{p}_{T}^{ch} < 4 GeV", 0.036/uPadY);
+    }
+    else {
+      myText (0.22, 0.06, kBlack, "Pb+Pb, 0-30%", 0.036/uPadY);
+      myMarkerTextNoLine (0.50, 0.9, kBlack, kFullCircle, "Central values", 1.4, 0.032/uPadY);
+      myMarkerTextNoLine (0.50, 0.82, kRed+1, kOpenSquare, "Muons Up", 1.4, 0.032/uPadY);
+      myMarkerTextNoLine (0.50, 0.74, kAzure-1, kOpenSquare, "Muons Down", 1.4, 0.032/uPadY);
+    }
+
+
+    dPad->cd ();
+
+    {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 0, pi);
+
+      TAxis* xax = htemp->GetXaxis ();
+      TAxis* yax = htemp->GetYaxis ();
+
+      float ymin, ymax;
+      if (iCent == 0) {
+        if (doGt4) {
+          ymin = 0.96;
+          ymax = 1.04;
+        }
+        else {
+          ymin = 0.992;
+          ymax = 1.008;
+        }
+      }
+      else {
+        if (doGt4) {
+          ymin = 0.99;
+          ymax = 1.01;
+        }
+        else {
+          ymin = 0.995;
+          ymax = 1.005;
+        }
+      }
+      yax->SetRangeUser (ymin, ymax);
+
+      xax->SetTitle ("#Delta#phi_{hZ}");
+      yax->SetTitle ("Variation / Nominal");
+
+      xax->SetTitleFont (43);
+      xax->SetTitleSize (axisTextSize);
+      xax->SetLabelFont (43);
+      xax->SetLabelSize (axisTextSize);
+
+      yax->SetTitleFont (43);
+      yax->SetTitleSize (axisTextSize);
+      yax->SetLabelFont (43);
+      yax->SetLabelSize (axisTextSize);
+      yax->CenterTitle ();
+
+      xax->SetTitleOffset (2.0 * xax->GetTitleOffset ());
+      yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
+
+      htemp->SetLineWidth (0);
+
+      htemp->DrawCopy ("");
+      SaferDelete (&htemp);
+    }
+
+    h_ratio = (TH1D*) h_up->Clone ("h_ratio");
+    h_ratio->Reset ();
+    for (int ix = 1; ix <= h_ratio->GetNbinsX (); ix++) {
+      const float yd = h_nom->GetBinContent (ix);
+      const float yde = h_nom->GetBinError (ix);
+      const float yn = h_up->GetBinContent (ix);
+      const float yne = h_up->GetBinError (ix);
+      h_ratio->SetBinContent (ix, yn/yd);
+      h_ratio->SetBinError (ix, fabs (yn/yd) * sqrt (fabs (pow (yde/yd, 2) + pow (yne/yn, 2) - 2.*yne*yne/(yd*yn))));
+    }
+
+    g = make_graph (h_ratio);
+    deltaize (g, -0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kRed+1);
+    g->SetLineColor (kRed+1);
+
+    g->Draw ("P");
+
+    double mean = 0, sumweights = 0;
+    double x, y, yerr;
+    for (int i = 0; i < g->GetN (); i++) {
+      g->GetPoint (i, x, y);
+      yerr = g->GetErrorY (i);
+      assert (yerr != 0);
+      mean += y/pow (yerr, 2);
+      sumweights += 1./pow (yerr, 2);
+    }
+    assert (sumweights > 0);
+    mean = mean / sumweights;
+
+    //TF1* fit1 = new TF1 ("fit1", "[0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4]))", 0, pi);
+    //fit1->SetParameter (0, 1);
+    //fit1->SetParameter (1, 0);
+    //fit1->SetParameter (2, 0);
+    //fit1->SetParameter (3, 0);
+    //fit1->SetParameter (4, 0);
+    TF1* fit1 = new TF1 ("fit1", "[0]", 0, pi);
+    fit1->SetParameter (0, mean);
+
+    //h_ratio->Fit (fit1, "RN0Q");
+    SaferDelete (&h_ratio);
+
+    fit1->SetLineColor (kRed+1);
+    fit1->SetLineStyle (2);
+    fit1->SetLineWidth (2);
+    fit1->Draw ("same");
+
+    //TF1* inv_fit1 = new TF1 ("inv_fit1", "2-([0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4])))", 0, pi);
+    //inv_fit1->SetParameter (0, fit1->GetParameter (0));
+    //inv_fit1->SetParameter (1, fit1->GetParameter (1));
+    //inv_fit1->SetParameter (2, fit1->GetParameter (2));
+    //inv_fit1->SetParameter (3, fit1->GetParameter (3));
+    //inv_fit1->SetParameter (4, fit1->GetParameter (4));
+    TF1* inv_fit1 = new TF1 ("inv_fit1", "2-[0]", 0, pi);
+    inv_fit1->SetParameter (0, mean);
+
+    inv_fit1->SetLineColor (kRed+1);
+    inv_fit1->SetLineStyle (2);
+    inv_fit1->SetLineWidth (2);
+    inv_fit1->Draw ("same");
+
+    //cout << "chi2/ndf = " << fit1->GetChisquare () << " / " << fit1->GetNDF () << endl;
+
+
+    h_ratio = (TH1D*) h_down->Clone ("h_ratio");
+    h_ratio->Reset ();
+    for (int ix = 1; ix <= h_ratio->GetNbinsX (); ix++) {
+      const float yd = h_nom->GetBinContent (ix);
+      const float yde = h_nom->GetBinError (ix);
+      const float yn = h_down->GetBinContent (ix);
+      const float yne = h_down->GetBinError (ix);
+      h_ratio->SetBinContent (ix, yn/yd);
+      h_ratio->SetBinError (ix, fabs (yn/yd) * sqrt (fabs (pow (yde/yd, 2) + pow (yne/yn, 2) - 2.*yne*yne/(yd*yn))));
+    }
+
+    g = make_graph (h_ratio);
+    deltaize (g, 0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kAzure-1);
+    g->SetLineColor (kAzure-1);
+
+    g->Draw ("P");
+
+    mean = 0, sumweights = 0;
+    for (int i = 0; i < g->GetN (); i++) {
+      g->GetPoint (i, x, y);
+      yerr = g->GetErrorY (i);
+      assert (yerr != 0);
+      mean += y/pow (yerr, 2);
+      sumweights += 1./pow (yerr, 2);
+    }
+    assert (sumweights > 0);
+    mean = mean / sumweights;
+
+    //TF1* fit2 = new TF1 ("fit2", "[0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4]))", 0, pi);
+    //fit2->SetParameter (0, 1);
+    //fit2->SetParameter (1, 0);
+    //fit2->SetParameter (2, 0);
+    //fit2->SetParameter (3, 0);
+    //fit2->SetParameter (4, 0);
+    TF1* fit2 = new TF1 ("fit2", "[0]", 0, pi);
+    fit2->SetParameter (0, mean);
+
+    //h_ratio->Fit (fit2, "RN0Q");
+    SaferDelete (&h_ratio);
+
+    fit2->SetLineColor (kAzure-1);
+    fit2->SetLineStyle (2);
+    fit2->SetLineWidth (2);
+    fit2->Draw ("same");
+
+    //TF1* inv_fit2 = new TF1 ("inv_fit2", "2-([0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4])))", 0, pi);
+    //inv_fit2->SetParameter (0, fit2->GetParameter (0));
+    //inv_fit2->SetParameter (1, fit2->GetParameter (1));
+    //inv_fit2->SetParameter (2, fit2->GetParameter (2));
+    //inv_fit2->SetParameter (3, fit2->GetParameter (3));
+    //inv_fit2->SetParameter (4, fit2->GetParameter (4));
+    TF1* inv_fit2 = new TF1 ("inv_fit2", "2-[0]", 0, pi);
+    inv_fit2->SetParameter (0, mean);
+
+    inv_fit2->SetLineColor (kAzure-1);
+    inv_fit2->SetLineStyle (2);
+    inv_fit2->SetLineWidth (2);
+    inv_fit2->Draw ("same");
+
+    //cout << "chi2/ndf = " << fit2->GetChisquare () << " / " << fit2->GetNDF () << endl;
+
+    TLine* l = new TLine (0, 1, pi, 1); 
+    l->SetLineColor (kBlack);
+    l->SetLineStyle (2);
+    l->Draw ("same");
+
+    SaferDelete (&h_nom);
+    SaferDelete (&h_up);
+    SaferDelete (&h_down);
+  }
+
+  c->SaveAs (Form ("../Plots/LeptonESSystStudy/muonES_dphi_%s_iPtZ%i.pdf", doGt4 ? "gt4" : "lt4", iPtZ));
+}
+
+
+
+
+/**
  * Plots nominal vs. up/down variations on the electron energy scale, then fits to a line. (This is how the electron ES systematic is evaluated.)
  */
 void DoElectronESSystStudy (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, PhysicsAnalysis* a_down, const short iPtZ = nPtZBins-1, const bool useTrkPt = true) {
@@ -392,8 +729,8 @@ void DoElectronESSystStudy (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, Physi
   for (int iCent = 0; iCent < numCentBins; iCent++) {
     c->cd ();
 
-    const char* uPadName = Form ("uPad_%i", iCent);
-    const char* dPadName = Form ("dPad_%i", iCent);
+    const char* uPadName = Form ("%s_uPad_iCent%i", canvasName, iCent);
+    const char* dPadName = Form ("%s_dPad_iCent%i", canvasName, iCent);
 
     TPad* uPad = new TPad (uPadName, "", (1./(numCentBins))*(iCent), dPadY, (1./(numCentBins))*(iCent+1), 1);
     TPad* dPad = new TPad (dPadName, "", (1./(numCentBins))*(iCent), 0, (1./(numCentBins))*(iCent+1), dPadY);
@@ -628,6 +965,342 @@ void DoElectronESSystStudy (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, Physi
   }
 
   c->SaveAs (Form ("../Plots/LeptonESSystStudy/electronES_%s_iPtZ%i.pdf", useTrkPt ? "pTch" : "xhZ", iPtZ));
+}
+
+
+
+/**
+ * Plots nominal vs. up/down variations on the electron energy scale vs. deltaPhi, then fits to a fourier series.. (This is how the electron ES systematic is evaluated.)
+ */
+void DoElectronESSystStudyDPhi (PhysicsAnalysis* a_nom, PhysicsAnalysis* a_up, PhysicsAnalysis* a_down, const short iPtZ = nPtZBins-1, const bool doGt4 = false) {
+  const char* canvasName = Form ("c_electronES_dphi_syst_%s_iPtZ%i", doGt4 ? "gt4" : "lt4", iPtZ);
+  const bool canvasExists = (gDirectory->Get (canvasName) != nullptr);
+  TCanvas* c = nullptr;
+  if (canvasExists)
+    c = dynamic_cast <TCanvas*> (gDirectory->Get (canvasName));
+  else {
+    c = new TCanvas (canvasName, "", 1200, 800);
+    gDirectory->Add (c);
+    c->cd ();
+  }
+
+  const double dPadY = 0.5;
+  const double uPadY = 1. - dPadY;
+  const int axisTextSize = 23;
+
+  TH1D* h_nom = nullptr, *h_up = nullptr, *h_down = nullptr, *h_ratio = nullptr;
+  TGraphAsymmErrors* g = nullptr;
+
+  const short iPtch = (doGt4 ? maxNPtchBins : maxNPtchBins+1);
+
+  for (int iCent : {0, 1}) {
+    c->cd ();
+
+    const char* uPadName = Form ("%s_uPad_iCent%i", canvasName, iCent);
+    const char* dPadName = Form ("%s_dPad_iCent%i", canvasName, iCent);
+
+    TPad* uPad = new TPad (uPadName, "", 0.5*iCent, dPadY, 0.5*(iCent+1), 1);
+    TPad* dPad = new TPad (dPadName, "", 0.5*iCent, 0, 0.5*(iCent+1), dPadY);
+
+    uPad->SetTopMargin (0.04);
+    uPad->SetBottomMargin (0);
+    uPad->SetLeftMargin (0.17);
+    uPad->SetRightMargin (0.06);
+    dPad->SetTopMargin (0);
+    dPad->SetBottomMargin (0.25);
+    dPad->SetLeftMargin (0.17);
+    dPad->SetRightMargin (0.06);
+    uPad->Draw ();
+    dPad->Draw ();
+
+
+    uPad->cd ();
+
+    h_nom = (TH1D*) a_nom->h_trk_dphi[2][iPtZ][iPtch][numCentBins*iCent]->Clone ("h_nom");
+    h_up = (TH1D*) a_up->h_trk_dphi[2][iPtZ][iPtch][numCentBins*iCent]->Clone ("h_up");
+    h_down = (TH1D*) a_down->h_trk_dphi[2][iPtZ][iPtch][numCentBins*iCent]->Clone ("h_down");
+
+    const float min = fmin (fmin (h_nom->GetMinimum (), h_up->GetMinimum ()), h_down->GetMinimum ());
+    const float max = fmax (fmax (h_nom->GetMaximum (),  h_up->GetMaximum ()), h_down->GetMaximum ());
+
+    {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 0, pi);
+
+      TAxis* xax = htemp->GetXaxis ();
+      TAxis* yax = htemp->GetYaxis ();
+
+      yax->SetRangeUser ((min < 0 ? 1.1 : 0.9)*min, (max > 0 ? 1.1 : 0.9)*max);
+
+      xax->SetTitle ("#Delta#phi_{hZ}");
+      yax->SetTitle ("dY / d#Delta#phi");
+
+      xax->SetTitleFont (43);
+      xax->SetTitleSize (axisTextSize);
+      xax->SetLabelFont (43);
+      xax->SetLabelSize (axisTextSize);
+
+      yax->SetTitleFont (43);
+      yax->SetTitleSize (axisTextSize);
+      yax->SetLabelFont (43);
+      yax->SetLabelSize (axisTextSize);
+
+      xax->SetTitleOffset (2.0 * xax->GetTitleOffset ());
+      yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
+
+      htemp->SetLineWidth (0);
+
+      htemp->DrawCopy ("");
+      SaferDelete (&htemp);
+    }
+
+    g = a_nom->GetTGAE (h_nom);
+
+    g->SetMarkerStyle (kFullCircle);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kBlack);
+    g->SetLineColor (kBlack);
+
+    g->Draw ("P");
+
+    g = a_up->GetTGAE (h_up);
+    deltaize (g, -0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kRed+1);
+    g->SetLineColor (kRed+1);
+
+    g->Draw ("P");
+
+    g = a_down->GetTGAE (h_down);
+    deltaize (g, 0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kAzure-1);
+    g->SetLineColor (kAzure-1);
+
+    g->Draw ("P");
+
+
+    if (iCent == 0) {
+      myText (0.22, 0.85, kBlack, "#bf{#it{ATLAS}} Internal", 0.040/uPadY);
+      myText (0.22, 0.06, kBlack, "#it{pp}, 5.02 TeV", 0.036/uPadY);
+      if (iPtZ == nPtZBins-1) myText (0.22, 0.75, kBlack, Form ("#it{p}_{T}^{Z} > %g GeV", zPtBins[iPtZ]), 0.036/uPadY);
+      else                    myText (0.22, 0.75, kBlack, Form ("%g < #it{p}_{T}^{Z} < %g GeV", zPtBins[iPtZ], zPtBins[iPtZ+1]), 0.036/uPadY);
+      if (doGt4)  myText (0.22, 0.67, kBlack, "#it{p}_{T}^{ch} > 4 GeV", 0.036/uPadY);
+      else        myText (0.22, 0.67, kBlack, "2 < #it{p}_{T}^{ch} < 4 GeV", 0.036/uPadY);
+    }
+    else {
+      myText (0.22, 0.06, kBlack, "Pb+Pb, 0-30%", 0.036/uPadY);
+      myMarkerTextNoLine (0.50, 0.9, kBlack, kFullCircle, "Central values", 1.4, 0.032/uPadY);
+      myMarkerTextNoLine (0.50, 0.82, kRed+1, kOpenSquare, "Electrons Up", 1.4, 0.032/uPadY);
+      myMarkerTextNoLine (0.50, 0.74, kAzure-1, kOpenSquare, "Electrons Down", 1.4, 0.032/uPadY);
+    }
+
+
+    dPad->cd ();
+
+    {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 0, pi);
+
+      TAxis* xax = htemp->GetXaxis ();
+      TAxis* yax = htemp->GetYaxis ();
+
+      float ymin, ymax;
+      if (iCent == 0) {
+        if (doGt4) {
+          ymin = 0.96;
+          ymax = 1.04;
+        }
+        else {
+          ymin = 0.992;
+          ymax = 1.008;
+        }
+      }
+      else {
+        if (doGt4) {
+          ymin = 0.99;
+          ymax = 1.01;
+        }
+        else {
+          ymin = 0.999;
+          ymax = 1.001;
+        }
+      }
+      yax->SetRangeUser (ymin, ymax);
+
+      xax->SetTitle ("#Delta#phi_{hZ}");
+      yax->SetTitle ("Variation / Nominal");
+
+      xax->SetTitleFont (43);
+      xax->SetTitleSize (axisTextSize);
+      xax->SetLabelFont (43);
+      xax->SetLabelSize (axisTextSize);
+
+      yax->SetTitleFont (43);
+      yax->SetTitleSize (axisTextSize);
+      yax->SetLabelFont (43);
+      yax->SetLabelSize (axisTextSize);
+      yax->CenterTitle ();
+
+      xax->SetTitleOffset (2.0 * xax->GetTitleOffset ());
+      yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
+
+      htemp->SetLineWidth (0);
+
+      htemp->DrawCopy ("");
+      SaferDelete (&htemp);
+    }
+
+    h_ratio = (TH1D*) h_up->Clone ("h_ratio");
+    h_ratio->Reset ();
+    for (int ix = 1; ix <= h_ratio->GetNbinsX (); ix++) {
+      const float yd = h_nom->GetBinContent (ix);
+      const float yde = h_nom->GetBinError (ix);
+      const float yn = h_up->GetBinContent (ix);
+      const float yne = h_up->GetBinError (ix);
+      h_ratio->SetBinContent (ix, yn/yd);
+      h_ratio->SetBinError (ix, fabs (yn/yd) * sqrt (fabs (pow (yde/yd, 2) + pow (yne/yn, 2) - 2.*yne*yne/(yd*yn))));
+    }
+
+    g = make_graph (h_ratio);
+    deltaize (g, -0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kRed+1);
+    g->SetLineColor (kRed+1);
+
+    g->Draw ("P");
+
+    double mean = 0, sumweights = 0;
+    double x, y, yerr;
+    for (int i = 0; i < g->GetN (); i++) {
+      g->GetPoint (i, x, y);
+      yerr = g->GetErrorY (i);
+      assert (yerr != 0);
+      mean += y/pow (yerr, 2);
+      sumweights += 1./pow (yerr, 2);
+    }
+    assert (sumweights > 0);
+    mean = mean / sumweights;
+
+    //TF1* fit1 = new TF1 ("fit1", "[0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4]))", 0, pi);
+    //fit1->SetParameter (0, 1);
+    //fit1->SetParameter (1, 0);
+    //fit1->SetParameter (2, 0);
+    //fit1->SetParameter (3, 0);
+    //fit1->SetParameter (4, 0);
+    TF1* fit1 = new TF1 ("fit1", "[0]", 0, pi);
+    fit1->SetParameter (0, mean);
+
+    //h_ratio->Fit (fit1, "RN0Q");
+    SaferDelete (&h_ratio);
+
+    fit1->SetLineColor (kRed+1);
+    fit1->SetLineStyle (2);
+    fit1->SetLineWidth (2);
+    fit1->Draw ("same");
+
+    //TF1* inv_fit1 = new TF1 ("inv_fit1", "2-([0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4])))", 0, pi);
+    //inv_fit1->SetParameter (0, fit1->GetParameter (0));
+    //inv_fit1->SetParameter (1, fit1->GetParameter (1));
+    //inv_fit1->SetParameter (2, fit1->GetParameter (2));
+    //inv_fit1->SetParameter (3, fit1->GetParameter (3));
+    //inv_fit1->SetParameter (4, fit1->GetParameter (4));
+    TF1* inv_fit1 = new TF1 ("inv_fit1", "2-[0]", 0, pi);
+    inv_fit1->SetParameter (0, mean);
+
+    inv_fit1->SetLineColor (kRed+1);
+    inv_fit1->SetLineStyle (2);
+    inv_fit1->SetLineWidth (2);
+    inv_fit1->Draw ("same");
+
+    //cout << "chi2/ndf = " << fit1->GetChisquare () << " / " << fit1->GetNDF () << endl;
+
+
+    h_ratio = (TH1D*) h_down->Clone ("h_ratio");
+    h_ratio->Reset ();
+    for (int ix = 1; ix <= h_ratio->GetNbinsX (); ix++) {
+      const float yd = h_nom->GetBinContent (ix);
+      const float yde = h_nom->GetBinError (ix);
+      const float yn = h_down->GetBinContent (ix);
+      const float yne = h_down->GetBinError (ix);
+      h_ratio->SetBinContent (ix, yn/yd);
+      h_ratio->SetBinError (ix, fabs (yn/yd) * sqrt (fabs (pow (yde/yd, 2) + pow (yne/yn, 2) - 2.*yne*yne/(yd*yn))));
+    }
+
+    g = make_graph (h_ratio);
+    deltaize (g, 0.05, false);
+
+    g->SetMarkerStyle (kOpenSquare);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (kAzure-1);
+    g->SetLineColor (kAzure-1);
+
+    g->Draw ("P");
+
+    mean = 0, sumweights = 0;
+    for (int i = 0; i < g->GetN (); i++) {
+      g->GetPoint (i, x, y);
+      yerr = g->GetErrorY (i);
+      assert (yerr != 0);
+      mean += y/pow (yerr, 2);
+      sumweights += 1./pow (yerr, 2);
+    }
+    assert (sumweights > 0);
+    mean = mean / sumweights;
+
+    //TF1* fit2 = new TF1 ("fit2", "[0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4]))", 0, pi);
+    //fit2->SetParameter (0, 1);
+    //fit2->SetParameter (1, 0);
+    //fit2->SetParameter (2, 0);
+    //fit2->SetParameter (3, 0);
+    //fit2->SetParameter (4, 0);
+    TF1* fit2 = new TF1 ("fit2", "[0]", 0, pi);
+    fit2->SetParameter (0, mean);
+
+    //h_ratio->Fit (fit2, "RN0Q");
+    SaferDelete (&h_ratio);
+
+    fit2->SetLineColor (kAzure-1);
+    fit2->SetLineStyle (2);
+    fit2->SetLineWidth (2);
+    fit2->Draw ("same");
+
+    //TF1* inv_fit2 = new TF1 ("inv_fit2", "2-([0]+[1]*cos(x-[2])+[3]*cos(2*(x-[4])))", 0, pi);
+    //inv_fit2->SetParameter (0, fit2->GetParameter (0));
+    //inv_fit2->SetParameter (1, fit2->GetParameter (1));
+    //inv_fit2->SetParameter (2, fit2->GetParameter (2));
+    //inv_fit2->SetParameter (3, fit2->GetParameter (3));
+    //inv_fit2->SetParameter (4, fit2->GetParameter (4));
+    TF1* inv_fit2 = new TF1 ("inv_fit2", "2-[0]", 0, pi);
+    inv_fit2->SetParameter (0, mean);
+
+    inv_fit2->SetLineColor (kAzure-1);
+    inv_fit2->SetLineStyle (2);
+    inv_fit2->SetLineWidth (2);
+    inv_fit2->Draw ("same");
+
+    //cout << "chi2/ndf = " << fit2->GetChisquare () << " / " << fit2->GetNDF () << endl;
+
+    TLine* l = new TLine (0, 1, pi, 1); 
+    l->SetLineColor (kBlack);
+    l->SetLineStyle (2);
+    l->Draw ("same");
+
+    SaferDelete (&h_nom);
+    SaferDelete (&h_up);
+    SaferDelete (&h_down);
+  }
+
+  c->SaveAs (Form ("../Plots/LeptonESSystStudy/electronES_dphi_%s_iPtZ%i.pdf", doGt4 ? "gt4" : "lt4", iPtZ));
 }
 
 
@@ -1021,6 +1694,8 @@ void DoLowPtZSystStudy (PhysicsAnalysis* data, PhysicsAnalysis* bkg, const bool 
       htemp->GetXaxis ()->SetTitleOffset (2.6 * htemp->GetXaxis ()->GetTitleOffset ());
       htemp->GetYaxis ()->SetTitleOffset (1.8 * htemp->GetYaxis ()->GetTitleOffset ());
 
+      htemp->SetLineWidth (0);
+
       htemp->DrawCopy ("hist");
       SaferDelete (&htemp);
     }
@@ -1099,6 +1774,8 @@ void DoLowPtZSystStudy (PhysicsAnalysis* data, PhysicsAnalysis* bkg, const bool 
       htemp->GetYaxis ()->SetTitleOffset (1.8 * htemp->GetYaxis ()->GetTitleOffset ());
 
       htemp->GetYaxis ()->CenterTitle ();
+
+      htemp->SetLineWidth (0);
 
       htemp->DrawCopy ("hist");
       SaferDelete (&htemp);
@@ -1284,6 +1961,358 @@ void DoLowPtZSystStudy (PhysicsAnalysis* data, PhysicsAnalysis* bkg, const bool 
   } // end loop over iCent
 
   c->SaveAs (Form ("../Plots/LowPtZSystStudy/lowPtZ_%s.pdf", useTrkPt ? "pTch" : "xhZ"));
+}
+
+
+
+
+/**
+ * Does low pT^Z channel comparison systematic study as a function of delta Phi.
+ */
+void DoLowPtZSystStudyDPhi (PhysicsAnalysis* data, PhysicsAnalysis* bkg, const bool doGt4) {
+  const char* canvasName = Form ("c_lowptz_syst_dphi_%s", doGt4 ? "gt4" : "lt4");
+  const bool canvasExists = (gDirectory->Get (canvasName) != nullptr);
+  TCanvas* c = nullptr;
+  if (canvasExists)
+    c = dynamic_cast <TCanvas*> (gDirectory->Get (canvasName));
+  else {
+    c = new TCanvas (canvasName, "", 1200, 800);
+    gDirectory->Add (c);
+  }
+  c->cd ();
+
+  const double dPadY = 0.5;
+  const double uPadY = 1. - dPadY;
+  const int axisTextSize = 23;
+
+  const short iPtch = maxNPtchBins + (doGt4 ? 0 : 1);
+
+  TH1D* h_ee = nullptr, *h_mumu = nullptr, *h_comb = nullptr;
+  TH1D* h_ee_bkg = nullptr, *h_mumu_bkg = nullptr, *h_comb_bkg = nullptr;
+  TH1D* h_ee_diff = nullptr, *h_mumu_diff = nullptr;
+  TGraphAsymmErrors* g = nullptr;
+
+  TPad* ulPad = new TPad (Form ("%s_ulPad", canvasName), "", 0, dPadY, 0.5, 1);
+  TPad* dlPad = new TPad (Form ("%s_dlPad", canvasName), "", 0, 0, 0.5, dPadY);
+  TPad* urPad = new TPad (Form ("%s_urPad", canvasName), "", 0.5, dPadY, 1, 1);
+  TPad* drPad = new TPad (Form ("%s_drPad", canvasName), "", 0.5, 0, 1, dPadY);
+
+  ulPad->SetTopMargin (0.04);
+  ulPad->SetBottomMargin (0.02);
+  ulPad->SetLeftMargin (0.17);
+  ulPad->SetRightMargin (0.06);
+  dlPad->SetTopMargin (0.02);
+  dlPad->SetBottomMargin (0.25);
+  dlPad->SetLeftMargin (0.17);
+  dlPad->SetRightMargin (0.06);
+  urPad->SetTopMargin (0.04);
+  urPad->SetBottomMargin (0.02);
+  urPad->SetLeftMargin (0.17);
+  urPad->SetRightMargin (0.06);
+  drPad->SetTopMargin (0.02);
+  drPad->SetBottomMargin (0.25);
+  drPad->SetLeftMargin (0.17);
+  drPad->SetRightMargin (0.06);
+
+  ulPad->Draw ();
+  dlPad->Draw ();
+  urPad->Draw ();
+  drPad->Draw ();
+
+  TPad* uPads[2] = {ulPad, urPad};
+  TPad* dPads[2] = {dlPad, drPad};
+
+  TGAE** g_ee_arr = Get1DArray <TGAE*> (2);
+  TGAE** g_mumu_arr = Get1DArray <TGAE*> (2);
+  for (int iCent : {0, 1}) { 
+    g_ee_arr[iCent] = new TGAE ();
+    g_ee_arr[iCent]->SetName (Form ("g_ee_iCent%i", iCent*numCentBins));
+    g_mumu_arr[iCent] = new TGAE ();
+    g_mumu_arr[iCent]->SetName (Form ("g_mumu_iCent%i", iCent*numCentBins));
+  }
+
+  for (int iCent : {0, 1}) { 
+    c->cd ();
+
+    if (iCent != 0 && data->isMC) continue;
+
+    uPads[iCent]->cd ();
+
+    h_ee = (TH1D*) data->h_trk_dphi_sub[0][2][iPtch][iCent*numCentBins]->Clone ("h_ee");
+    h_mumu = (TH1D*) data->h_trk_dphi_sub[1][2][iPtch][iCent*numCentBins]->Clone ("h_mumu");
+    h_comb = (TH1D*) data->h_trk_dphi_sub[2][2][iPtch][iCent*numCentBins]->Clone ("h_comb");
+    h_ee_bkg = bkg->h_trk_dphi[0][2][iPtch][iCent*numCentBins];
+    h_mumu_bkg = bkg->h_trk_dphi[1][2][iPtch][iCent*numCentBins];
+    h_comb_bkg = bkg->h_trk_dphi[2][2][iPtch][iCent*numCentBins];
+
+    const float min = fmin (fmin (h_ee->GetMinimum (), h_mumu->GetMinimum ()), h_comb->GetMinimum ());
+    const float max = fmin (fmin (h_ee->GetMaximum (), h_mumu->GetMaximum ()), h_comb->GetMaximum ());
+
+    if (!canvasExists) {
+
+      TH1D* htemp = new TH1D ("htemp", "", 1, 0, pi);
+
+      htemp->GetXaxis ()->SetLimits (0, pi);
+      htemp->GetYaxis ()->SetRangeUser ((min < 0 ? 1.5 : 0.5)*min, (max > 0 ? 1.5 : 0.5)*max);
+
+      htemp->GetXaxis ()->SetTitle ("#Delta#phi_{hZ}");
+      htemp->GetYaxis ()->SetTitle ("dY / d#Delta#phi");
+
+      htemp->GetXaxis ()->SetTitleFont (43);
+      htemp->GetXaxis ()->SetTitleSize (axisTextSize);
+      htemp->GetXaxis ()->SetLabelFont (43);
+      htemp->GetXaxis ()->SetLabelSize (axisTextSize);
+
+      htemp->GetYaxis ()->SetTitleFont (43);
+      htemp->GetYaxis ()->SetTitleSize (axisTextSize);
+      htemp->GetYaxis ()->SetLabelFont (43);
+      htemp->GetYaxis ()->SetLabelSize (axisTextSize);
+
+      htemp->GetXaxis ()->SetTitleOffset (2.6 * htemp->GetXaxis ()->GetTitleOffset ());
+      htemp->GetYaxis ()->SetTitleOffset (1.8 * htemp->GetYaxis ()->GetTitleOffset ());
+
+      htemp->SetLineWidth (0);
+
+      htemp->DrawCopy ("hist");
+      SaferDelete (&htemp);
+    }
+
+    g = data->GetTGAE (h_ee);
+    ResetXErrors (g);
+    deltaize (g, 0.02, false);
+    ResetXErrors (g);
+
+    g->SetMarkerStyle (kFullCircle);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (colors[1]);
+    g->SetLineColor (colors[1]);
+
+    g->Draw ("P");
+
+    g = data->GetTGAE (h_mumu);
+    ResetXErrors (g);
+    deltaize (g, -0.02, false);
+    ResetXErrors (g);
+
+    g->SetMarkerStyle (kOpenCircle);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (colors[2]);
+    g->SetLineColor (colors[2]);
+
+    g->Draw ("P");
+
+    if (iCent == 0) {
+      myText (0.22, 0.85, kBlack, "#bf{#it{ATLAS}} Internal", 0.040/uPadY);
+      myText (0.22, 0.75, kBlack, "15 < #it{p}_{T}^{Z} < 30 GeV", 0.032/uPadY);
+      myText (0.22, 0.65, kBlack, doGt4 ? "#it{p}_{T}^{ch} > 4 GeV" : "2 < #it{p}_{T}^{ch} < 4 GeV", 0.032/uPadY);
+      myText (0.22, 0.06, kBlack, "#it{pp}, 5.02 TeV", 0.032/uPadY);
+    }
+    else {
+      myText (0.22, 0.06, kBlack, "Pb+Pb, 0-30%", 0.032/uPadY);
+      myMarkerText (0.70, 0.85, colors[1], kFullCircle, "#it{ee}", 1.6, 0.032/uPadY);
+      myMarkerText (0.70, 0.78, colors[2], kOpenCircle, "#it{#mu#mu}", 1.6, 0.032/uPadY);
+    }
+
+
+    dPads[iCent]->cd ();
+
+    if (!canvasExists) {
+      TH1D* htemp = new TH1D ("htemp", "", 1, 0, pi);
+
+      htemp->GetXaxis ()->SetLimits (0, pi);
+      htemp->GetYaxis ()->SetRangeUser ((min < 0 ? 1.1 : 0.9)*min, (max > 0 ? 1.1 : 0.9)*max);
+
+      if (iCent == 0) htemp->GetYaxis ()->SetRangeUser (-0.1, 0.1);
+      else            htemp->GetYaxis ()->SetRangeUser (-0.7, 0.7);
+
+      htemp->GetXaxis ()->SetTitle ("#Delta#phi_{hZ}");
+      htemp->GetYaxis ()->SetTitle ("Channel #minus Combined");
+
+      htemp->GetXaxis ()->SetTitleFont (43);
+      htemp->GetXaxis ()->SetTitleSize (axisTextSize);
+      htemp->GetXaxis ()->SetLabelFont (43);
+      htemp->GetXaxis ()->SetLabelSize (axisTextSize);
+
+      htemp->GetYaxis ()->SetTitleFont (43);
+      htemp->GetYaxis ()->SetTitleSize (axisTextSize);
+      htemp->GetYaxis ()->SetLabelFont (43);
+      htemp->GetYaxis ()->SetLabelSize (axisTextSize);
+
+      htemp->GetXaxis ()->SetTitleOffset (2.6 * htemp->GetXaxis ()->GetTitleOffset ());
+      htemp->GetYaxis ()->SetTitleOffset (1.8 * htemp->GetYaxis ()->GetTitleOffset ());
+
+      htemp->GetYaxis ()->CenterTitle ();
+
+      htemp->DrawCopy ("hist");
+      SaferDelete (&htemp);
+
+      //TLine* l = new TLine ();
+      //l->SetLineColor (kBlack);
+      //l->SetLineStyle (2);
+      //l->DrawLine (useTrkPt ? pTchBins[2][0] : xhZBins[2][0], 1, useTrkPt ? pTchBins[2][nPtchBins[2]] : xhZBins[2][nXhZBins[2]], 1);
+      //l->DrawLine (useTrkPt ? pTchBins[2][0] : xhZBins[2][0], -1, useTrkPt ? pTchBins[2][nPtchBins[2]] : xhZBins[2][nXhZBins[2]], -1);
+    }
+
+    TGAE* g_ee = g_ee_arr[iCent];
+    TGAE* g_mumu = g_mumu_arr[iCent];
+    h_ee_diff = (TH1D*) h_ee->Clone ("h_ee_diff");
+    h_ee_diff->Reset ();
+    h_mumu_diff = (TH1D*) h_mumu->Clone ("h_mumu_diff");
+    h_mumu_diff->Reset ();
+
+    const double wee = data->h_z_counts[0][2][iCent]->GetBinContent (2) / data->h_z_counts[2][2][iCent]->GetBinContent (2);
+    const double wmm = data->h_z_counts[1][2][iCent]->GetBinContent (2) / data->h_z_counts[2][2][iCent]->GetBinContent (2);
+    for (int ix = 1; ix <= h_ee_diff->GetNbinsX (); ix++) {
+
+      const double yee = h_ee->GetBinContent (ix);
+      const double yee_err = sqrt (pow (h_ee->GetBinError (ix), 2) + pow (h_ee_bkg->GetBinError (ix), 2));
+      const double ymm = h_mumu->GetBinContent (ix);
+      const double ymm_err = sqrt (pow (h_mumu->GetBinError (ix), 2) + pow (h_mumu_bkg->GetBinError (ix), 2));
+      const double ycomb = h_comb->GetBinContent (ix);
+
+      //assert (yee != 0 && ymm != 0);
+
+      const double fee = (yee-ycomb);
+      const double fee_err = sqrt (pow ((1.-wee)*yee_err, 2) + pow (wmm*ymm_err, 2));
+
+      h_ee_diff->SetBinContent (ix, fee);
+      h_ee_diff->SetBinError (ix, fee_err);
+      g_ee->SetPoint (g_ee->GetN (), h_ee_diff->GetBinCenter (ix), fee);
+      g_ee->SetPointEYhigh (g_ee->GetN () - 1, fee_err);
+      g_ee->SetPointEYlow (g_ee->GetN () - 1, fee_err);
+      g_ee->SetPointEXhigh (g_ee->GetN () - 1, 0.5 * h_ee_diff->GetBinWidth (ix));
+      g_ee->SetPointEXlow (g_ee->GetN () - 1, 0.5 * h_ee_diff->GetBinWidth (ix));
+
+      const double fmm = (ymm-ycomb);
+      const double fmm_err = sqrt (pow ((1.-wmm)*ymm_err, 2) + pow (wee*yee_err, 2));
+
+      h_mumu_diff->SetBinContent (ix, fmm);
+      h_mumu_diff->SetBinError (ix, fmm_err);
+      g_mumu->SetPoint (g_mumu->GetN (), h_mumu_diff->GetBinCenter (ix), fmm);
+      g_mumu->SetPointEYhigh (g_mumu->GetN () - 1, fmm_err);
+      g_mumu->SetPointEYlow (g_mumu->GetN () - 1, fmm_err);
+      g_mumu->SetPointEXhigh (g_mumu->GetN () - 1, 0.5 * h_mumu_diff->GetBinWidth (ix));
+      g_mumu->SetPointEXlow (g_mumu->GetN () - 1, 0.5 * h_mumu_diff->GetBinWidth (ix));
+    }
+
+    g = make_graph (h_ee_diff);
+    ResetXErrors (g);
+    deltaize (g, 0.02, false);
+    ResetXErrors (g);
+    //if (iCent != 0) deltaize (g, 1+0.05*(iCent-2), true);
+
+    g->SetMarkerStyle (kFullCircle);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (colors[1]);
+    g->SetLineColor (colors[1]);
+
+    g->Draw ("P");
+
+    g = make_graph (h_mumu_diff);
+    ResetXErrors (g);
+    deltaize (g, -0.02, false);
+    ResetXErrors (g);
+    //if (iCent != 0) deltaize (g, 1+0.05*(iCent-2), true);
+
+    g->SetMarkerStyle (kOpenCircle);
+    g->SetMarkerSize (1);
+    g->SetLineWidth (2);
+    g->SetMarkerColor (colors[2]);
+    g->SetLineColor (colors[2]);
+
+    g->Draw ("P");
+
+    SaferDelete (&h_ee);
+    SaferDelete (&h_mumu);
+    SaferDelete (&h_comb);
+    SaferDelete (&h_ee_diff);
+    SaferDelete (&h_mumu_diff);
+  } // end loop over iCent
+
+  for (int iCent : {0, 1}) { 
+
+    dPads[iCent]->cd ();
+
+    const bool doPP = (iCent == 0);
+
+    g = g_ee_arr[iCent];
+
+    //TF1* fit1 = new TF1 ("fit1", "[0]", useTrkPt ? pTchBins[2][0] : xhZBins[2][0], useTrkPt ? pTchBins[2][nPtchBins[2]] : xhZBins[2][nXhZBins[2]]);
+    TF1* fit1 = nullptr;
+    if (!doGt4 || iCent != 0)
+      fit1 = new TF1 ("fit1", "[0]", 0, pi);
+    else {
+      fit1 = new TF1 ("fit1", "[0]+[1]*x+[2]*x*x", 0, pi);
+      fit1->SetParameter (1, 0);
+      fit1->SetParameter (2, 0);
+    }
+    fit1->SetParameter (0, 0);
+    g->Fit (fit1, "RN0Q");
+
+    fit1->SetLineColor (colors[1]);
+    fit1->SetLineStyle (2);
+    fit1->SetLineWidth (2);
+    fit1->Draw ("same");
+
+    TF1* inv_fit1 = nullptr;
+    if (!doGt4 || iCent != 0)
+      inv_fit1 = new TF1 ("inv_fit1", "[0]", 0, pi);
+    else {
+      inv_fit1 = new TF1 ("inv_fit1", "[0]+[1]*x+[2]*x*x", 0, pi);
+      inv_fit1->SetParameter (1, -fit1->GetParameter (1));
+      inv_fit1->SetParameter (2, -fit1->GetParameter (2));
+    }
+    inv_fit1->SetParameter (0, -fit1->GetParameter (0));
+
+    inv_fit1->SetLineColor (colors[1]);
+    inv_fit1->SetLineStyle (2);
+    inv_fit1->SetLineWidth (2);
+    inv_fit1->Draw ("same");
+
+    myText (0.52, 0.90, colors[1], Form ("#chi^{2}/ndf = %.2f/%i", fit1->GetChisquare (), fit1->GetNDF ()), 0.032/uPadY);
+
+    cout << "chi2/ndf = " << fit1->GetChisquare () << " / " << fit1->GetNDF () << endl;
+
+    g = g_mumu_arr[iCent];
+
+    TF1* fit2 = nullptr;
+    if (!doGt4 || iCent != 0)
+      fit2 = new TF1 ("fit2", "[0]", 0, pi);
+    else {
+      fit2 = new TF1 ("fit2", "[0]+[1]*x+[2]*x*x", 0, pi);
+      fit2->SetParameter (1, 0);
+      fit2->SetParameter (2, 0);
+    }
+    fit2->SetParameter (0, 0);
+    g->Fit (fit2, "RN0Q");
+
+    fit2->SetLineColor (colors[2]);
+    fit2->SetLineStyle (2);
+    fit2->SetLineWidth (2);
+    fit2->Draw ("same");
+
+    TF1* inv_fit2 = nullptr;
+    if (!doGt4 || iCent != 0)
+      inv_fit2 = new TF1 ("inv_fit2", "[0]", 0, pi);
+    else {
+      inv_fit2 = new TF1 ("inv_fit2", "[0]+[1]*x+[2]*x*x", 0, pi);
+      inv_fit2->SetParameter (1, -fit2->GetParameter (1));
+      inv_fit2->SetParameter (2, -fit2->GetParameter (2));
+    }
+    inv_fit2->SetParameter (0, -fit2->GetParameter (0));
+
+    inv_fit2->SetLineColor (colors[2]);
+    inv_fit2->SetLineStyle (2);
+    inv_fit2->SetLineWidth (2);
+    inv_fit2->Draw ("same");
+
+    myText (0.52, 0.82, colors[2], Form ("#chi^{2}/ndf = %.2f/%i", fit2->GetChisquare (), fit2->GetNDF ()), 0.032/uPadY);
+  } // end loop over iCent
+
+  c->SaveAs (Form ("../Plots/LowPtZSystStudy/lowPtZ_dphi_%s.pdf", doGt4 ? "gt4" : "lt4"));
 }
 
 #endif

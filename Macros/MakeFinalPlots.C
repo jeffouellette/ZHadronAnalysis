@@ -43,10 +43,10 @@ const Color_t scetgColor  = (Color_t) tcolor->GetColor (39, 180, 66);
 const double  scetgAlpha  = 0.6;
 const Color_t jewelColor  = tcolor->GetColor (255, 170, 50);
 const double  jewelAlpha  = 0.5;
-const Color_t colbtColor  = kAzure-2;
+const Color_t colbtColor  = kAzure+1;
+const double  colbtAlpha  = 0.5;
 
-const bool plotXhZ = true;
-const double minModelUnc = 0.08;
+const double minModelUnc = 0.06;
 
 
 void SetMinErrors (TGAE* g, const double minerr, const bool logy) {
@@ -124,6 +124,77 @@ void SetMinErrors (TGAE* g, const double minerr, const bool logy) {
 //  return;
 //}
 
+TH1D*** h_trk_pt_ptz_iaa_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+TH1D*** h_trk_xhz_ptz_iaa_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+//TH1D*** h_trk_pt_ptz_sub_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+//TH1D*** h_trk_xhz_ptz_sub_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+
+
+TGAE*** g_trk_pt_ptz_iaa_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+TGAE*** g_trk_xhz_ptz_iaa_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+//TGAE*** g_trk_pt_ptz_sub_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+//TGAE*** g_trk_xhz_ptz_sub_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+
+
+TH1D*** h_trk_dphi_ptz_gt4_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins+1);
+TH1D*** h_trk_dphi_ptz_lt4_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins+1);
+TH1D*** h_trk_pt_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+TH1D*** h_trk_xhz_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+TH1D*** h_trk_pt_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+//TH1D*** h_trk_pt_ptz_iaa_stat_2015proj = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+TH1D*** h_trk_xhz_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+//TH1D*** h_trk_xhz_ptz_iaa_stat_2015proj = Get2DArray <TH1D*> (nPtZBins, numCentBins);
+TGAE** g_trk_avg_pt_ptz_stat = Get1DArray <TGAE*> (numCentBins);
+TGAE** g_trk_avg_xhz_ptz_stat = Get1DArray <TGAE*> (numCentBins);
+TGAE** g_avg_ntrk_ptz_stat = Get1DArray <TGAE*> (numCentBins);
+
+
+TGAE*** g_trk_dphi_ptz_lt4_sub_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins+1);
+TGAE*** g_trk_dphi_ptz_gt4_sub_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins+1);
+TGAE*** g_trk_pt_ptz_sub_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+TGAE*** g_trk_xhz_ptz_sub_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+TGAE*** g_trk_pt_ptz_iaa_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+TGAE*** g_trk_xhz_ptz_iaa_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
+TGAE** g_trk_avg_pt_ptz_syst = Get1DArray <TGAE*> (numCentBins);
+TGAE** g_trk_avg_xhz_ptz_syst = Get1DArray <TGAE*> (numCentBins);
+TGAE** g_avg_ntrk_ptz_syst = Get1DArray <TGAE*> (numCentBins);
+
+
+TGAE* tg_CMS_Zh_IAA_0_30_syst = nullptr;
+TGAE* tg_CMS_Zh_IAA_0_30_stat = nullptr;
+
+
+TGAE** g_pythia_pth_ptz = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_pythia_finepth_ptz = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_pythia_xhz_ptz = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_pythia_finexhz_ptz = Get1DArray <TGAE*> (nPtZBins);
+
+
+TGAE** g_colbt_pth = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_colbt_xhz = Get1DArray <TGAE*> (nPtZBins);
+
+
+TGAE** g_hybrid_xhz = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_hybrid_pth  = Get1DArray <TGAE*> (nPtZBins);
+
+
+TGAE** g_scetg_pth = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_scetg_xhz = Get1DArray <TGAE*> (nPtZBins);
+
+
+TGAE** g_jewel_xhz = Get1DArray <TGAE*> (nPtZBins);
+TGAE** g_jewel_pth = Get1DArray <TGAE*> (nPtZBins);
+
+
+TGE* tg_PHENIX_IAA_stat = nullptr;
+TGE* tg_PHENIX_IAA_syst = nullptr;
+TGAE* tg_STAR_IAA_stat = nullptr;
+TGE* tg_STAR_IAA_syst = nullptr;
+TGE* tg_CMS_IAA_stat = nullptr;
+TGE* tg_CMS_IAA_syst = nullptr;
+
+
+
 void MakeFinalPlots () {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,11 +202,6 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   TFile* CONFResultsFile = new TFile ("../rootFiles/Results/CONFNote/finalResults.root", "read");
   TFile* CONFSysFile = new TFile ("../rootFiles/Results/CONFNote/CombinedSys.root", "read");
-
-  TH1D*** h_trk_pt_ptz_iaa_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  TH1D*** h_trk_xhz_ptz_iaa_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  //TH1D*** h_trk_pt_ptz_sub_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  //TH1D*** h_trk_xhz_ptz_sub_stat_conf = Get2DArray <TH1D*> (nPtZBins, numCentBins);
 
   for (short iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
     for (short iCent = 1; iCent < numCentBins; iCent++) {
@@ -147,11 +213,6 @@ void MakeFinalPlots () {
     //  h_trk_xhz_ptz_sub_stat_conf[iPtZ][iCent] = (TH1D*) CONFResultsFile->Get (Form ("h_ztrk_xhz_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
     //}
   }
-
-  TGAE*** g_trk_pt_ptz_iaa_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  TGAE*** g_trk_xhz_ptz_iaa_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  //TGAE*** g_trk_pt_ptz_sub_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  //TGAE*** g_trk_xhz_ptz_sub_syst_conf = Get2DArray <TGAE*> (nPtZBins, numCentBins);
 
   for (short iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
     for (short iCent = 1; iCent < numCentBins; iCent++) {
@@ -172,23 +233,26 @@ void MakeFinalPlots () {
   TFile* resultsFile = new TFile ("../rootFiles/Results/finalResults.root", "read");
   TFile* sysFile = new TFile ("../rootFiles/Systematics/CombinedSys.root", "read");
 
-  TH1D*** h_trk_pt_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  //TH1D*** h_trk_pt_ptz_iaa_stat_2015proj = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  TH1D*** h_trk_xhz_ptz_iaa_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  //TH1D*** h_trk_xhz_ptz_iaa_stat_2015proj = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  TH1D*** h_trk_pt_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-  TH1D*** h_trk_xhz_ptz_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins);
-
-  TH1D*** h_trk_dphi_ptz_gt4_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins+1);
-  TH1D*** h_trk_dphi_ptz_lt4_sub_stat = Get2DArray <TH1D*> (nPtZBins, numCentBins+1);
-
-  TGAE** g_trk_avg_pt_ptz_stat = Get1DArray <TGAE*> (numCentBins);
-  TGAE** g_trk_avg_xhz_ptz_stat = Get1DArray <TGAE*> (numCentBins);
-
   const double abbrev_xhz_bins[4] = {1./8., 1./4., 1./2., 1.};
   const short num_abbrev_xhz_bins = 3;
 
   for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+    for (short iCent : {0, numCentBins}) {
+      h_trk_dphi_ptz_lt4_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_dphi_sub_lt4_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
+      h_trk_dphi_ptz_gt4_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_dphi_sub_gt4_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
+    } // end loop over iCent
+    for (short iCent = 0; iCent < numCentBins; iCent++) {
+      h_trk_pt_ptz_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_pt_ptz_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
+      h_trk_xhz_ptz_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_xhz_ptz_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
+      if (iPtZ == 2) {
+        TH1D* h = new TH1D (Form ("h_trk_xhz_ptz_sub_comb_iPtZ%i_iCent%i_data18_abbrev", iPtZ, iCent), "", num_abbrev_xhz_bins, abbrev_xhz_bins);
+        for (int iX = 1; iX <= num_abbrev_xhz_bins; iX++) {
+          h->SetBinContent (iX, h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->GetBinContent (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->FindFixBin (h->GetBinCenter (iX))));
+          h->SetBinError (iX, h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->GetBinError (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->FindFixBin (h->GetBinCenter (iX))));
+        }
+        h_trk_xhz_ptz_sub_stat[iPtZ][iCent] = h;
+      }
+    } // end loop over iCent
     for (short iCent = 1; iCent < numCentBins; iCent++) {
       h_trk_pt_ptz_iaa_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_pt_ptz_iaa_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
       //h_trk_pt_ptz_iaa_stat_2015proj[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_pt_ptz_iaa_2015proj_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
@@ -203,65 +267,43 @@ void MakeFinalPlots () {
         }
         h_trk_xhz_ptz_iaa_stat[iPtZ][iCent] = h;
       }
-    }
-    for (short iCent = 0; iCent < numCentBins; iCent++) {
-      h_trk_pt_ptz_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_pt_ptz_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
-      h_trk_xhz_ptz_sub_stat[iPtZ][iCent] = (TH1D*) resultsFile->Get (Form ("h_trk_xhz_ptz_sub_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
-      if (iPtZ == 2) {
-        TH1D* h = new TH1D (Form ("h_trk_xhz_ptz_sub_comb_iPtZ%i_iCent%i_data18_abbrev", iPtZ, iCent), "", num_abbrev_xhz_bins, abbrev_xhz_bins);
-        for (int iX = 1; iX <= num_abbrev_xhz_bins; iX++) {
-          h->SetBinContent (iX, h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->GetBinContent (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->FindFixBin (h->GetBinCenter (iX))));
-          h->SetBinError (iX, h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->GetBinError (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]->FindFixBin (h->GetBinCenter (iX))));
-        }
-        h_trk_xhz_ptz_sub_stat[iPtZ][iCent] = h;
-      }
-    }
-
-
-    for (short iCent = 0; iCent < numCentBins+1; iCent++) {
-      TH1D* h = (TH1D*) resultsFile->Get (Form ("h_trk_dphi_sub_lt4_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
-      h_trk_dphi_ptz_lt4_sub_stat[iPtZ][iCent] = h;
-
-      h = (TH1D*) resultsFile->Get (Form ("h_trk_dphi_sub_gt4_comb_iPtZ%i_iCent%i_data18", iPtZ, iCent));
-      h_trk_dphi_ptz_gt4_sub_stat[iPtZ][iCent] = h;
-    }
-  }
+    } // end loop over iCent
+  } // end loop over iPtZ
   for (short iCent = 0; iCent < numCentBins; iCent++) {
     g_trk_avg_pt_ptz_stat[iCent] = (TGAE*) resultsFile->Get (Form ("g_trk_avg_pt_ptz_comb_iCent%i_data18", iCent));
     g_trk_avg_xhz_ptz_stat[iCent] = (TGAE*) resultsFile->Get (Form ("g_trk_avg_xhz_ptz_comb_iCent%i_data18", iCent));
-  }
-
-  TGAE*** g_trk_pt_ptz_iaa_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  TGAE*** g_trk_xhz_ptz_iaa_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  TGAE*** g_trk_pt_ptz_sub_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  TGAE*** g_trk_xhz_ptz_sub_syst = Get2DArray <TGAE*> (nPtZBins, numCentBins);
-  TGAE** g_trk_avg_pt_ptz_syst = Get1DArray <TGAE*> (numCentBins);
-  TGAE** g_trk_avg_xhz_ptz_syst = Get1DArray <TGAE*> (numCentBins);
+    g_avg_ntrk_ptz_stat[iCent] = (TGAE*) resultsFile->Get (Form ("g_avg_ntrk_ptz_comb_iCent%i_data18", iCent));
+  } // end loop over iCent
 
   for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+    for (short iCent : {0, numCentBins}) {
+      g_trk_dphi_ptz_lt4_sub_syst[iPtZ][iCent] = (TGAE*) sysFile->Get (Form ("g_trk_dphi_sub_lt4_comb_iPtZ%i_iCent%i_combSys", iPtZ, iCent));
+      g_trk_dphi_ptz_gt4_sub_syst[iPtZ][iCent] = (TGAE*) sysFile->Get (Form ("g_trk_dphi_sub_gt4_comb_iPtZ%i_iCent%i_combSys", iPtZ, iCent));
+    } // end iCent = numCentBins scope
     for (short iCent = 1; iCent < numCentBins; iCent++) {
       g_trk_pt_ptz_iaa_syst[iPtZ][iCent] = (TGAE*) sysFile->Get (Form ("g_trk_pt_ptz_iaa_comb_iPtZ%i_iCent%i_combSys", iPtZ, iCent));
       g_trk_xhz_ptz_iaa_syst[iPtZ][iCent] = (TGAE*) sysFile->Get (Form ("g_trk_xhz_ptz_iaa_comb_iPtZ%i_iCent%i_combSys", iPtZ, iCent));
       if (iPtZ == 2) {
         g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->RemovePoint (0);
       }
-    }
+    } // end loop over iCent
     for (short iCent = 0; iCent < numCentBins; iCent++) {
       g_trk_pt_ptz_sub_syst[iPtZ][iCent] = (TGAE*) sysFile->Get (Form ("g_trk_pt_ptz_sub_comb_iPtZ%i_iCent%i_combSys", iPtZ, iCent));
       g_trk_xhz_ptz_sub_syst[iPtZ][iCent] = (TGAE*) sysFile->Get (Form ("g_trk_xhz_ptz_sub_comb_iPtZ%i_iCent%i_combSys", iPtZ, iCent));
       if (iPtZ == 2) {
         g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->RemovePoint (0);
       }
-    }
-  }
+    } // end loop over iCent
+  } // end loop over iPtZ
   for (short iCent = 0; iCent < numCentBins; iCent++) {
     g_trk_avg_pt_ptz_syst[iCent] = (TGAE*) sysFile->Get (Form ("g_trk_avg_pt_ptz_comb_iCent%i_combSys", iCent));
     g_trk_avg_xhz_ptz_syst[iCent] = (TGAE*) sysFile->Get (Form ("g_trk_avg_xhz_ptz_comb_iCent%i_combSys", iCent));
-  }
+    g_avg_ntrk_ptz_syst[iCent] = (TGAE*) sysFile->Get (Form ("g_avg_ntrk_ptz_comb_iCent%i_combSys", iCent));
+  } // end loop over iCent
 
 
-  TGAE* tg_CMS_Zh_IAA_0_30_syst = new TGAE ();
-  TGAE* tg_CMS_Zh_IAA_0_30_stat = new TGAE ();
+  tg_CMS_Zh_IAA_0_30_syst = new TGAE ();
+  tg_CMS_Zh_IAA_0_30_stat = new TGAE ();
 
   {
     const string fileName = "../DataThieving/CMS_Zh_IAA_HP2020/0_30centrality.dat";
@@ -288,10 +330,6 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Get Powheg+Pythia hadron yield predictions
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TGAE** g_pythia_pth_ptz = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_pythia_finepth_ptz = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_pythia_xhz_ptz = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_pythia_finexhz_ptz = Get1DArray <TGAE*> (nPtZBins);
   {
     TFile* pythiaFile = new TFile ("../rootFiles/TruthAnalysis/Nominal/pythiaCompare.root", "read");
     TH1D* h_z_counts = (TH1D*) pythiaFile->Get ("h_z_counts");
@@ -441,26 +479,26 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Get CoLBT predictions
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TGraph** g_colbt_pth = Get1DArray <TGraph*> (nPtZBins);
-  TGraph** g_colbt_xhz = Get1DArray <TGraph*> (nPtZBins);
   {
     for (int iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
-      g_colbt_pth[iPtZ] = new TGraph ();
-      g_colbt_xhz[iPtZ] = new TGraph ();
+      g_colbt_pth[iPtZ] = new TGAE ();
+      g_colbt_xhz[iPtZ] = new TGAE ();
     }
 
     string modelFileName, dummyLine;
     short iPtZ;
     ifstream f;
-    float x = 0, withResp = 0, noResp = 0;
+    float x = 0, withResp = 0, statUnc = 0;
 
     modelFileName = "../CoLBT/Iaa_pt_zpt30_cent0_10.dat";
     iPtZ = 3;
     f.open (modelFileName.c_str ());
     getline (f, dummyLine);
     for (int i = 0; i < 5; i++) {
-      f >> x >> withResp >> noResp;
+      f >> x >> withResp >> statUnc;
       g_colbt_pth[iPtZ]->SetPoint (g_colbt_pth[iPtZ]->GetN (), x, withResp);
+      const double xUnc = g_trk_pt_ptz_iaa_syst[iPtZ][3]->GetErrorX (i);
+      g_colbt_pth[iPtZ]->SetPointError (g_colbt_pth[iPtZ]->GetN ()-1, xUnc, xUnc, statUnc, statUnc);
     }
     f.close ();
 
@@ -469,8 +507,10 @@ void MakeFinalPlots () {
     f.open (modelFileName.c_str ());
     getline (f, dummyLine);
     for (int i = 0; i < 6; i++) {
-      f >> x >> withResp >> noResp;
+      f >> x >> withResp >> statUnc;
       g_colbt_pth[iPtZ]->SetPoint (g_colbt_pth[iPtZ]->GetN (), x, withResp);
+      const double xUnc = g_trk_pt_ptz_iaa_syst[iPtZ][3]->GetErrorX (i);
+      g_colbt_pth[iPtZ]->SetPointError (g_colbt_pth[iPtZ]->GetN ()-1, xUnc, xUnc, statUnc, statUnc);
     }
     f.close ();
 
@@ -479,8 +519,10 @@ void MakeFinalPlots () {
     f.open (modelFileName.c_str ());
     getline (f, dummyLine);
     for (int i = 0; i < 5; i++) {
-      f >> x >> withResp >> noResp;
+      f >> x >> withResp >> statUnc;
       g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, withResp);
+      const double xUnc = g_trk_xhz_ptz_iaa_syst[iPtZ][3]->GetErrorX (i);
+      g_colbt_xhz[iPtZ]->SetPointError (g_colbt_xhz[iPtZ]->GetN ()-1, xUnc, xUnc, statUnc, statUnc);
     }
     f.close ();
 
@@ -489,8 +531,10 @@ void MakeFinalPlots () {
     f.open (modelFileName.c_str ());
     getline (f, dummyLine);
     for (int i = 0; i < 6; i++) {
-      f >> x >> withResp >> noResp;
+      f >> x >> withResp >> statUnc;
       g_colbt_xhz[iPtZ]->SetPoint (g_colbt_xhz[iPtZ]->GetN (), x, withResp);
+      const double xUnc = g_trk_xhz_ptz_iaa_syst[iPtZ][3]->GetErrorX (i);
+      g_colbt_xhz[iPtZ]->SetPointError (g_colbt_xhz[iPtZ]->GetN ()-1, xUnc, xUnc, statUnc, statUnc);
     }
     f.close ();
   }
@@ -500,13 +544,12 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Get Hybrid model predictions
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TGAE** g_hybrid_xhz = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_hybrid_pth  = Get1DArray <TGAE*> (nPtZBins);
-  for (int iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
-    g_hybrid_xhz[iPtZ] = new TGAE ();
-    g_hybrid_pth[iPtZ] = new TGAE ();
-  }
   {
+    for (int iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+      g_hybrid_xhz[iPtZ] = new TGAE ();
+      g_hybrid_pth[iPtZ] = new TGAE ();
+    }
+
     const bool useTrkPt = false;
     //string modelFileName = "../HybridModel/IAAs/010_IAA_z_wake_1_ignore_neg_0.dat"; // means medium response including only the positive contribution from the wake
     string modelFileName = "../HybridModel/IAAs/010_IAA_z_wake_1_ignore_neg_1.dat"; // means full medium response, including also the negative contribution from the wake
@@ -556,14 +599,12 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Get SCET_G predictions
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TGAE** g_scetg_pth = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_scetg_xhz = Get1DArray <TGAE*> (nPtZBins);
-  for (int iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
-    g_scetg_pth[iPtZ] = new TGAE ();
-    g_scetg_xhz[iPtZ] = new TGAE ();
-  }
-
   {
+    for (int iPtZ = 3; iPtZ < nPtZBins; iPtZ++) {
+      g_scetg_pth[iPtZ] = new TGAE ();
+      g_scetg_xhz[iPtZ] = new TGAE ();
+    }
+
     ifstream f;
     double dummy = 0, x = 0, y = 0;
 
@@ -733,8 +774,6 @@ void MakeFinalPlots () {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Get JEWEL predictions
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TGAE** g_jewel_xhz = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_jewel_pth = Get1DArray <TGAE*> (nPtZBins);
   {
     TFile* jewelFile = new TFile ("../rootFiles/Jewel/hists.root", "read");
     for (int iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
@@ -757,12 +796,12 @@ void MakeFinalPlots () {
   // Get data comparison plots
   ////////////////////////////////////////////////////////////////////////////////////////////////
   TFile* dataCompFile = new TFile ("../DataComparisons/Zhadron_IAA_data_comparisons.root", "read");
-  TGE* tg_PHENIX_IAA_stat = (TGE*) dataCompFile->Get ("tg_PHENIX_IAA_stat");
-  TGE* tg_PHENIX_IAA_syst = (TGE*) dataCompFile->Get ("tg_PHENIX_IAA_syst");
-  TGAE* tg_STAR_IAA_stat = (TGAE*) dataCompFile->Get ("tg_STAR_IAA_stat");
-  TGE* tg_STAR_IAA_syst = (TGE*) dataCompFile->Get ("tg_STAR_IAA_syst");
-  TGE* tg_CMS_IAA_stat = (TGE*) dataCompFile->Get ("tg_CMS_IAA_stat");
-  TGE* tg_CMS_IAA_syst = (TGE*) dataCompFile->Get ("tg_CMS_IAA_syst");
+  tg_PHENIX_IAA_stat = (TGE*) dataCompFile->Get ("tg_PHENIX_IAA_stat");
+  tg_PHENIX_IAA_syst = (TGE*) dataCompFile->Get ("tg_PHENIX_IAA_syst");
+  tg_STAR_IAA_stat = (TGAE*) dataCompFile->Get ("tg_STAR_IAA_stat");
+  tg_STAR_IAA_syst = (TGE*) dataCompFile->Get ("tg_STAR_IAA_syst");
+  tg_CMS_IAA_stat = (TGE*) dataCompFile->Get ("tg_CMS_IAA_stat");
+  tg_CMS_IAA_syst = (TGE*) dataCompFile->Get ("tg_CMS_IAA_syst");
 
   TLatex* tl = new TLatex ();
   TLine* l = new TLine ();
@@ -771,7 +810,8 @@ void MakeFinalPlots () {
 
 
   {
-    TCanvas* c1 = new TCanvas ("c1", "", 1600, plotXhZ ? 1200 : 600);
+    const char* canvasName = "c1";
+    TCanvas* c1 = new TCanvas (canvasName, "", 1600, 1200);
 
     const double llMargin = 0.17;
     const double lrMargin = 0.032;
@@ -792,7 +832,7 @@ void MakeFinalPlots () {
     const double xPadLCMiddle = a;
     const double xPadCRMiddle = a+b;
 
-    const double yPadMiddle = plotXhZ ? 0.5 : 0.0;
+    const double yPadMiddle = 0.5;
 
     TPad* luPad = nullptr;
     TPad* cuPad = nullptr;
@@ -801,14 +841,12 @@ void MakeFinalPlots () {
     TPad* cdPad = nullptr;
     TPad* rdPad = nullptr;
 
-    luPad = new TPad ("luPad", "", 0, yPadMiddle, xPadLCMiddle, 1);
-    cuPad = new TPad ("cuPad", "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
-    ruPad = new TPad ("ruPad", "", xPadCRMiddle, yPadMiddle, 1, 1);
-    if (plotXhZ) {
-      ldPad = new TPad ("ldPad", "", 0, 0, xPadLCMiddle, yPadMiddle);
-      cdPad = new TPad ("cdPad", "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
-      rdPad = new TPad ("rdPad", "", xPadCRMiddle, 0, 1, yPadMiddle);
-    }
+    luPad = new TPad (Form ("%s_luPad", canvasName), "", 0, yPadMiddle, xPadLCMiddle, 1);
+    cuPad = new TPad (Form ("%s_cuPad", canvasName), "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
+    ruPad = new TPad (Form ("%s_ruPad", canvasName), "", xPadCRMiddle, yPadMiddle, 1, 1);
+    ldPad = new TPad (Form ("%s_ldPad", canvasName), "", 0, 0, xPadLCMiddle, yPadMiddle);
+    cdPad = new TPad (Form ("%s_cdPad", canvasName), "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
+    rdPad = new TPad (Form ("%s_rdPad", canvasName), "", xPadCRMiddle, 0, 1, yPadMiddle);
 
     luPad->SetLeftMargin (llMargin);
     luPad->SetRightMargin (lrMargin);
@@ -822,52 +860,50 @@ void MakeFinalPlots () {
     cuPad->SetTopMargin (tMargin);
     ruPad->SetBottomMargin (bMargin);
     ruPad->SetTopMargin (tMargin);
-    if (plotXhZ) {
-      ldPad->SetLeftMargin (llMargin);
-      ldPad->SetRightMargin (lrMargin);
-      cdPad->SetLeftMargin (clMargin);
-      cdPad->SetRightMargin (crMargin);
-      rdPad->SetLeftMargin (rlMargin);
-      rdPad->SetRightMargin (rrMargin);
-      ldPad->SetBottomMargin (bMargin);
-      ldPad->SetTopMargin (tMargin);
-      cdPad->SetBottomMargin (bMargin);
-      cdPad->SetTopMargin (tMargin);
-      rdPad->SetBottomMargin (bMargin);
-      rdPad->SetTopMargin (tMargin);
-    }
+    ldPad->SetLeftMargin (llMargin);
+    ldPad->SetRightMargin (lrMargin);
+    cdPad->SetLeftMargin (clMargin);
+    cdPad->SetRightMargin (crMargin);
+    rdPad->SetLeftMargin (rlMargin);
+    rdPad->SetRightMargin (rrMargin);
+    ldPad->SetBottomMargin (bMargin);
+    ldPad->SetTopMargin (tMargin);
+    cdPad->SetBottomMargin (bMargin);
+    cdPad->SetTopMargin (tMargin);
+    rdPad->SetBottomMargin (bMargin);
+    rdPad->SetTopMargin (tMargin);
 
     TPad* uPads[3] = {luPad, cuPad, ruPad};
     TPad* dPads[3] = {ldPad, cdPad, rdPad};
 
     for (int i = 0; i < 3; i++) {
       uPads[i]->Draw ();
-      if (plotXhZ)
-        dPads[i]->Draw ();
+      dPads[i]->Draw ();
     }
     for (int i = 0; i < 3; i++) {
       uPads[i]->SetLogx ();
       uPads[i]->SetLogy ();
-      if (plotXhZ) {
-        dPads[i]->SetLogx ();
-        dPads[i]->SetLogy ();
-      }
+      dPads[i]->SetLogx ();
+      dPads[i]->SetLogy ();
     }
 
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
       uPads[iPtZ-2]->cd ();
 
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetTitleFont (43);
       xax->SetTitleSize (30);
-      xax->SetTitleOffset (plotXhZ ? 2.5 : 1.25);
+      xax->SetTitleOffset (2.5);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
@@ -876,10 +912,8 @@ void MakeFinalPlots () {
       yax->SetRangeUser (ymin, ymax);
       yax->SetTitleFont (43);
       yax->SetTitleSize (30);
-      yax->SetTitleOffset (plotXhZ ? 2.6 : 1.30);
-      yax->SetLabelFont (43);
-      if (iPtZ == 2) yax->SetLabelSize (28);
-      else yax->SetLabelSize (0);
+      yax->SetTitleOffset (3.2);
+      yax->SetLabelSize (0);
 
       h->SetLineWidth (0);
 
@@ -903,10 +937,27 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
+      if (iPtZ == 2) {
+        tl->SetTextAlign (32);
+
+        const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-llMargin-lrMargin));
+        tl->DrawLatex (xoff, 0.1, "0.1");
+        tl->DrawLatex (xoff, 0.2, "0.2");
+        tl->DrawLatex (xoff, 0.3, "0.3");
+        tl->DrawLatex (xoff, 0.5, "0.5");
+        tl->DrawLatex (xoff, 0.7, "0.7");
+        tl->DrawLatex (xoff, 1, "1");
+        tl->DrawLatex (xoff, 2, "2");
+        tl->DrawLatex (xoff, 3, "3");
+        tl->DrawLatex (xoff, 5, "5");
+        tl->DrawLatex (xoff, 7, "7");
+        tl->DrawLatex (xoff, 10, "10");
+      }
+
       l->SetLineStyle (2);
       l->SetLineWidth (2);
       l->SetLineColor (kBlack);
-      l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+      l->DrawLine (xmin, 1, xmax, 1);
     } // end loop over iPtZ
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
@@ -964,207 +1015,33 @@ void MakeFinalPlots () {
     } // end loop over iPtZ
 
 
-    if (plotXhZ) {
-      for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-        dPads[iPtZ-2]->cd ();
+    for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
+      dPads[iPtZ-2]->cd ();
 
-        TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+      const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-        TAxis* xax = h->GetXaxis ();
-        TAxis* yax = h->GetYaxis ();
-
-        xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
-
-        const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
-        xax->SetRangeUser (xmin, xhZBins[iPtZ][nXhZBins[iPtZ]]);
-        xax->SetTitleFont (43);
-        xax->SetTitleSize (30);
-        xax->SetTitleOffset (plotXhZ ? 2.5 : 1.25);
-        xax->SetLabelSize (0);
-
-        yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
-        const double ymin = 0.05;
-        const double ymax = 10;
-        yax->SetRangeUser (ymin, ymax);
-        yax->SetTitleFont (43);
-        yax->SetTitleSize (30);
-        yax->SetTitleOffset (plotXhZ ? 2.6 : 1.30);
-        yax->SetLabelFont (43);
-        if (iPtZ == 2) yax->SetLabelSize (28);
-        else yax->SetLabelSize (0);
-
-        h->SetLineWidth (0);
-
-        h->DrawCopy ("");
-        SaferDelete (&h);
-
-        tl->SetTextFont (43);
-        tl->SetTextSize (28);
-        tl->SetTextAlign (21);
-        const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-        if (iPtZ > 2) {
-          if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
-          tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
-        }
-        tl->DrawLatex (1e-1,  yoff, "10^{-1}");
-        tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
-        tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
-        tl->DrawLatex (1,     yoff, "1");
-
-        l->SetLineStyle (2);
-        l->SetLineWidth (2);
-        //l->SetLineColor (kPink-8);
-        l->DrawLine (xmin, 1, xhZBins[iPtZ][nXhZBins[iPtZ]], 1);
-      } // end loop over iPtZ
-
-      for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-        dPads[iPtZ-2]->cd ();
-
-        for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
-          TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
-
-          RecenterGraph (g_syst);
-          ResetXErrors (g_syst);
-          deltaize (g_syst, 0.09*(iCent-1 - 0.5*(numCentBins-2)), true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
-          ResetXErrors (g_syst);
-          SetConstantXErrors (g_syst, 0.040, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
-
-          g_syst->SetMarkerSize (0);
-          g_syst->SetLineWidth (1);
-          g_syst->SetMarkerColor (finalColors[iCent]);
-          g_syst->SetLineColor (finalColors[iCent]);
-          g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
-
-          g_syst->Draw ("5P");
-        } // end loop over iCent
-
-        for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
-          TGAE* g_stat = make_graph (h_trk_xhz_ptz_iaa_stat[iPtZ][iCent]);
-
-          Style_t markerStyle = markerStyles[iCent-1];
-          float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-
-          RecenterGraph (g_stat);
-          ResetXErrors (g_stat);
-          deltaize (g_stat, 0.09*(iCent-1 - 0.5*(numCentBins-2)), true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
-          ResetXErrors (g_stat);
-
-          g_stat->SetMarkerStyle (markerStyle);
-          g_stat->SetMarkerSize (markerSize);
-          g_stat->SetLineWidth (3);
-          g_stat->SetMarkerColor (finalColors[iCent]);
-          g_stat->SetLineColor (finalColors[iCent]);
-
-          ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-          markerStyle = FullToOpenMarker (markerStyle);
-          markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-          
-          g_stat->SetMarkerStyle (markerStyle);
-          g_stat->SetMarkerSize (markerSize);
-          g_stat->SetLineWidth (0);
-          g_stat->SetMarkerColor (kBlack);
-
-          ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-          SaferDelete (&g_stat);
-        } // end loop over iCent
-      } // end loop over iPtZ
-    }
-
-    tl->SetTextColor (kBlack);
-    tl->SetTextAlign (11);
-
-    luPad->cd ();
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.22, 0.80, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.22, 0.74, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-
-    if (plotXhZ) {
-      ldPad->cd ();
-      tl->SetTextSize (32);
-      tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
-      tl->SetTextSize (28);
-      tl->DrawLatexNDC (0.22, 0.80, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-      tl->DrawLatexNDC (0.22, 0.74, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    }
-
-    tl->SetTextSize (30);
-    luPad->cd ();
-    tl->DrawLatexNDC (0.56, 0.86, "15 < #it{p}_{T}^{Z} < 30 GeV");
-    cuPad->cd ();
-    tl->DrawLatexNDC (0.50, 0.86, "30 < #it{p}_{T}^{Z} < 60 GeV");
-    ruPad->cd ();
-    tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
-
-    if (plotXhZ) {
-      ldPad->cd ();
-      tl->DrawLatexNDC (0.56, 0.86, "15 < #it{p}_{T}^{Z} < 30 GeV");
-      cdPad->cd ();
-      tl->DrawLatexNDC (0.50, 0.86, "30 < #it{p}_{T}^{Z} < 60 GeV");
-      rdPad->cd ();
-      tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
-    }
-
-    ruPad->cd ();
-    myMarkerAndBoxAndLineText (0.60, 0.780, 3.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "30-80\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
-    myMarkerAndBoxAndLineText (0.60, 0.715, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "10-30\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
-    myMarkerAndBoxAndLineText (0.60, 0.650, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
-
-    if (plotXhZ) {
-      rdPad->cd ();
-      myMarkerAndBoxAndLineText (0.60, 0.780, 3.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "30-80\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
-      myMarkerAndBoxAndLineText (0.60, 0.715, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "10-30\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
-      myMarkerAndBoxAndLineText (0.60, 0.650, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
-    }
-
-    c1->SaveAs (plotXhZ ? "../Plots/FinalPlots/iaa_allptz.pdf" : "../Plots/FinalPlots/iaa_allptz_pTchOnly.pdf");
-  }
-
-
-
-
-  {
-    TCanvas* c2 = new TCanvas ("c2", "", 800, 800);
-
-    const double lMargin = 0.15;
-    const double rMargin = 0.04;
-    const double bMargin = 0.15;
-    const double tMargin = 0.04;
-
-    c2->SetLeftMargin (lMargin);
-    c2->SetRightMargin (rMargin);
-    c2->SetBottomMargin (bMargin);
-    c2->SetTopMargin (tMargin);
-
-    c2->SetLogx ();
-    c2->SetLogy ();
-
-    {
-      TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
-      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-      //xax->SetTitleFont (43);
-      //xax->SetTitleSize (30);
-      //xax->SetTitleOffset (1.25);
+      xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
+
+      xax->SetRangeUser (xmin, xmax);
+      xax->SetTitleFont (43);
+      xax->SetTitleSize (30);
+      xax->SetTitleOffset (2.5);
       xax->SetLabelSize (0);
 
-      yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      const double ymin = 0.08;
-      const double ymax = 1200;
+      yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
+      const double ymin = 0.05;
+      const double ymax = 10;
       yax->SetRangeUser (ymin, ymax);
-      //yax->SetTitleFont (43);
-      //yax->SetTitleSize (30);
-      //yax->SetTitleOffset (1.30);
-      //yax->SetLabelFont (43);
-      //yax->SetLabelSize (28);
+      yax->SetTitleFont (43);
+      yax->SetTitleSize (30);
+      yax->SetTitleOffset (3.2);
+      yax->SetLabelSize (0);
 
       h->SetLineWidth (0);
 
@@ -1172,41 +1049,53 @@ void MakeFinalPlots () {
       SaferDelete (&h);
 
       tl->SetTextFont (43);
-      tl->SetTextSize (36);
+      tl->SetTextSize (28);
       tl->SetTextAlign (21);
       const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
+      if (iPtZ > 2) {
+        if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
+        tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
+      }
+      if (iPtZ >= 3) tl->DrawLatex (1e-1,  yoff, "10^{-1}");
+      tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
+      tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
+      tl->DrawLatex (1,     yoff, "1");
 
-      tl->DrawLatex (1,  yoff, "1");
-      tl->DrawLatex (2,  yoff, "2");
-      tl->DrawLatex (3,  yoff, "3");
-      tl->DrawLatex (4,  yoff, "4");
-      tl->DrawLatex (5,  yoff, "5");
-      tl->DrawLatex (6,  yoff, "6");
-      tl->DrawLatex (7,  yoff, "7");
-      tl->DrawLatex (10, yoff, "10");
-      tl->DrawLatex (20, yoff, "20");
-      tl->DrawLatex (30, yoff, "30");
-      tl->DrawLatex (40, yoff, "40");
-      tl->DrawLatex (60, yoff, "60");
+      if (iPtZ == 2) {
+        tl->SetTextAlign (32);
+  
+        const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-llMargin-lrMargin));
+        tl->DrawLatex (xoff, 0.05, "0.05");
+        tl->DrawLatex (xoff, 0.1, "0.1");
+        tl->DrawLatex (xoff, 0.2, "0.2");
+        tl->DrawLatex (xoff, 0.3, "0.3");
+        tl->DrawLatex (xoff, 0.5, "0.5");
+        tl->DrawLatex (xoff, 1, "1");
+        tl->DrawLatex (xoff, 2, "2");
+        tl->DrawLatex (xoff, 3, "3");
+        tl->DrawLatex (xoff, 5, "5");
+        tl->DrawLatex (xoff, 10, "10");
+      }
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      l->SetLineColor (kBlack);
-      l->DrawLine (1, 1, 14, 1);
-      l->DrawLine (1, 10, 28, 10);
-      l->DrawLine (1, 100, 60, 100);
-    }
+      l->DrawLine (xmin, 1, xmax, 1);
+    } // end loop over iPtZ
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-      for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
-        TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
+      dPads[iPtZ-2]->cd ();
 
-        OffsetYAxis (g_syst, pow (10, iPtZ-2), true);
+      const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
+
+      for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
+        TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
+
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
-        deltaize (g_syst, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        deltaize (g_syst, 0.09*(iCent-1 - 0.5*(numCentBins-2)), true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.040, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        SetConstantXErrors (g_syst, 0.040, true, xmin, xmax);
 
         g_syst->SetMarkerSize (0);
         g_syst->SetLineWidth (1);
@@ -1214,21 +1103,20 @@ void MakeFinalPlots () {
         g_syst->SetLineColor (finalColors[iCent]);
         g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
 
-        g_syst->Draw ( "5P");
-
+        g_syst->Draw ("5P");
       } // end loop over iCent
 
       for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
-        TGAE* g_stat = make_graph (h_trk_pt_ptz_iaa_stat[iPtZ][iCent]);
-
-        OffsetYAxis (g_stat, pow (10, iPtZ-2), true);
-        RecenterGraph (g_stat);
-        ResetXErrors (g_stat);
-        deltaize (g_stat, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-        ResetXErrors (g_stat);
+        TGAE* g_stat = make_graph (h_trk_xhz_ptz_iaa_stat[iPtZ][iCent]);
 
         Style_t markerStyle = markerStyles[iCent-1];
-        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
+        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+
+        RecenterGraph (g_stat);
+        ResetXErrors (g_stat);
+        deltaize (g_stat, 0.09*(iCent-1 - 0.5*(numCentBins-2)), true, xmin, xmax);
+        ResetXErrors (g_stat);
+
         g_stat->SetMarkerStyle (markerStyle);
         g_stat->SetMarkerSize (markerSize);
         g_stat->SetLineWidth (3);
@@ -1238,7 +1126,7 @@ void MakeFinalPlots () {
         ((TGAE*) g_stat->Clone ())->Draw ("P");
 
         markerStyle = FullToOpenMarker (markerStyle);
-        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
+        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
         
         g_stat->SetMarkerStyle (markerStyle);
         g_stat->SetMarkerSize (markerSize);
@@ -1250,41 +1138,217 @@ void MakeFinalPlots () {
         SaferDelete (&g_stat);
       } // end loop over iCent
     } // end loop over iPtZ
+    
 
     tl->SetTextColor (kBlack);
     tl->SetTextAlign (11);
 
+    luPad->cd ();
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.19, 0.890, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (26);
-    tl->DrawLatexNDC (0.43, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.43, 0.845, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.21, 0.79, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.21, 0.73, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (24);
-    tl->DrawLatex (3.40, 1.28, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
-    tl->DrawLatex (6.35, 12.8, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
-    tl->DrawLatex (13, 128, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
+    ldPad->cd ();
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
+    tl->SetTextSize (28);
+    tl->DrawLatexNDC (0.21, 0.79, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.21, 0.73, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (26);
-    tl->SetTextAlign (11);
-    tl->DrawLatexNDC (0.765, 0.320-0.011, "30-80\% #/#it{pp}");
-    tl->DrawLatexNDC (0.765, 0.270-0.011, "10-30\% #/#it{pp}");
-    tl->DrawLatexNDC (0.765, 0.220-0.011, "0-10\% #/#it{pp}");
-    MakeDataBox   (0.78, 0.320, finalFillColors[1], 0.30, markerStyles[0], 1.6);
-    MakeDataBox   (0.78, 0.270, finalFillColors[2], 0.30, markerStyles[1], 1.6);
-    MakeDataBox   (0.78, 0.220, finalFillColors[3], 0.30, markerStyles[2], 2.2);
-    //myMarkerAndBoxAndLineText (0.76, 0.280, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\% #/#it{pp}", 0.032);
-    //myMarkerAndBoxAndLineText (0.76, 0.230, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\% #/#it{pp}", 0.032);
-    //myMarkerAndBoxAndLineText (0.76, 0.180, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\% #/#it{pp}", 0.032);
+    tl->SetTextSize (30);
+    luPad->cd ();
+    tl->DrawLatexNDC (0.56, 0.86, "15 < #it{p}_{T}^{Z} < 30 GeV");
+    cuPad->cd ();
+    tl->DrawLatexNDC (0.50, 0.86, "30 < #it{p}_{T}^{Z} < 60 GeV");
+    ruPad->cd ();
+    tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
 
-    c2->SaveAs ("../Plots/FinalPlots/iaa_allptz_pTchOnly_onePlot.pdf");
+    ldPad->cd ();
+    tl->DrawLatexNDC (0.56, 0.86, "15 < #it{p}_{T}^{Z} < 30 GeV");
+    cdPad->cd ();
+    tl->DrawLatexNDC (0.50, 0.86, "30 < #it{p}_{T}^{Z} < 60 GeV");
+    rdPad->cd ();
+    tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
+
+    ruPad->cd ();
+    myMarkerAndBoxAndLineText (0.52, 0.780, 3.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "30-80\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
+    myMarkerAndBoxAndLineText (0.52, 0.715, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "10-30\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
+    myMarkerAndBoxAndLineText (0.52, 0.650, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
+
+    rdPad->cd ();
+    myMarkerAndBoxAndLineText (0.52, 0.780, 3.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "30-80\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
+    myMarkerAndBoxAndLineText (0.52, 0.715, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "10-30\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
+    myMarkerAndBoxAndLineText (0.52, 0.650, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\% #/#it{pp}", 0.02 / (gPad->GetWNDC ()));
+    
+
+    c1->SaveAs (Form ("%s/FinalPlots/iaa_allptz.pdf", plotPath.Data ()));
   }
 
 
 
 
+  //{
+  //  TCanvas* c2 = new TCanvas ("c2", "", 800, 800);
+
+  //  const double lMargin = 0.15;
+  //  const double rMargin = 0.04;
+  //  const double bMargin = 0.15;
+  //  const double tMargin = 0.04;
+
+  //  c2->SetLeftMargin (lMargin);
+  //  c2->SetRightMargin (rMargin);
+  //  c2->SetBottomMargin (bMargin);
+  //  c2->SetTopMargin (tMargin);
+
+  //  c2->SetLogx ();
+  //  c2->SetLogy ();
+
+  //  {
+  //    TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
+
+  //    TAxis* xax = h->GetXaxis ();
+  //    TAxis* yax = h->GetYaxis ();
+
+  //    xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
+  //    xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
+  //    xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+  //    //xax->SetTitleFont (43);
+  //    //xax->SetTitleSize (30);
+  //    //xax->SetTitleOffset (1.25);
+  //    xax->SetLabelSize (0);
+
+  //    yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
+  //    const double ymin = 0.08;
+  //    const double ymax = 1200;
+  //    yax->SetRangeUser (ymin, ymax);
+  //    //yax->SetTitleFont (43);
+  //    //yax->SetTitleSize (30);
+  //    //yax->SetTitleOffset (1.30);
+  //    //yax->SetLabelFont (43);
+  //    //yax->SetLabelSize (28);
+
+  //    h->SetLineWidth (0);
+
+  //    h->DrawCopy ("");
+  //    SaferDelete (&h);
+
+  //    tl->SetTextFont (43);
+  //    tl->SetTextSize (36);
+  //    tl->SetTextAlign (21);
+  //    const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
+
+  //    tl->DrawLatex (1,  yoff, "1");
+  //    tl->DrawLatex (2,  yoff, "2");
+  //    tl->DrawLatex (3,  yoff, "3");
+  //    tl->DrawLatex (4,  yoff, "4");
+  //    tl->DrawLatex (5,  yoff, "5");
+  //    tl->DrawLatex (6,  yoff, "6");
+  //    tl->DrawLatex (7,  yoff, "7");
+  //    tl->DrawLatex (10, yoff, "10");
+  //    tl->DrawLatex (20, yoff, "20");
+  //    tl->DrawLatex (30, yoff, "30");
+  //    tl->DrawLatex (40, yoff, "40");
+  //    tl->DrawLatex (60, yoff, "60");
+
+  //    l->SetLineStyle (2);
+  //    l->SetLineWidth (2);
+  //    l->SetLineColor (kBlack);
+  //    l->DrawLine (1, 1, 14, 1);
+  //    l->DrawLine (1, 10, 28, 10);
+  //    l->DrawLine (1, 100, 60, 100);
+  //  }
+
+  //  for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
+  //    for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
+  //      TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
+
+  //      OffsetYAxis (g_syst, pow (10, iPtZ-2), true);
+  //      RecenterGraph (g_syst);
+  //      ResetXErrors (g_syst);
+  //      deltaize (g_syst, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+  //      ResetXErrors (g_syst);
+  //      SetConstantXErrors (g_syst, 0.040, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+
+  //      g_syst->SetMarkerSize (0);
+  //      g_syst->SetLineWidth (1);
+  //      g_syst->SetMarkerColor (finalColors[iCent]);
+  //      g_syst->SetLineColor (finalColors[iCent]);
+  //      g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
+
+  //      g_syst->Draw ( "5P");
+
+  //    } // end loop over iCent
+
+  //    for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
+  //      TGAE* g_stat = make_graph (h_trk_pt_ptz_iaa_stat[iPtZ][iCent]);
+
+  //      OffsetYAxis (g_stat, pow (10, iPtZ-2), true);
+  //      RecenterGraph (g_stat);
+  //      ResetXErrors (g_stat);
+  //      deltaize (g_stat, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+  //      ResetXErrors (g_stat);
+
+  //      Style_t markerStyle = markerStyles[iCent-1];
+  //      float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
+  //      g_stat->SetMarkerStyle (markerStyle);
+  //      g_stat->SetMarkerSize (markerSize);
+  //      g_stat->SetLineWidth (3);
+  //      g_stat->SetMarkerColor (finalColors[iCent]);
+  //      g_stat->SetLineColor (finalColors[iCent]);
+
+  //      ((TGAE*) g_stat->Clone ())->Draw ("P");
+
+  //      markerStyle = FullToOpenMarker (markerStyle);
+  //      markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
+  //      
+  //      g_stat->SetMarkerStyle (markerStyle);
+  //      g_stat->SetMarkerSize (markerSize);
+  //      g_stat->SetLineWidth (0);
+  //      g_stat->SetMarkerColor (kBlack);
+
+  //      ((TGAE*) g_stat->Clone ())->Draw ("P");
+
+  //      SaferDelete (&g_stat);
+  //    } // end loop over iCent
+  //  } // end loop over iPtZ
+
+  //  tl->SetTextColor (kBlack);
+  //  tl->SetTextAlign (11);
+
+  //  tl->SetTextSize (28);
+  //  tl->DrawLatexNDC (0.19, 0.890, "#bf{#it{ATLAS}} Internal");
+  //  tl->SetTextSize (26);
+  //  tl->DrawLatexNDC (0.43, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+  //  tl->DrawLatexNDC (0.43, 0.845, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+
+  //  tl->SetTextSize (24);
+  //  tl->DrawLatex (3.40, 1.28, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
+  //  tl->DrawLatex (6.35, 12.8, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
+  //  tl->DrawLatex (13, 128, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
+
+  //  tl->SetTextSize (26);
+  //  tl->SetTextAlign (11);
+  //  tl->DrawLatexNDC (0.765, 0.320-0.011, "30-80\% #/#it{pp}");
+  //  tl->DrawLatexNDC (0.765, 0.270-0.011, "10-30\% #/#it{pp}");
+  //  tl->DrawLatexNDC (0.765, 0.220-0.011, "0-10\% #/#it{pp}");
+  //  MakeDataBox   (0.78, 0.320, finalFillColors[1], 0.30, markerStyles[0], 1.6);
+  //  MakeDataBox   (0.78, 0.270, finalFillColors[2], 0.30, markerStyles[1], 1.6);
+  //  MakeDataBox   (0.78, 0.220, finalFillColors[3], 0.30, markerStyles[2], 2.2);
+  //  //myMarkerAndBoxAndLineText (0.76, 0.280, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\% #/#it{pp}", 0.032);
+  //  //myMarkerAndBoxAndLineText (0.76, 0.230, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\% #/#it{pp}", 0.032);
+  //  //myMarkerAndBoxAndLineText (0.76, 0.180, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\% #/#it{pp}", 0.032);
+
+  //  c2->SaveAs (Form ("%s/FinalPlots/iaa_allptz_pTchOnly_onePlot.pdf", plotPath.Data ()));
+  //}
+
+
+
+
   {
-    TCanvas* c2_3plots = new TCanvas ("c2_3plots", "", 800, 960);
+    const char* canvasName = "c3";
+    TCanvas* c3 = new TCanvas (canvasName, "", 800, 960);
 
     const double lMargin = 0.12;
     const double rMargin = 0.04;
@@ -1296,9 +1360,9 @@ void MakeFinalPlots () {
     const double y1 = 0.393106;
     const double y2 = 0.686212;
 
-    TPad* uPad = new TPad ("uPad_c2_3plots", "", 0, y2, 1, 1);
-    TPad* cPad = new TPad ("cPad_c2_3plots", "", 0, y1, 1, y2);
-    TPad* dPad = new TPad ("dPad_c2_3plots", "", 0, 0, 1, y1);
+    TPad* uPad = new TPad (Form ("%s_uPad", canvasName), "", 0, y2, 1, 1);
+    TPad* cPad = new TPad (Form ("%s_cPad", canvasName), "", 0, y1, 1, y2);
+    TPad* dPad = new TPad (Form ("%s_dPad", canvasName), "", 0, 0, 1, y1);
 
     uPad->SetLeftMargin (lMargin);
     uPad->SetRightMargin (rMargin);
@@ -1321,7 +1385,7 @@ void MakeFinalPlots () {
     dPad->SetLogx ();
     dPad->SetLogy ();
 
-    c2_3plots->cd ();
+    c3->cd ();
     uPad->Draw ();
     cPad->Draw ();
     dPad->Draw ();
@@ -1337,16 +1401,19 @@ void MakeFinalPlots () {
     ymaxvals[dPad] = 2;
     yminvals[dPad] = 0.12;
 
+    const double xmin = pTchBins[nPtZBins-1][0];
+    const double xmax = pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]];
+
     for (TPad* pad : pads) {
       pad->cd ();
 
-      TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetTitleFont (43);
       xax->SetTitleSize (30);
       xax->SetTitleOffset (3.4);
@@ -1358,7 +1425,6 @@ void MakeFinalPlots () {
       yax->SetRangeUser (yminvals[pad], ymaxvals[pad]);
       if (pad == uPad) {
         yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-        //yax->CenterTitle (true);
         yax->SetTitleFont (43);
         yax->SetTitleSize (30);
         yax->SetTitleOffset (1.80);
@@ -1366,8 +1432,6 @@ void MakeFinalPlots () {
       else {
         yax->SetTitleSize (0);
       }
-      //yax->SetLabelFont (43);
-      //yax->SetLabelSize (28);
       yax->SetLabelSize (0);
 
       h->SetLineWidth (0);
@@ -1382,8 +1446,8 @@ void MakeFinalPlots () {
       tl->SetTextFont (43);
       tl->SetTextSize (32);
       tl->SetTextAlign (21);
-      const double yoff = yminvals[dPad] / exp (0.086 * (log (ymaxvals[dPad]) - log (yminvals[dPad])) / (1.-0-dPad_bMargin));
 
+      const double yoff = yminvals[dPad] / exp (0.086 * (log (ymaxvals[dPad]) - log (yminvals[dPad])) / (1.-0-dPad_bMargin));
       tl->DrawLatex (1,  yoff, "1");
       tl->DrawLatex (2,  yoff, "2");
       tl->DrawLatex (3,  yoff, "3");
@@ -1396,44 +1460,42 @@ void MakeFinalPlots () {
       tl->DrawLatex (30, yoff, "30");
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
+    }
 
-      const double xmin = pTchBins[nPtZBins-1][0];
-      const double xmax = pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+    for (TPad* pad : pads) {
+      pad->cd ();
 
       tl->SetTextAlign (32);
+
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
+      if (yminvals[pad] == 0.12) tl->DrawLatex (xoff, 0.2, "0.2");
+      if (yminvals[pad] <= 0.2) tl->DrawLatex (xoff, 0.3, "0.3");
+      if (yminvals[pad] == 0.3) tl->DrawLatex (xoff, 0.4, "0.4");
+      tl->DrawLatex (xoff, 0.6, "0.6");
+      tl->DrawLatex (xoff, 1, "1");
+      if (ymaxvals[pad] > 2) tl->DrawLatex (xoff, 2, "2");
+      if (ymaxvals[pad] > 3) tl->DrawLatex (xoff, 3, "3");
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
       l->SetLineColor (kBlack);
-
-      for (TPad* pad : pads) {
-        pad->cd ();
-
-        if (yminvals[pad] == 0.12) tl->DrawLatex (xoff, 0.2, "0.2");
-        if (yminvals[pad] <= 0.2) tl->DrawLatex (xoff, 0.3, "0.3");
-        if (yminvals[pad] == 0.3) tl->DrawLatex (xoff, 0.4, "0.4");
-        tl->DrawLatex (xoff, 0.6, "0.6");
-        tl->DrawLatex (xoff, 1, "1");
-        if (ymaxvals[pad] > 2) tl->DrawLatex (xoff, 2, "2");
-        if (ymaxvals[pad] > 3) tl->DrawLatex (xoff, 3, "3");
-
-        l->DrawLine (xmin, 1, xmax, 1);
-      }
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
       pads[iPtZ-2]->cd ();
 
+      const double xmin = pTchBins[nPtZBins-1][0];
+      const double xmax = pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]];
+
       for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
         TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
 
-        //OffsetYAxis (g_syst, pow (10, iPtZ-2), true);
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
-        deltaize (g_syst, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        deltaize (g_syst, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.040, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        SetConstantXErrors (g_syst, 0.040, true, xmin, xmax);
 
         g_syst->SetMarkerSize (0);
         g_syst->SetLineWidth (1);
@@ -1448,10 +1510,9 @@ void MakeFinalPlots () {
       for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
         TGAE* g_stat = make_graph (h_trk_pt_ptz_iaa_stat[iPtZ][iCent]);
 
-        //OffsetYAxis (g_stat, pow (10, iPtZ-2), true);
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
-        deltaize (g_stat, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        deltaize (g_stat, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, xmin, xmax);
         ResetXErrors (g_stat);
 
         Style_t markerStyle = markerStyles[iCent-1];
@@ -1481,7 +1542,7 @@ void MakeFinalPlots () {
     tl->SetTextColor (kBlack);
     tl->SetTextAlign (11);
 
-    c2_3plots->cd ();
+    c3->cd ();
     tl->SetTextSize (30);
     tl->DrawLatexNDC (0.39, 0.930, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (28);
@@ -1493,15 +1554,7 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.673, 0.646, "30 < #it{p}_{T}^{Z} < 60 GeV");
     tl->DrawLatexNDC (0.671, 0.350, "15 < #it{p}_{T}^{Z} < 30 GeV");
 
-    //tl->SetTextSize (28);
-    //uPad->cd ();
-    //tl->DrawLatex (13, 1+ (0.24 * log (ymaxvals[uPad]/yminvals[uPad]) / log (ymaxvals[uPad]/yminvals[uPad])), "#it{p}_{T}^{Z} > 60 GeV");
-    //cPad->cd ();
-    //tl->DrawLatex (13, 1+ (0.24 * log (ymaxvals[cPad]/yminvals[cPad]) / log (ymaxvals[uPad]/yminvals[uPad])), "30 < #it{p}_{T}^{Z} < 60 GeV");
-    //dPad->cd ();
-    //tl->DrawLatex (13, 1+ (0.24 * log (ymaxvals[dPad]/yminvals[dPad]) / log (ymaxvals[uPad]/yminvals[uPad])), "15 < #it{p}_{T}^{Z} < 30 GeV");
-
-    c2_3plots->cd ();
+    c3->cd ();
 
     tl->SetTextSize (28);
     tl->SetTextAlign (11);
@@ -1511,315 +1564,8 @@ void MakeFinalPlots () {
     MakeDataBox   (0.79, 0.260, finalFillColors[1], 0.30, markerStyles[0], 1.6);
     MakeDataBox   (0.79, 0.210, finalFillColors[2], 0.30, markerStyles[1], 1.6);
     MakeDataBox   (0.79, 0.160, finalFillColors[3], 0.30, markerStyles[2], 2.2);
-    //myMarkerAndBoxAndLineText (0.76, 0.280, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\% #/#it{pp}", 0.032);
-    //myMarkerAndBoxAndLineText (0.76, 0.230, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\% #/#it{pp}", 0.032);
-    //myMarkerAndBoxAndLineText (0.76, 0.180, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\% #/#it{pp}", 0.032);
 
-    c2_3plots->SaveAs ("../Plots/FinalPlots/iaa_allptz_pTchOnly_threePlots.pdf");
-  }
-
-
-
-
-  {
-    TCanvas* c3 = new TCanvas ("c3", "", 800, 1600);
-
-    const double lMargin = 0.15;
-    const double rMargin = 0.04;
-    const double bMargin = 0.15;
-    const double tMargin = 0.04;
-
-    const double yPadMiddle = 0.5;
-
-    TPad* uPad = nullptr;
-    TPad* dPad = nullptr;
-
-    uPad = new TPad ("uPad", "", 0, yPadMiddle, 1, 1);
-    dPad = new TPad ("dPad", "", 0, 0, 1, yPadMiddle);
-
-    uPad->SetLeftMargin (lMargin);
-    uPad->SetRightMargin (rMargin);
-    uPad->SetBottomMargin (bMargin);
-    uPad->SetTopMargin (tMargin);
-    dPad->SetLeftMargin (lMargin);
-    dPad->SetRightMargin (rMargin);
-    dPad->SetBottomMargin (bMargin);
-    dPad->SetTopMargin (tMargin);
-
-    uPad->Draw ();
-    dPad->Draw ();
-
-    uPad->SetLogx ();
-    dPad->SetLogx ();
-    uPad->SetLogy ();
-    dPad->SetLogy ();
-
-    {
-      dPad->cd ();
-
-      TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
-
-      TAxis* xax = h->GetXaxis ();
-      TAxis* yax = h->GetYaxis ();
-
-      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-      //xax->SetTitleFont (43);
-      //xax->SetTitleSize (30);
-      //xax->SetTitleOffset (2.5);
-      xax->SetLabelSize (0);
-
-      yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
-      const double ymin = 0.10;
-      const double ymax = 1000;
-      yax->SetRangeUser (ymin, ymax);
-      //yax->SetTitleFont (43);
-      //yax->SetTitleSize (30);
-      //yax->SetTitleOffset (2.6);
-      //yax->SetLabelFont (43);
-      //yax->SetLabelSize (28);
-
-      h->SetLineWidth (0);
-
-      h->DrawCopy ("");
-      SaferDelete (&h);
-
-      tl->SetTextFont (43);
-      tl->SetTextSize (36);
-      tl->SetTextAlign (21);
-      const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      tl->DrawLatex (1,  yoff, "1");
-      tl->DrawLatex (2,  yoff, "2");
-      tl->DrawLatex (3,  yoff, "3");
-      tl->DrawLatex (4,  yoff, "4");
-      tl->DrawLatex (5,  yoff, "5");
-      tl->DrawLatex (6,  yoff, "6");
-      tl->DrawLatex (7,  yoff, "7");
-      tl->DrawLatex (10, yoff, "10");
-      tl->DrawLatex (20, yoff, "20");
-      tl->DrawLatex (30, yoff, "30");
-      tl->DrawLatex (40, yoff, "40");
-      tl->DrawLatex (60, yoff, "60");
-
-      l->SetLineStyle (2);
-      l->SetLineWidth (2);
-      l->SetLineColor (kBlack);
-      l->DrawLine (pTchBins[nPtZBins-1][0], 1, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
-      l->DrawLine (pTchBins[nPtZBins-1][0], 10, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 10);
-      l->DrawLine (pTchBins[nPtZBins-1][0], 100, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 100);
-    } // end loop over iPtZ
-
-    for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-      dPad->cd ();
-
-      for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
-        TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
-
-        OffsetYAxis (g_syst, pow (10, iPtZ-2), true);
-        RecenterGraph (g_syst);
-        ResetXErrors (g_syst);
-        deltaize (g_syst, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-        ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.040, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-
-        g_syst->SetMarkerSize (0);
-        g_syst->SetLineWidth (1);
-        g_syst->SetMarkerColor (finalColors[iCent]);
-        g_syst->SetLineColor (finalColors[iCent]);
-        g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
-
-        g_syst->Draw ( "5P");
-
-      } // end loop over iCent
-
-      for (short iCent = numCentBins-1; iCent >= 1; iCent--) {
-        TGAE* g_stat = make_graph (h_trk_pt_ptz_iaa_stat[iPtZ][iCent]);
-
-        OffsetYAxis (g_stat, pow (10, iPtZ-2), true);
-        RecenterGraph (g_stat);
-        ResetXErrors (g_stat);
-        deltaize (g_stat, 0.06*(iCent-1 - 0.5*(numCentBins-2)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-        ResetXErrors (g_stat);
-
-        Style_t markerStyle = markerStyles[iCent-1];
-        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        g_stat->SetLineWidth (3);
-        g_stat->SetMarkerColor (finalColors[iCent]);
-        g_stat->SetLineColor (finalColors[iCent]);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        markerStyle = FullToOpenMarker (markerStyle);
-        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
-        
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        g_stat->SetLineWidth (0);
-        g_stat->SetMarkerColor (kBlack);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        SaferDelete (&g_stat);
-      } // end loop over iCent
-    } // end loop over iPtZ
-
-
-    {
-      uPad->cd ();
-
-      TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
-
-      TAxis* xax = h->GetXaxis ();
-      TAxis* yax = h->GetYaxis ();
-
-      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-      //xax->SetTitleFont (43);
-      //xax->SetTitleSize (30);
-      //xax->SetTitleOffset (2.5);
-      xax->SetLabelSize (0);
-
-      yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{p}_{T} d#Delta#phi) [GeV^{-1}]");
-      const double ymin = 2e-3;
-      const double ymax = 2e3;
-      yax->SetRangeUser (ymin, ymax);
-      //yax->SetTitleFont (43);
-      //yax->SetTitleSize (30);
-      //yax->SetTitleOffset (2.6);
-      //yax->SetLabelFont (43);
-      //yax->SetLabelSize (28);
-
-      h->SetLineWidth (0);
-
-      h->DrawCopy ("");
-      SaferDelete (&h);
-
-      tl->SetTextFont (43);
-      tl->SetTextSize (36);
-      tl->SetTextAlign (21);
-      const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      tl->DrawLatex (1,  yoff, "1");
-      tl->DrawLatex (2,  yoff, "2");
-      tl->DrawLatex (3,  yoff, "3");
-      tl->DrawLatex (4,  yoff, "4");
-      tl->DrawLatex (5,  yoff, "5");
-      tl->DrawLatex (6,  yoff, "6");
-      tl->DrawLatex (7,  yoff, "7");
-      tl->DrawLatex (10, yoff, "10");
-      tl->DrawLatex (20, yoff, "20");
-      tl->DrawLatex (30, yoff, "30");
-      tl->DrawLatex (40, yoff, "40");
-      tl->DrawLatex (60, yoff, "60");
-    } // end loop over iPtZ
-
-    for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-      uPad->cd ();
-
-      for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
-        TGAE* g_syst = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
-
-        OffsetYAxis (g_syst, pow (10, iPtZ-2), true);
-        RecenterGraph (g_syst);
-        ResetXErrors (g_syst);
-        const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-        deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-        ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.04, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-
-        g_syst->SetMarkerSize (0);
-        g_syst->SetLineWidth (1);
-        g_syst->SetMarkerColor (finalColors[iCent]);
-        g_syst->SetLineColor (finalColors[iCent]);
-        g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
-
-        ((TGAE*) g_syst->Clone ())->Draw ("5P");
-
-        SaferDelete (&g_syst);
-      } // end loop over iCent
-
-      for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
-        TGAE* g_stat = make_graph (h_trk_pt_ptz_sub_stat[iPtZ][iCent]);
-
-        Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
-        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
-
-        OffsetYAxis (g_stat, pow (10, iPtZ-2), true);
-        RecenterGraph (g_stat);
-        ResetXErrors (g_stat);
-        const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-        deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-        ResetXErrors (g_stat);
-
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        g_stat->SetLineWidth (3);
-        g_stat->SetMarkerColor (finalColors[iCent]);
-        g_stat->SetLineColor (finalColors[iCent]);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        markerStyle = FullToOpenMarker (markerStyle);
-        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
-        
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        if (iCent > 0) g_stat->SetLineWidth (0);
-        g_stat->SetMarkerColor (kBlack);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        SaferDelete (&g_stat);
-      } // end loop over iCent
-    } // end loop over iPtZ
-
-    tl->SetTextColor (kBlack);
-    tl->SetTextAlign (11);
-
-    uPad->cd ();
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.26, 0.19, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (26);
-    tl->DrawLatexNDC (0.45, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.45, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-
-    tl->SetTextSize (24);
-    tl->SetTextAngle (-35);
-    tl->DrawLatex (1.8, 0.2, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
-    tl->DrawLatex (3, 2.2, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
-    tl->DrawLatex (5.4, 15, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
-    tl->SetTextAngle (0);
-
-    TLine* dashedLines = new TLine ();
-    dashedLines->SetLineStyle (2);
-    dashedLines->SetLineColor (kBlack);
-
-    dashedLines->DrawLine (1, 17., 50., 2e-3);
-    dashedLines->DrawLine (1, 350., 60., exp (((log(2e-3)-log(17.))/log(50.))*log(60.) + log(350.)));
-
-    myMarkerAndBoxAndLineText (0.65, 0.780, 1.4, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.6, "#it{pp}", 0.032);
-    myMarkerAndBoxAndLineText (0.65, 0.730, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\%", 0.032);
-    myMarkerAndBoxAndLineText (0.82, 0.780, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\%", 0.032);
-    myMarkerAndBoxAndLineText (0.82, 0.730, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\%", 0.032);
-
-    dPad->cd ();
-    tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.26, 0.19, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (26);
-    tl->DrawLatexNDC (0.45, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.45, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-
-    tl->SetTextSize (24);
-    tl->DrawLatex (13, 1.25, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
-    tl->DrawLatex (13, 12.5, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10)");
-    tl->DrawLatex (13, 125, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
-
-    myMarkerAndBoxAndLineText (0.77, 0.280, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\% #/#it{pp}", 0.036);
-    myMarkerAndBoxAndLineText (0.77, 0.230, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\% #/#it{pp}", 0.036);
-    myMarkerAndBoxAndLineText (0.77, 0.180, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\% #/#it{pp}", 0.036);
-
-    c3->SaveAs ("../Plots/FinalPlots/yield_and_iaa_allptz_pTchOnly_onePlot.pdf");
+    c3->SaveAs (Form ("%s/FinalPlots/iaa_allptz_pTchOnly_threePlots.pdf", plotPath.Data ()));
   }
 
 
@@ -1827,7 +1573,7 @@ void MakeFinalPlots () {
 
   {
     TCanvas* c4 = new TCanvas ("c4", "", 800, 800);
-    const double lMargin = 0.15;
+    const double lMargin = 0.12;
     const double rMargin = 0.04;
     const double bMargin = 0.15;
     const double tMargin = 0.04;
@@ -1837,30 +1583,31 @@ void MakeFinalPlots () {
     c4->SetBottomMargin (bMargin);
     c4->SetTopMargin (tMargin);
 
+    c4->SetLogx ();
+    c4->SetLogy ();
+
     short iPtZ = nPtZBins-1;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
+    const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
+    const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-      TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+    {
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{x}_{h,#gamma/Z} = #it{p}_{T}^{ch} #/#it{p}_{T}^{#gamma/Z}");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
+      yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
+      yax->SetLabelSize (0);
       const double ymin = 0.05;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
 
       h->SetLineWidth (0);
@@ -1873,7 +1620,6 @@ void MakeFinalPlots () {
       tl->SetTextAlign (21);
 
       const double yoff = ymin / exp (0.054 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      //const double yoff = ymin - 0.054 * (ymax-ymin) / (1.-tMargin-bMargin);
       if (iPtZ > 2) {
         if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
         tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
@@ -1883,10 +1629,21 @@ void MakeFinalPlots () {
       tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
       tl->DrawLatex (1,     yoff, "1");
 
+      tl->SetTextAlign (32);
+  
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-lMargin));
+      tl->DrawLatex (xoff, 0.1, "0.1");
+      tl->DrawLatex (xoff, 0.2, "0.2");
+      tl->DrawLatex (xoff, 0.3, "0.3");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 5, "5");
+
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (xhZBins[iPtZ][0], 1, xhZBins[iPtZ][nXhZBins[iPtZ]], 1);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     TGE* g = nullptr;
@@ -1921,8 +1678,7 @@ void MakeFinalPlots () {
     TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
     RecenterGraph (g_syst);
     ResetXErrors (g_syst);
-    //SetConstantXErrors (g_syst, 0.060, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
-    SetConstantXErrors (g_syst, 0.060, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+    SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
 
     g_syst->SetMarkerSize (0);
     g_syst->SetMarkerColor (atlasColor);
@@ -1936,7 +1692,6 @@ void MakeFinalPlots () {
 
     RecenterGraph (g_stat);
     ResetXErrors (g_stat);
-    //deltaize (g_stat, 1 + 0.01*(iCent - (numCentBins-1)), true);
 
     g_stat->SetMarkerStyle (kFullDiamond);
     g_stat->SetMarkerSize (2.4);
@@ -1955,11 +1710,16 @@ void MakeFinalPlots () {
 
     SaferDelete (&g_stat);
 
-    myMarkerAndBoxAndLineText (0.33, 0.90-0.012, 1.4, 1001, atlasFillColor, 0.30, atlasColor, kFullDiamond,  2.4, "ATLAS #it{p}_{T}^{Z} > 60 GeV, 0-10% Pb+Pb", 0.032);
-    myMarkerAndBoxAndLineText (0.33, 0.85-0.012, 1.4, 1001, cmsColor,       0.30, cmsColor,   cmsMarker, 1.8, "CMS #it{p}_{T}^{#gamma} > 60 GeV, #it{p}_{T}^{jet} > 30 GeV, 0-10\% Pb+Pb", 0.032);
+    //myMarkerAndBoxAndLineText (0.31, 0.90-0.012, 1.4, 1001, atlasFillColor, 0.30, atlasColor, kFullDiamond,  2.4, "ATLAS #it{p}_{T}^{Z} > 60 GeV, 0-10% Pb+Pb", 0.032);
+    //myMarkerAndBoxAndLineText (0.31, 0.85-0.012, 1.4, 1001, cmsColor,       0.30, cmsColor,   cmsMarker, 1.8, "CMS #it{p}_{T}^{#gamma} > 60 GeV, #it{p}_{T}^{jet} > 30 GeV, 0-10\% Pb+Pb", 0.032);
+    myMarkerAndBoxAndLineText (0.284, 0.888, 1.4, 1001, atlasFillColor, 0.30, atlasColor, kFullDiamond,  2.4, "", 0.032);
+    myMarkerAndBoxAndLineText (0.284, 0.838, 1.4, 1001, cmsColor,       0.30, cmsColor,   cmsMarker, 1.8, "", 0.032);
 
     tl->SetTextColor (kBlack);
+    tl->SetTextSize (26);
     tl->SetTextAlign (11);
+    tl->DrawLatexNDC (0.290, 0.886, "ATLAS #it{p}_{T}^{Z} > 60 GeV, 0-10% Pb+Pb");
+    tl->DrawLatexNDC (0.290, 0.836, "CMS #it{p}_{T}^{#gamma} > 60 GeV, #it{p}_{T}^{jet} > 30 GeV, 0-10\% Pb+Pb");
 
     tl->SetTextSize (32);
     tl->DrawLatexNDC (0.24, 0.300, "#bf{#it{ATLAS}} Internal");
@@ -1967,7 +1727,7 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.26, 0.255, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.26, 0.210, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    c4->SaveAs ("../Plots/FinalPlots/iaa_xhz_cmsComp.pdf");
+    c4->SaveAs (Form ("%s/FinalPlots/iaa_xhz_cmsComp.pdf", plotPath.Data ()));
   }
 
 
@@ -1975,7 +1735,7 @@ void MakeFinalPlots () {
 
   {
     TCanvas* c5 = new TCanvas ("c5", "", 800, 800);
-    const double lMargin = 0.15;
+    const double lMargin = 0.12;
     const double rMargin = 0.04;
     const double bMargin = 0.15;
     const double tMargin = 0.04;
@@ -1985,30 +1745,31 @@ void MakeFinalPlots () {
     c5->SetBottomMargin (bMargin);
     c5->SetTopMargin (tMargin);
 
+    c5->SetLogx ();
+    c5->SetLogy ();
+
     short iPtZ = nPtZBins-1;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
+    const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
+    const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-      TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+    {
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{x}_{h,#gamma/Z} = #it{p}_{T}^{ch} #/#it{p}_{T}^{#gamma/Z}");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
+      yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
+      yax->SetLabelSize (0);
       const double ymin = 0.05;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
 
       h->SetLineWidth (0);
@@ -2021,7 +1782,6 @@ void MakeFinalPlots () {
       tl->SetTextAlign (21);
 
       const double yoff = ymin / exp (0.054 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      //const double yoff = ymin - 0.054 * (ymax-ymin) / (1.-tMargin-bMargin);
       if (iPtZ > 2) {
         if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
         tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
@@ -2031,10 +1791,21 @@ void MakeFinalPlots () {
       tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
       tl->DrawLatex (1,     yoff, "1");
 
+      tl->SetTextAlign (32);
+  
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-lMargin));
+      tl->DrawLatex (xoff, 0.1, "0.1");
+      tl->DrawLatex (xoff, 0.2, "0.2");
+      tl->DrawLatex (xoff, 0.3, "0.3");
+      tl->DrawLatex (xoff, 0.5, "0.5");
+      tl->DrawLatex (xoff, 1, "1");
+      tl->DrawLatex (xoff, 2, "2");
+      tl->DrawLatex (xoff, 3, "3");
+      tl->DrawLatex (xoff, 5, "5");
+
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (xhZBins[iPtZ][0], 1, xhZBins[iPtZ][nXhZBins[iPtZ]], 1);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     TGE* g = nullptr;
@@ -2097,8 +1868,7 @@ void MakeFinalPlots () {
     TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
     RecenterGraph (g_syst);
     ResetXErrors (g_syst);
-    //SetConstantXErrors (g_syst, 0.040, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
-    SetConstantXErrors (g_syst, 0.060, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+    SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
 
     g_syst->SetMarkerSize (0);
     g_syst->SetMarkerColor (atlasColor);
@@ -2112,7 +1882,6 @@ void MakeFinalPlots () {
 
     RecenterGraph (g_stat);
     ResetXErrors (g_stat);
-    //deltaize (g_stat, 1 + 0.01*(iCent - (numCentBins-1)), true);
 
     g_stat->SetMarkerStyle (kFullDiamond);
     g_stat->SetMarkerSize (2.4);
@@ -2131,12 +1900,19 @@ void MakeFinalPlots () {
 
     SaferDelete (&g_stat);
 
-    myMarkerAndBoxAndLineText (0.33, 0.90-0.012, 1.4, 1001, atlasFillColor, 0.30, atlasColor, kFullDiamond,  2.4, "ATLAS #it{p}_{T}^{Z} > 60 GeV, 0-10% Pb+Pb", 0.032);
-    myMarkerAndBoxAndLineText (0.33, 0.85-0.012, 1.4, 1001, phenixColor,    0.30, phenixColor,  phenixMarker, 1.8, "PHENIX 5 < #it{p}_{T}^{#gamma} < 9 GeV, 0-40\% Au+Au", 0.032);
-    myMarkerAndBoxAndLineText (0.33, 0.80-0.012, 1.4, 1001, starColor,      0.20, starColor,    starMarker, 1.8, "STAR 12 < #it{p}_{T}^{#gamma} < 20 GeV, 0-12\% Au+Au", 0.032);
+    //myMarkerAndBoxAndLineText (0.31, 0.90-0.012, 1.4, 1001, atlasFillColor, 0.30, atlasColor, kFullDiamond,  2.4, "ATLAS #it{p}_{T}^{Z} > 60 GeV, 0-10% Pb+Pb", 0.032);
+    //myMarkerAndBoxAndLineText (0.31, 0.85-0.012, 1.4, 1001, phenixColor,    0.30, phenixColor,  phenixMarker, 1.8, "PHENIX 5 < #it{p}_{T}^{#gamma} < 9 GeV, 0-40\% Au+Au", 0.032);
+    //myMarkerAndBoxAndLineText (0.31, 0.80-0.012, 1.4, 1001, starColor,      0.20, starColor,    starMarker, 1.8, "STAR 12 < #it{p}_{T}^{#gamma} < 20 GeV, 0-12\% Au+Au", 0.032);
+    myMarkerAndBoxAndLineText (0.31, 0.888, 1.4, 1001, atlasFillColor, 0.30, atlasColor, kFullDiamond,  2.4, "", 0.032);
+    myMarkerAndBoxAndLineText (0.31, 0.838, 1.4, 1001, phenixColor,    0.30, phenixColor,  phenixMarker, 1.8, "", 0.032);
+    myMarkerAndBoxAndLineText (0.31, 0.788, 1.4, 1001, starColor,      0.20, starColor,    starMarker, 1.8, "", 0.032);
 
     tl->SetTextColor (kBlack);
+    tl->SetTextSize (26);
     tl->SetTextAlign (11);
+    tl->DrawLatexNDC (0.316, 0.85+0.036, "ATLAS #it{p}_{T}^{Z} > 60 GeV, 0-10% Pb+Pb");
+    tl->DrawLatexNDC (0.316, 0.80+0.036, "PHENIX 5 < #it{p}_{T}^{#gamma} < 9 GeV, 0-40\% Au+Au");
+    tl->DrawLatexNDC (0.316, 0.75+0.036, "STAR 12 < #it{p}_{T}^{#gamma} < 20 GeV, 0-12\% Au+Au");
 
     tl->SetTextSize (32);
     tl->DrawLatexNDC (0.24, 0.310, "#bf{#it{ATLAS}} Internal");
@@ -2144,14 +1920,15 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.26, 0.260, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.26, 0.210, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    c5->SaveAs ("../Plots/FinalPlots/iaa_xhz_rhicComp.pdf");
+    c5->SaveAs (Form ("%s/FinalPlots/iaa_xhz_rhicComp.pdf", plotPath.Data ()));
   }
 
 
 
 
   {
-    TCanvas* c6 = new TCanvas ("c6", "", 1600, plotXhZ ? 1200 : 600);
+    const char* canvasName = "c6";
+    TCanvas* c6 = new TCanvas (canvasName, "", 1600, 1200);
 
     const double llMargin = 0.17;
     const double lrMargin = 0.032;
@@ -2172,7 +1949,7 @@ void MakeFinalPlots () {
     const double xPadLCMiddle = a;
     const double xPadCRMiddle = a+b;
 
-    const double yPadMiddle = plotXhZ ? 0.5 : 0.0;
+    const double yPadMiddle = 0.5;
 
     TPad* luPad = nullptr;
     TPad* cuPad = nullptr;
@@ -2181,14 +1958,12 @@ void MakeFinalPlots () {
     TPad* cdPad = nullptr;
     TPad* rdPad = nullptr;
 
-    luPad = new TPad ("luPad", "", 0, yPadMiddle, xPadLCMiddle, 1);
-    cuPad = new TPad ("cuPad", "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
-    ruPad = new TPad ("ruPad", "", xPadCRMiddle, yPadMiddle, 1, 1);
-    if (plotXhZ) {
-      ldPad = new TPad ("ldPad", "", 0, 0, xPadLCMiddle, yPadMiddle);
-      cdPad = new TPad ("cdPad", "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
-      rdPad = new TPad ("rdPad", "", xPadCRMiddle, 0, 1, yPadMiddle);
-    }
+    luPad = new TPad (Form ("%s_luPad", canvasName), "", 0, yPadMiddle, xPadLCMiddle, 1);
+    cuPad = new TPad (Form ("%s_cuPad", canvasName), "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
+    ruPad = new TPad (Form ("%s_ruPad", canvasName), "", xPadCRMiddle, yPadMiddle, 1, 1);
+    ldPad = new TPad (Form ("%s_ldPad", canvasName), "", 0, 0, xPadLCMiddle, yPadMiddle);
+    cdPad = new TPad (Form ("%s_cdPad", canvasName), "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
+    rdPad = new TPad (Form ("%s_rdPad", canvasName), "", xPadCRMiddle, 0, 1, yPadMiddle);
 
     luPad->SetLeftMargin (llMargin);
     luPad->SetRightMargin (lrMargin);
@@ -2202,59 +1977,57 @@ void MakeFinalPlots () {
     cuPad->SetTopMargin (tMargin);
     ruPad->SetBottomMargin (bMargin);
     ruPad->SetTopMargin (tMargin);
-    if (plotXhZ) {
-      ldPad->SetLeftMargin (llMargin);
-      ldPad->SetRightMargin (lrMargin);
-      cdPad->SetLeftMargin (clMargin);
-      cdPad->SetRightMargin (crMargin);
-      rdPad->SetLeftMargin (rlMargin);
-      rdPad->SetRightMargin (rrMargin);
-      ldPad->SetBottomMargin (bMargin);
-      ldPad->SetTopMargin (tMargin);
-      cdPad->SetBottomMargin (bMargin);
-      cdPad->SetTopMargin (tMargin);
-      rdPad->SetBottomMargin (bMargin);
-      rdPad->SetTopMargin (tMargin);
-    }
+    ldPad->SetLeftMargin (llMargin);
+    ldPad->SetRightMargin (lrMargin);
+    cdPad->SetLeftMargin (clMargin);
+    cdPad->SetRightMargin (crMargin);
+    rdPad->SetLeftMargin (rlMargin);
+    rdPad->SetRightMargin (rrMargin);
+    ldPad->SetBottomMargin (bMargin);
+    ldPad->SetTopMargin (tMargin);
+    cdPad->SetBottomMargin (bMargin);
+    cdPad->SetTopMargin (tMargin);
+    rdPad->SetBottomMargin (bMargin);
+    rdPad->SetTopMargin (tMargin);
 
     TPad* uPads[3] = {luPad, cuPad, ruPad};
     TPad* dPads[3] = {ldPad, cdPad, rdPad};
 
     for (int i = 0; i < 3; i++) {
       uPads[i]->Draw ();
-      if (plotXhZ)
-        dPads[i]->Draw ();
+      dPads[i]->Draw ();
     }
     for (int i = 0; i < 3; i++) {
       uPads[i]->SetLogx ();
       uPads[i]->SetLogy ();
-      if (plotXhZ) {
-        dPads[i]->SetLogx ();
-        dPads[i]->SetLogy ();
-      }
+      dPads[i]->SetLogx ();
+      dPads[i]->SetLogy ();
     }
 
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
       uPads[iPtZ-2]->cd ();
 
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetTitleFont (43);
       xax->SetTitleSize (30);
-      xax->SetTitleOffset (plotXhZ ? 2.5 : 1.25);
+      xax->SetTitleOffset (2.5);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{p}_{T} d#Delta#phi) [GeV^{-1}]");
       yax->SetRangeUser (2e-3, 200);
       yax->SetTitleFont (43);
       yax->SetTitleSize (30);
-      yax->SetTitleOffset (plotXhZ ? 2.6 : 1.30);
+      yax->SetTitleOffset (3.2);
       yax->SetLabelFont (43);
       if (iPtZ == 2) yax->SetLabelSize (28);
       else yax->SetLabelSize (0);
@@ -2285,15 +2058,18 @@ void MakeFinalPlots () {
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
       uPads[iPtZ-2]->cd ();
 
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+
       for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
         TGAE* g_syst = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
 
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
         const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-        deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.04, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        SetConstantXErrors (g_syst, 0.04, true, xmin, xmax);
 
         g_syst->SetMarkerSize (0);
         g_syst->SetLineWidth (1);
@@ -2315,7 +2091,7 @@ void MakeFinalPlots () {
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
         const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-        deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xmin, xmax);
         ResetXErrors (g_stat);
 
         g_stat->SetMarkerStyle (markerStyle);
@@ -2356,125 +2132,128 @@ void MakeFinalPlots () {
     } // end loop over iPtZ
 
 
-    if (plotXhZ) {
-      for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-        dPads[iPtZ-2]->cd ();
+    for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
+      dPads[iPtZ-2]->cd ();
 
-        TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+      const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-        TAxis* xax = h->GetXaxis ();
-        TAxis* yax = h->GetYaxis ();
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
-        xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
-        const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
-        xax->SetRangeUser (xmin, xhZBins[iPtZ][nXhZBins[iPtZ]]);
-        xax->SetTitleFont (43);
-        xax->SetTitleSize (30);
-        xax->SetTitleOffset (plotXhZ ? 2.5 : 1.25);
-        xax->SetLabelSize (0);
+      TAxis* xax = h->GetXaxis ();
+      TAxis* yax = h->GetYaxis ();
 
-        yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
-        yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{x} d#Delta#phi)");
-        yax->SetRangeUser (5e-3, 4e3);
-        yax->SetTitleFont (43);
-        yax->SetTitleSize (30);
-        yax->SetTitleOffset (plotXhZ ? 2.6 : 1.30);
-        yax->SetLabelFont (43);
-        if (iPtZ == 2) yax->SetLabelSize (28);
-        else yax->SetLabelSize (0);
+      xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
+      xax->SetRangeUser (xmin, xmax);
+      xax->SetTitleFont (43);
+      xax->SetTitleSize (30);
+      xax->SetTitleOffset (2.5);
+      xax->SetLabelSize (0);
 
-        h->SetLineWidth (0);
+      yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
+      yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{x} d#Delta#phi)");
+      yax->SetRangeUser (5e-3, 4e3);
+      yax->SetTitleFont (43);
+      yax->SetTitleSize (30);
+      yax->SetTitleOffset (3.2);
+      yax->SetLabelFont (43);
+      if (iPtZ == 2) yax->SetLabelSize (28);
+      else yax->SetLabelSize (0);
 
-        h->DrawCopy ("");
-        SaferDelete (&h);
+      h->SetLineWidth (0);
 
-        tl->SetTextFont (43);
-        tl->SetTextSize (28);
-        tl->SetTextAlign (21);
-        const double yoff = 1.95e-3;
-        if (iPtZ > 2) {
-          if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
-          else tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
-        }
-        tl->DrawLatex (1e-1,  yoff, "10^{-1}");
-        tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
-        tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
-        tl->DrawLatex (1,     yoff, "1");
-      } // end loop over iPtZ
+      h->DrawCopy ("");
+      SaferDelete (&h);
 
-      for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-        dPads[iPtZ-2]->cd ();
+      tl->SetTextFont (43);
+      tl->SetTextSize (28);
+      tl->SetTextAlign (21);
+      const double yoff = 1.95e-3;
+      if (iPtZ > 2) {
+        if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
+        else tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
+      }
+      if (iPtZ >= 3) tl->DrawLatex (1e-1,  yoff, "10^{-1}");
+      tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
+      tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
+      tl->DrawLatex (1,     yoff, "1");
+    } // end loop over iPtZ
 
-        for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
-          TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->Clone ();
+    for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
+      dPads[iPtZ-2]->cd ();
 
-          RecenterGraph (g_syst);
-          ResetXErrors (g_syst);
-          const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-          deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
-          ResetXErrors (g_syst);
-          SetConstantXErrors (g_syst, 0.04, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+      const double xmin = (iPtZ == 2 ? 1./8. : xhZBins[iPtZ][0]);
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-          g_syst->SetMarkerSize (0);
-          g_syst->SetLineWidth (1);
-          g_syst->SetMarkerColor (finalColors[iCent]);
-          g_syst->SetLineColor (finalColors[iCent]);
-          g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
+      for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
+        TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->Clone ();
 
-          ((TGAE*) g_syst->Clone ())->Draw ("5P");
+        RecenterGraph (g_syst);
+        ResetXErrors (g_syst);
+        const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
+        deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xmin, xmax);
+        ResetXErrors (g_syst);
+        SetConstantXErrors (g_syst, 0.04, true, xmin, xmax);
 
-          SaferDelete (&g_syst);
-        } // end loop over iCent
+        g_syst->SetMarkerSize (0);
+        g_syst->SetLineWidth (1);
+        g_syst->SetMarkerColor (finalColors[iCent]);
+        g_syst->SetLineColor (finalColors[iCent]);
+        g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
 
-        for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
-          TGAE* g_stat = make_graph (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]);
+        ((TGAE*) g_syst->Clone ())->Draw ("5P");
 
-          Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
-          float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+        SaferDelete (&g_syst);
+      } // end loop over iCent
 
-          RecenterGraph (g_stat);
-          ResetXErrors (g_stat);
-          const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-          deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
-          ResetXErrors (g_stat);
+      for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
+        TGAE* g_stat = make_graph (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]);
 
+        Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
+        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+
+        RecenterGraph (g_stat);
+        ResetXErrors (g_stat);
+        const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
+        deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xmin, xmax);
+        ResetXErrors (g_stat);
+
+        g_stat->SetMarkerStyle (markerStyle);
+        g_stat->SetMarkerSize (markerSize);
+        g_stat->SetLineWidth (3);
+        g_stat->SetMarkerColor (finalColors[iCent]);
+        g_stat->SetLineColor (finalColors[iCent]);
+
+        ((TGAE*) g_stat->Clone ())->Draw ("P");
+
+        if (iCent != 0) {
+          markerStyle = FullToOpenMarker (markerStyle);
+          markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+          
           g_stat->SetMarkerStyle (markerStyle);
           g_stat->SetMarkerSize (markerSize);
-          g_stat->SetLineWidth (3);
-          g_stat->SetMarkerColor (finalColors[iCent]);
-          g_stat->SetLineColor (finalColors[iCent]);
+          if (iCent > 0) g_stat->SetLineWidth (0);
+          g_stat->SetMarkerColor (kBlack);
 
           ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-          if (iCent != 0) {
-            markerStyle = FullToOpenMarker (markerStyle);
-            markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-            
-            g_stat->SetMarkerStyle (markerStyle);
-            g_stat->SetMarkerSize (markerSize);
-            if (iCent > 0) g_stat->SetLineWidth (0);
-            g_stat->SetMarkerColor (kBlack);
-
-            ((TGAE*) g_stat->Clone ())->Draw ("P");
+        }
+        else {
+          TLine* g_stat_line = new TLine ();
+          g_stat_line->SetLineWidth (2);
+          g_stat_line->SetLineColor (kBlack);
+          for (int i = 0; i < g_stat->GetN (); i++) {
+            double x, y, yhi, ylo;
+            g_stat->GetPoint (i, x, y);
+            yhi = y + g_stat->GetErrorYhigh (i);
+            ylo = y - g_stat->GetErrorYlow (i);
+            g_stat_line->DrawLine (x, ylo, x, yhi);
           }
-          else {
-            TLine* g_stat_line = new TLine ();
-            g_stat_line->SetLineWidth (2);
-            g_stat_line->SetLineColor (kBlack);
-            for (int i = 0; i < g_stat->GetN (); i++) {
-              double x, y, yhi, ylo;
-              g_stat->GetPoint (i, x, y);
-              yhi = y + g_stat->GetErrorYhigh (i);
-              ylo = y - g_stat->GetErrorYlow (i);
-              g_stat_line->DrawLine (x, ylo, x, yhi);
-            }
-            SaferDelete (&g_stat_line);
-          }
+          SaferDelete (&g_stat_line);
+        }
 
-          SaferDelete (&g_stat);
-        } // end loop over iCent
-      } // end loop over iPtZ
-    }
+        SaferDelete (&g_stat);
+      } // end loop over iCent
+    } // end loop over iPtZ
 
     tl->SetTextColor (kBlack);
     tl->SetTextAlign (11);
@@ -2483,17 +2262,15 @@ void MakeFinalPlots () {
     tl->SetTextSize (32);
     tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (28);
-    tl->DrawLatexNDC (0.22, 0.79, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.22, 0.73, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.21, 0.79, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.21, 0.73, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    if (plotXhZ) {
-      ldPad->cd ();
-      tl->SetTextSize (32);
-      tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
-      tl->SetTextSize (28);
-      tl->DrawLatexNDC (0.22, 0.79, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-      tl->DrawLatexNDC (0.22, 0.73, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    }
+    ldPad->cd ();
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.21, 0.86, "#bf{#it{ATLAS}} Internal");
+    tl->SetTextSize (28);
+    tl->DrawLatexNDC (0.21, 0.79, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.21, 0.73, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (30);
     luPad->cd ();
@@ -2503,14 +2280,12 @@ void MakeFinalPlots () {
     ruPad->cd ();
     tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
 
-    if (plotXhZ) {
-      ldPad->cd ();
-      tl->DrawLatexNDC (0.56, 0.86, "15 < #it{p}_{T}^{Z} < 30 GeV");
-      cdPad->cd ();
-      tl->DrawLatexNDC (0.50, 0.86, "30 < #it{p}_{T}^{Z} < 60 GeV");
-      rdPad->cd ();
-      tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
-    }
+    ldPad->cd ();
+    tl->DrawLatexNDC (0.56, 0.86, "15 < #it{p}_{T}^{Z} < 30 GeV");
+    cdPad->cd ();
+    tl->DrawLatexNDC (0.50, 0.86, "30 < #it{p}_{T}^{Z} < 60 GeV");
+    rdPad->cd ();
+    tl->DrawLatexNDC (0.60, 0.86, "#it{p}_{T}^{Z} > 60 GeV");
 
     cuPad->cd ();
     myMarkerAndBoxAndLineText (0.22, 0.280, 3.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.8, "#it{pp}", 0.016 / (gPad->GetWNDC ()));
@@ -2519,16 +2294,14 @@ void MakeFinalPlots () {
     myMarkerAndBoxAndLineText (0.22, 0.280, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "Pb+Pb 10-30\%", 0.016 / (gPad->GetWNDC ()));
     myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "Pb+Pb 0-10\%", 0.016 / (gPad->GetWNDC ()));
 
-    if (plotXhZ) {
-      cdPad->cd ();
-      myMarkerAndBoxAndLineText (0.22, 0.280, 3.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.8, "#it{pp}", 0.016 / (gPad->GetWNDC ()));
-      myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "Pb+Pb 30-80\%", 0.016 / (gPad->GetWNDC ()));
-      rdPad->cd ();
-      myMarkerAndBoxAndLineText (0.22, 0.280, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "Pb+Pb 10-30\%", 0.016 / (gPad->GetWNDC ()));
-      myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "Pb+Pb 0-10\%", 0.016 / (gPad->GetWNDC ()));
-    }
+    cdPad->cd ();
+    myMarkerAndBoxAndLineText (0.22, 0.280, 3.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.8, "#it{pp}", 0.016 / (gPad->GetWNDC ()));
+    myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "Pb+Pb 30-80\%", 0.016 / (gPad->GetWNDC ()));
+    rdPad->cd ();
+    myMarkerAndBoxAndLineText (0.22, 0.280, 3.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "Pb+Pb 10-30\%", 0.016 / (gPad->GetWNDC ()));
+    myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "Pb+Pb 0-10\%", 0.016 / (gPad->GetWNDC ()));
 
-    c6->SaveAs (plotXhZ ? "../Plots/FinalPlots/yield_allptz.pdf" : "../Plots/FinalPlots/yield_allptz_pTchOnly.pdf");
+    c6->SaveAs (Form ("%s/FinalPlots/yield_allptz.pdf", plotPath.Data ()));
   }
 
 
@@ -2549,13 +2322,16 @@ void MakeFinalPlots () {
     c6b->SetLogx ();
     c6b->SetLogy ();
 
-    TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
+    const double xmin = pTchBins[nPtZBins-1][0];
+    const double xmax = pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]];
+
+    TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
     TAxis* xax = h->GetXaxis ();
     TAxis* yax = h->GetYaxis ();
 
     xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-    xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+    xax->SetRangeUser (xmin, xmax);
     xax->SetTitleFont (43);
     xax->SetTitleSize (30);
     xax->SetTitleOffset (1.3);
@@ -2601,9 +2377,9 @@ void MakeFinalPlots () {
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
         const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-        deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.04, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        SetConstantXErrors (g_syst, 0.04, true, xmin, xmax);
 
         g_syst->SetMarkerSize (0);
         g_syst->SetLineWidth (1);
@@ -2626,7 +2402,7 @@ void MakeFinalPlots () {
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
         const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-        deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+        deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, xmin, xmax);
         ResetXErrors (g_stat);
 
         g_stat->SetMarkerStyle (markerStyle);
@@ -2682,18 +2458,6 @@ void MakeFinalPlots () {
     tl->DrawLatex (14, 30, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{2})");
     tl->SetTextAngle (0);
 
-    //TLine* dashedLines = new TLine ();
-    //dashedLines->SetLineStyle (2);
-    //dashedLines->SetLineColor (kBlack);
-
-    //dashedLines->DrawLine (1, 21518.047, 40, 1.30*4);
-    //dashedLines->DrawLine (1, 70, 14, 1.30*0.15);
-
-    //myMarkerAndBoxAndLineText (0.30, 0.245, 1.4, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.6, "#it{pp}", 0.032);
-    //myMarkerAndBoxAndLineText (0.30, 0.200, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\%", 0.032);
-    //myMarkerAndBoxAndLineText (0.47, 0.245, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\%", 0.032);
-    //myMarkerAndBoxAndLineText (0.47, 0.200, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\%", 0.032);
-
     tl->SetTextSize (28);
     tl->SetTextAlign (11);
     tl->DrawLatexNDC (0.345, 0.270-0.009, "#it{pp}");
@@ -2705,147 +2469,8 @@ void MakeFinalPlots () {
     MakeDataBox   (0.36, 0.190, finalFillColors[2], 0.30, markerStyles[1], 1.6);
     MakeDataBox   (0.36, 0.150, finalFillColors[3], 0.30, markerStyles[2], 2.2);
 
-    c6b->SaveAs ("../Plots/FinalPlots/yield_allptz_pTchOnly_onePlot.pdf");
+    c6b->SaveAs (Form ("%s/FinalPlots/yield_allptz_pTchOnly_onePlot.pdf", plotPath.Data ()));
   }
-
-
-
-
-  //{
-  //  TCanvas* c6c = new TCanvas ("c6c", "", 800, 800);
-
-  //  const double lMargin = 0.15;
-  //  const double rMargin = 0.04;
-  //  const double bMargin = 0.15;
-  //  const double tMargin = 0.04;
-
-  //  c6c->SetLeftMargin (lMargin);
-  //  c6c->SetRightMargin (rMargin);
-  //  c6c->SetBottomMargin (0.12);
-  //  c6c->SetTopMargin (0.04);
-
-  //  c6c->SetLogx ();
-  //  c6c->SetLogy ();
-
-  //  TH1D* h = new TH1D ("", "", nXhZBins[nPtZBins-1], xhZBins[nPtZBins-1]);
-
-  //  TAxis* xax = h->GetXaxis ();
-  //  TAxis* yax = h->GetYaxis ();
-
-  //  xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
-  //  xax->SetRangeUser (xhZBins[nPtZBins-1][0], xhZBins[nPtZBins-1][nXhZBins[nPtZBins-1]]);
-  //  //xax->SetTitleFont (43);
-  //  //xax->SetTitleSize (30);
-  //  //xax->SetTitleOffset (1.25);
-  //  xax->SetLabelSize (0);
-
-  //  yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{x} d#Delta#phi)");
-  //  const double ymin = 5e-3;
-  //  const double ymax = 4e7;
-  //  yax->SetRangeUser (ymin, ymax);
-  //  //yax->SetTitleFont (43);
-  //  //yax->SetTitleSize (30);
-  //  //yax->SetTitleOffset (1.30);
-  //  //yax->SetLabelFont (43);
-  //  //yax->SetLabelSize (28);
-
-  //  h->SetLineWidth (0);
-
-  //  h->DrawCopy ("");
-  //  SaferDelete (&h);
-
-  //  tl->SetTextFont (43);
-  //  tl->SetTextSize (36);
-  //  tl->SetTextAlign (21);
-  //  const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-  //  tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
-  //  tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
-  //  tl->DrawLatex (1e-1,  yoff, "10^{-1}");
-  //  tl->DrawLatex (2e-1,  yoff, "2#times10^{-1}");
-  //  tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
-  //  tl->DrawLatex (1,     yoff, "1");
-
-  //  for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-  //    for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
-  //      TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->Clone ();
-
-  //      OffsetYAxis (g_syst, pow (100, iPtZ-2), true);
-  //      RecenterGraph (g_syst);
-  //      ResetXErrors (g_syst);
-  //      const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-  //      deltaize (g_syst, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-  //      ResetXErrors (g_syst);
-  //      SetConstantXErrors (g_syst, 0.04, true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-
-  //      g_syst->SetMarkerSize (0);
-  //      g_syst->SetLineWidth (1);
-  //      g_syst->SetMarkerColor (finalColors[iCent]);
-  //      g_syst->SetLineColor (finalColors[iCent]);
-  //      g_syst->SetFillColorAlpha (finalFillColors[iCent], 0.3);
-
-  //      ((TGAE*) g_syst->Clone ())->Draw ("5P");
-
-  //      SaferDelete (&g_syst);
-  //    } // end loop over iCent
-
-  //    for (short iCent = numCentBins-1; iCent >= 0; iCent--) {
-  //      TGAE* g_stat = make_graph (h_trk_xhz_ptz_sub_stat[iPtZ][iCent]);
-
-  //      Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
-  //      float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
-
-  //      OffsetYAxis (g_stat, pow (100, iPtZ-2), true);
-  //      RecenterGraph (g_stat);
-  //      ResetXErrors (g_stat);
-  //      const short iCentDelta = (iCent == 0 ? numCentBins-1 : iCent-1);
-  //      deltaize (g_stat, 0.05*(iCentDelta - 0.5*(numCentBins-1)), true, pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
-  //      ResetXErrors (g_stat);
-
-  //      g_stat->SetMarkerStyle (markerStyle);
-  //      g_stat->SetMarkerSize (markerSize);
-  //      g_stat->SetLineWidth (3);
-  //      g_stat->SetMarkerColor (finalColors[iCent]);
-  //      g_stat->SetLineColor (finalColors[iCent]);
-
-  //      ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-  //      markerStyle = FullToOpenMarker (markerStyle);
-  //      markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.2 : 1.6);
-  //      
-  //      g_stat->SetMarkerStyle (markerStyle);
-  //      g_stat->SetMarkerSize (markerSize);
-  //      if (iCent > 0) g_stat->SetLineWidth (0);
-  //      g_stat->SetMarkerColor (kBlack);
-
-  //      ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-  //      SaferDelete (&g_stat);
-  //    } // end loop over iCent
-  //  } // end loop over iPtZ
-
-  //  tl->SetTextColor (kBlack);
-  //  tl->SetTextAlign (11);
-
-  //  tl->SetTextSize (32);
-  //  tl->DrawLatexNDC (0.17, 0.17, "#bf{#it{ATLAS}} Internal");
-  //  tl->SetTextSize (26);
-  //  tl->DrawLatexNDC (0.45, 0.890, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-  //  tl->DrawLatexNDC (0.45, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-
-  //  tl->SetTextSize (24);
-  //  tl->SetTextAngle (-35);
-  //  tl->DrawLatex (6, 0.15, "15 < #it{p}_{T}^{Z} < 30 GeV (#times 1)");
-  //  tl->DrawLatex (9.5, 1.65, "30 < #it{p}_{T}^{Z} < 60 GeV (#times 10^{2})");
-  //  tl->DrawLatex (15, 18, "#it{p}_{T}^{Z} > 60 GeV (#times 10^{4})");
-  //  tl->SetTextAngle (0);
-
-  //  myMarkerAndBoxAndLineText (0.65, 0.780, 1.4, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.6, "#it{pp}", 0.032);
-  //  myMarkerAndBoxAndLineText (0.65, 0.730, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.6, "30-80\%", 0.032);
-  //  myMarkerAndBoxAndLineText (0.82, 0.780, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.6, "10-30\%", 0.032);
-  //  myMarkerAndBoxAndLineText (0.82, 0.730, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.2, "0-10\%", 0.032);
-
-  //  c6c->SaveAs ("../Plots/FinalPlots/yield_allptz_xhZOnly_onePlot.pdf");
-  //}
 
 
 
@@ -2863,39 +2488,31 @@ void MakeFinalPlots () {
     c7->SetBottomMargin (bMargin);
     c7->SetTopMargin (tMargin);
 
+    c7->SetLogx ();
+
     short iPtZ = 4;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      //gPad->SetLogy ();
+    const double xmin = pTchBins[iPtZ][0];
+    const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+    const double ymin = 0.;
+    const double ymax = 3.6;
 
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+    {
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
-      //xax->SetTitleFont (43);
-      //xax->SetTitleSize (36);
-      //xax->SetTitleOffset (2.5);
-      //xax->SetTitleOffset (1.2);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
       yax->SetTitleOffset (1.0 * yax->GetTitleOffset ());
-      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
       yax->SetLabelSize (0);
-      const double ymin = 0.;//0.18;
-      const double ymax = 3.6;//7;
       yax->SetRangeUser (ymin, ymax);
-      //yax->SetTitleFont (43);
-      //yax->SetTitleSize (36);
-      //yax->SetTitleOffset (2.6);
-      //yax->SetLabelFont (43);
-      //yax->SetLabelSize (36);
 
       h->SetLineWidth (0);
 
@@ -2905,9 +2522,7 @@ void MakeFinalPlots () {
       tl->SetTextFont (43);
       tl->SetTextSize (36);
       tl->SetTextAlign (21);
-      //const double yoff = 0.034;
 
-      //const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
       const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
       tl->DrawLatex (1,  yoff, "1");
       tl->DrawLatex (2,  yoff, "2");
@@ -2922,12 +2537,9 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
-      const double xmin = pTchBins[iPtZ][0];
-      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
-
       tl->SetTextAlign (32);
 
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
       tl->DrawLatex (xoff, 0, "0");
       tl->DrawLatex (xoff, 0.5, "0.5");
       tl->DrawLatex (xoff, 1, "1");
@@ -2939,8 +2551,8 @@ void MakeFinalPlots () {
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     for (iPtZ = nPtZBins-1; iPtZ >= 2; iPtZ--) {
@@ -2949,11 +2561,16 @@ void MakeFinalPlots () {
       TGAE* g = (TGAE*) g_hybrid_pth[iPtZ]->Clone ();
       SetMinErrors (g, minModelUnc, false);
       ResetXErrors (g);
-      deltaize (g, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      deltaize (g, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, xmin, xmax);
       ResetXErrors (g);
 
       g->SetFillColorAlpha (finalModelFillColors[iPtZ-1], 0.4);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (finalModelFillColors[iPtZ-1]);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -2962,9 +2579,9 @@ void MakeFinalPlots () {
 
       RecenterGraph (g_syst);
       ResetXErrors (g_syst);
-      deltaize (g_syst, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      deltaize (g_syst, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, xmin, xmax);
       ResetXErrors (g_syst);
-      SetConstantXErrors (g_syst, 0.04, true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      SetConstantXErrors (g_syst, 0.04, true, xmin, xmax);
 
       g_syst->SetMarkerSize (0);
       g_syst->SetLineWidth (1);
@@ -2979,7 +2596,7 @@ void MakeFinalPlots () {
 
       RecenterGraph (g_stat);
       ResetXErrors (g_stat);
-      deltaize (g_stat, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      deltaize (g_stat, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, xmin, xmax);
       ResetXErrors (g_stat);
 
       Style_t markerStyle = markerStyles[iPtZ-2];
@@ -3010,10 +2627,10 @@ void MakeFinalPlots () {
     tl->SetTextAlign (11);
 
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.30, 0.890, "#bf{#it{ATLAS}} Internal");
+    tl->DrawLatexNDC (0.31, 0.890, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (30);
-    tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.34, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.34, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (27);
     tl->SetTextAlign (21);
@@ -3032,12 +2649,16 @@ void MakeFinalPlots () {
     myMarkerAndBoxAndLineText (0.560, 0.630+0.014, 1.4, 1001, finalModelFillColors[2], 0.40, finalModelFillColors[2], -1, 1, "", 0.045);
     myMarkerAndBoxAndLineText (0.464, 0.630+0.014, 1.4, 1001, finalModelFillColors[1], 0.40, finalModelFillColors[1], -1, 1, "", 0.045);
 
-    l->SetLineStyle (2);
-    l->SetLineWidth (2);
-    l->SetLineColor (kBlack);
-    l->DrawLine (pTchBins[nPtZBins-1][0], 1, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
+    l->SetLineStyle (1);
+    l->SetLineWidth (4);
+    l->SetLineColor (finalModelFillColors[3]);
+    l->DrawLineNDC (0.654 - (0.8*0.045) + 0.02 - (0.04*1.4), 0.630+0.014+(0.25*0.045), 0.654 - (0.8*0.045) + 0.02, 0.630+0.014+(0.25*0.045));
+    l->SetLineColor (finalModelFillColors[2]);
+    l->DrawLineNDC (0.560 - (0.8*0.045) + 0.02 - (0.04*1.4), 0.630+0.014+(0.25*0.045), 0.560 - (0.8*0.045) + 0.02, 0.630+0.014+(0.25*0.045));
+    l->SetLineColor (finalModelFillColors[1]);
+    l->DrawLineNDC (0.464 - (0.8*0.045) + 0.02 - (0.04*1.4), 0.630+0.014+(0.25*0.045), 0.464 - (0.8*0.045) + 0.02, 0.630+0.014+(0.25*0.045));
 
-    c7->SaveAs ("../Plots/FinalPlots/iaa_ptch_hybridComp.pdf");
+    c7->SaveAs (Form ("%s/FinalPlots/iaa_ptch_hybridComp.pdf", plotPath.Data ()));
   }
 
 
@@ -3058,38 +2679,30 @@ void MakeFinalPlots () {
     c8->SetTopMargin (tMargin);
 
     c8->SetLogx ();
-    //c8->Divide (2, 1);
+
     short iPtZ = 4;
     const short iCent = 3;
 
+    const double xmin = pTchBins[iPtZ][0];
+    const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+    const double ymin = 0.;
+    const double ymax = 3.6;
+
     {
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
-      //xax->SetTitleFont (43);
-      //xax->SetTitleSize (36);
-      //xax->SetTitleOffset (2.5);
-      //xax->SetTitleOffset (1.2);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
       yax->SetTitleOffset (1.0 * yax->GetTitleOffset ());
-      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      //yax->SetRangeUser (0.05, 10);
       yax->SetLabelSize (0);
-      const double ymin = 0.;
-      const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
-      //yax->SetTitleFont (43);
-      //yax->SetTitleSize (36);
-      //yax->SetTitleOffset (2.6);
-      //yax->SetLabelFont (43);
-      //yax->SetLabelSize (36);
 
       h->SetLineWidth (0);
 
@@ -3099,7 +2712,6 @@ void MakeFinalPlots () {
       tl->SetTextFont (43);
       tl->SetTextSize (36);
       tl->SetTextAlign (21);
-      //const double yoff = 0.034;
 
       const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
       tl->DrawLatex (1,  yoff, "1");
@@ -3115,12 +2727,9 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
-      const double xmin = pTchBins[iPtZ][0];
-      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
-
       tl->SetTextAlign (32);
 
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
       tl->DrawLatex (xoff, 0, "0");
       tl->DrawLatex (xoff, 0.5, "0.5");
       tl->DrawLatex (xoff, 1, "1");
@@ -3132,8 +2741,8 @@ void MakeFinalPlots () {
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     for (iPtZ = nPtZBins-1; iPtZ >= 2; iPtZ--) {
@@ -3143,21 +2752,25 @@ void MakeFinalPlots () {
       TGAE* g = (TGAE*) g_jewel_pth[iPtZ]->Clone ();
       SetMinErrors (g, minModelUnc, false);
       ResetXErrors (g);
-      deltaize (g, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      deltaize (g, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, xmin, xmax);
       ResetXErrors (g);
 
       g->SetFillColorAlpha (finalModelFillColors[iPtZ-1], 0.4);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (finalModelFillColors[iPtZ-1]);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     for (iPtZ = nPtZBins-1; iPtZ >= 2; iPtZ--) {
-      //c7->cd (iPtZ-3+1);
       TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][iCent]->Clone ();
 
       RecenterGraph (g_syst);
       ResetXErrors (g_syst);
-      deltaize (g_syst, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      deltaize (g_syst, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, xmin, xmax);
       ResetXErrors (g_syst);
       SetConstantXErrors (g_syst, 0.04, true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
 
@@ -3170,12 +2783,11 @@ void MakeFinalPlots () {
     }
 
     for (iPtZ = nPtZBins-1; iPtZ >= 2; iPtZ--) {
-      //c7->cd (iPtZ-3+1);
       TGAE* g_stat = make_graph (h_trk_pt_ptz_iaa_stat[iPtZ][iCent]);
 
       RecenterGraph (g_stat);
       ResetXErrors (g_stat);
-      deltaize (g_stat, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, pTchBins[4][0], pTchBins[4][nPtchBins[4]]);
+      deltaize (g_stat, 0.06 * (iPtZ-2 - 0.5*(nPtZBins-3)), true, xmin, xmax);
       ResetXErrors (g_stat);
 
       Style_t markerStyle = markerStyles[iPtZ-2];
@@ -3206,10 +2818,10 @@ void MakeFinalPlots () {
     tl->SetTextAlign (11);
 
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.30, 0.890, "#bf{#it{ATLAS}} Internal");
+    tl->DrawLatexNDC (0.31, 0.890, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (30);
-    tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.34, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.34, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
     tl->SetTextSize (27);
     tl->SetTextAlign (21);
@@ -3228,12 +2840,16 @@ void MakeFinalPlots () {
     myMarkerAndBoxAndLineText (0.560, 0.630+0.014, 1.4, 1001, finalModelFillColors[2], 0.40, finalModelFillColors[2], -1, 1, "", 0.045);
     myMarkerAndBoxAndLineText (0.464, 0.630+0.014, 1.4, 1001, finalModelFillColors[1], 0.40, finalModelFillColors[1], -1, 1, "", 0.045);
 
-    l->SetLineStyle (2);
-    l->SetLineWidth (2);
-    l->SetLineColor (kBlack);
-    l->DrawLine (pTchBins[nPtZBins-1][0], 1, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
+    l->SetLineStyle (1);
+    l->SetLineWidth (4);
+    l->SetLineColor (finalModelFillColors[3]);
+    l->DrawLineNDC (0.654 - (0.8*0.045) + 0.02 - (0.04*1.4), 0.630+0.014+(0.25*0.045), 0.654 - (0.8*0.045) + 0.02, 0.630+0.014+(0.25*0.045));
+    l->SetLineColor (finalModelFillColors[2]);
+    l->DrawLineNDC (0.560 - (0.8*0.045) + 0.02 - (0.04*1.4), 0.630+0.014+(0.25*0.045), 0.560 - (0.8*0.045) + 0.02, 0.630+0.014+(0.25*0.045));
+    l->SetLineColor (finalModelFillColors[1]);
+    l->DrawLineNDC (0.464 - (0.8*0.045) + 0.02 - (0.04*1.4), 0.630+0.014+(0.25*0.045), 0.464 - (0.8*0.045) + 0.02, 0.630+0.014+(0.25*0.045));
 
-    c8->SaveAs ("../Plots/FinalPlots/iaa_ptch_jewelComp.pdf");
+    c8->SaveAs (Form ("%s/FinalPlots/iaa_ptch_jewelComp.pdf", plotPath.Data ()));
   }
 
 
@@ -3247,17 +2863,21 @@ void MakeFinalPlots () {
     TCanvas* c9 = new TCanvas ("c_mean_pTch_comb", "", 800, 800);
     c9->cd ();
 
-    TH1D* h = new TH1D ("htemp", "", 1, 5, 120);
+    TH1D* h = new TH1D ("htemp", "", 1, 5, 100);
 
     TAxis* xax = h->GetXaxis ();
     TAxis* yax = h->GetYaxis ();
 
     xax->SetTitle ("#LT#it{p}_{T}^{Z}#GT [GeV]");
-    xax->SetRangeUser (5, 120);
+    xax->SetLabelFont (43);
+    xax->SetLabelSize (34);
+    xax->SetRangeUser (5, 100);
     xax->SetMoreLogLabels ();
 
     yax->SetTitle ("#LT#it{p}_{T}^{ch}#GT [GeV]");
-    yax->SetRangeUser (0, 12);
+    yax->SetLabelFont (43);
+    yax->SetLabelSize (34);
+    yax->SetRangeUser (0, 10);
 
     h->SetLineWidth (0);
     h->SetMarkerSize (0);
@@ -3269,15 +2889,15 @@ void MakeFinalPlots () {
     tl->SetTextAlign (11);
     tl->SetTextSize (32);
     tl->DrawLatexNDC (0.22, 0.87, "#bf{#it{ATLAS}} Internal");
-    myMarkerAndBoxAndLineText (0.31, 0.815, 2.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.5, "#it{pp}", 0.036);
-    myMarkerAndBoxAndLineText (0.31, 0.760, 2.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.5, "30-80\%", 0.036);
-    myMarkerAndBoxAndLineText (0.56, 0.815, 2.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.5, "10-30\%", 0.036);
-    myMarkerAndBoxAndLineText (0.56, 0.760, 2.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\%", 0.036);
+    myMarkerAndBoxAndLineText (0.31, 0.820, 2.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.5, "#it{pp}", 0.036);
+    myMarkerAndBoxAndLineText (0.31, 0.765, 2.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.5, "30-80\%", 0.036);
+    myMarkerAndBoxAndLineText (0.56, 0.820, 2.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.5, "10-30\%", 0.036);
+    myMarkerAndBoxAndLineText (0.56, 0.765, 2.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\%", 0.036);
 
     tl->SetTextSize (28);
     tl->DrawLatexNDC (0.22, 0.26, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    tl->DrawLatexNDC (0.22, 0.21, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.22, 0.705, "2 < #it{p}_{T}^{ch} < 240 GeV");
+    tl->DrawLatexNDC (0.22, 0.215, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.22, 0.715, "2 < #it{p}_{T}^{ch} < 240 GeV");
 
     for (short iCent = 0; iCent < numCentBins; iCent++) {
       TGAE* g = (TGAE*) g_trk_avg_pt_ptz_syst[iCent]->Clone ();
@@ -3332,7 +2952,109 @@ void MakeFinalPlots () {
       SaferDelete (&g);
     } // end loop over iCent
 
-    c9->SaveAs ("../Plots/FinalPlots/mean_ptch.pdf");
+    c9->SaveAs (Form ("%s/FinalPlots/mean_ptch.pdf", plotPath.Data ()));
+  }
+
+
+
+
+  {
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Plots mean number of charged particles opposite the Z
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    TCanvas* c9b = new TCanvas ("c_mean_ntrk_comb", "", 800, 800);
+    c9b->cd ();
+
+    TH1D* h = new TH1D ("htemp", "", 1, 5, 100);
+
+    TAxis* xax = h->GetXaxis ();
+    TAxis* yax = h->GetYaxis ();
+
+    xax->SetTitle ("#LT#it{p}_{T}^{Z}#GT [GeV]");
+    xax->SetLabelFont (43);
+    xax->SetLabelSize (34);
+    xax->SetRangeUser (5, 100);
+    xax->SetMoreLogLabels ();
+
+    yax->SetTitle ("#LTN_{ch}#GT");
+    yax->SetLabelFont (43);
+    yax->SetLabelSize (34);
+    yax->SetRangeUser (0, 8);
+
+    h->SetLineWidth (0);
+    h->SetMarkerSize (0);
+
+    h->DrawCopy ("hist ][");
+    SaferDelete (&h);
+
+    tl->SetTextColor (kBlack);
+    tl->SetTextAlign (11);
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.22, 0.87, "#bf{#it{ATLAS}} Internal");
+    myMarkerAndBoxAndLineText (0.31, 0.710, 2.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.5, "#it{pp}", 0.036);
+    myMarkerAndBoxAndLineText (0.31, 0.655, 2.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.5, "30-80\%", 0.036);
+    myMarkerAndBoxAndLineText (0.56, 0.710, 2.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.5, "10-30\%", 0.036);
+    myMarkerAndBoxAndLineText (0.56, 0.655, 2.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\%", 0.036);
+
+    tl->SetTextSize (28);
+    tl->DrawLatexNDC (0.22, 0.815, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
+    tl->DrawLatexNDC (0.22, 0.765, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.22, 0.605, "2 < #it{p}_{T}^{ch} < 240 GeV");
+
+    for (short iCent = 0; iCent < numCentBins; iCent++) {
+      TGAE* g = (TGAE*) g_avg_ntrk_ptz_syst[iCent]->Clone ();
+
+      g->SetMarkerSize (0);
+      //g->SetLineWidth (0);
+      g->SetLineWidth (1);
+      g->SetLineColor (finalColors[iCent]);
+      g->SetFillColorAlpha (finalFillColors[iCent], 0.3);
+      ((TGAE*)g->Clone ())->Draw ("5P");
+      g->Draw ("2P");
+    } // end loop over iCent
+
+    for (short iCent = 0; iCent < numCentBins; iCent++) {
+      TGAE* g = (TGAE*) g_avg_ntrk_ptz_stat[iCent]->Clone ();
+
+      Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
+      float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+
+      g->SetMarkerStyle (markerStyle);
+      g->SetMarkerSize (markerSize);
+      g->SetMarkerColor (finalColors[iCent]);
+      g->SetLineColor (finalColors[iCent]);
+      g->SetLineWidth (3);
+      ((TGAE*) g->Clone ())->Draw ("P");
+
+      if (iCent != 0) {
+        markerStyle = FullToOpenMarker (markerStyle);
+        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
+          
+        g->SetMarkerStyle (markerStyle);
+        g->SetMarkerSize (markerSize);
+        g->SetLineWidth (0);
+        g->SetMarkerColor (kBlack);
+
+        ((TGAE*) g->Clone ())->Draw ("P");
+      }
+      else {
+        TLine* g_line = new TLine ();
+        g_line->SetLineWidth (2);
+        g_line->SetLineColor (kBlack);
+        for (int i = 0; i < g->GetN (); i++) {
+          double x, y, yhi, ylo;
+          g->GetPoint (i, x, y);
+          yhi = y + g->GetErrorYhigh (i);
+          ylo = y - g->GetErrorYlow (i);
+          g_line->DrawLine (x, ylo, x, yhi);
+        }
+        SaferDelete (&g_line);
+      }
+
+      SaferDelete (&g);
+    } // end loop over iCent
+
+    c9b->SaveAs (Form ("%s/FinalPlots/mean_ntrk.pdf", plotPath.Data ()));
   }
 
 
@@ -3346,16 +3068,20 @@ void MakeFinalPlots () {
     TCanvas* c10 = new TCanvas ("c_mean_xhZ_comb", "", 800, 800);
     c10->cd ();
 
-    TH1D* h = new TH1D ("htemp", "", 1, 5, 120);
+    TH1D* h = new TH1D ("htemp", "", 1, 5, 100);
 
     TAxis* xax = h->GetXaxis ();
     TAxis* yax = h->GetYaxis ();
 
     xax->SetTitle ("#LT#it{p}_{T}^{Z}#GT [GeV]");
-    xax->SetRangeUser (5, 120);
+    xax->SetLabelFont (43);
+    xax->SetLabelSize (34);
+    xax->SetRangeUser (5, 100);
     xax->SetMoreLogLabels ();
 
     yax->SetTitle ("#LT#it{x}_{hZ}#GT");
+    yax->SetLabelFont (43);
+    yax->SetLabelSize (34);
     yax->SetRangeUser (0, 0.30);
 
     h->SetLineWidth (0);
@@ -3368,15 +3094,15 @@ void MakeFinalPlots () {
     tl->SetTextAlign (11);
     tl->SetTextSize (32);
     tl->DrawLatexNDC (0.22, 0.87, "#bf{#it{ATLAS}} Internal");
-    myMarkerAndBoxAndLineText (0.31, 0.815, 2.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.8, "#it{pp}", 0.036);
-    myMarkerAndBoxAndLineText (0.31, 0.760, 2.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "30-80\%", 0.036);
-    myMarkerAndBoxAndLineText (0.56, 0.815, 2.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "10-30\%", 0.036);
-    myMarkerAndBoxAndLineText (0.56, 0.760, 2.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\%", 0.036);
+    myMarkerAndBoxAndLineText (0.31, 0.820, 2.0, 1001, finalFillColors[0], 0.30, finalColors[0], kOpenCircle,     1.8, "#it{pp}", 0.036);
+    myMarkerAndBoxAndLineText (0.31, 0.765, 2.0, 1001, finalFillColors[1], 0.30, finalColors[1], markerStyles[0], 1.8, "30-80\%", 0.036);
+    myMarkerAndBoxAndLineText (0.56, 0.820, 2.0, 1001, finalFillColors[2], 0.30, finalColors[2], markerStyles[1], 1.8, "10-30\%", 0.036);
+    myMarkerAndBoxAndLineText (0.56, 0.765, 2.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "0-10\%", 0.036);
 
     tl->SetTextSize (28);
     tl->DrawLatexNDC (0.22, 0.26, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    tl->DrawLatexNDC (0.22, 0.21, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.22, 0.705, "1/15 < #it{x}_{hZ} < 2");
+    tl->DrawLatexNDC (0.22, 0.215, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
+    tl->DrawLatexNDC (0.22, 0.715, "1/15 < #it{x}_{hZ} < 2");
 
     for (short iCent = 0; iCent < numCentBins; iCent++) {
       TGAE* g = (TGAE*) g_trk_avg_xhz_ptz_syst[iCent]->Clone ();
@@ -3431,14 +3157,15 @@ void MakeFinalPlots () {
       SaferDelete (&g);
     } // end loop over iCent
 
-    c10->SaveAs ("../Plots/FinalPlots/mean_xhz.pdf");
+    c10->SaveAs (Form ("%s/FinalPlots/mean_xhz.pdf", plotPath.Data ()));
   }
 
 
 
 
   {
-    TCanvas* c11 = new TCanvas ("c11", "", 800, 880);
+    const char* canvasName = "c11";
+    TCanvas* c11 = new TCanvas (canvasName, "", 800, 880);
     c11->Draw ();
 
     const double lMargin = 0.15;
@@ -3448,8 +3175,8 @@ void MakeFinalPlots () {
     const double dtMargin = 0;//0.02;
     const double dbMargin = 0.35;
 
-    TPad* uPad = new TPad ("c11_uPad", "", 0, 0.3, 1, 1);
-    TPad* dPad = new TPad ("c11_dPad", "", 0, 0, 1, 0.3);
+    TPad* uPad = new TPad (Form ("%s_uPad", canvasName), "", 0, 0.3, 1, 1);
+    TPad* dPad = new TPad (Form ("%s_dPad", canvasName), "", 0, 0, 1, 0.3);
 
     uPad->SetLeftMargin (lMargin);
     uPad->SetRightMargin (rMargin);
@@ -3467,8 +3194,11 @@ void MakeFinalPlots () {
     uPad->SetLogx ();
     uPad->SetLogy ();
 
+    const double xmin = pTchBins[nPtZBins-1][0];
+    const double xmax =  pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]];
+
     {
-      TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
@@ -3479,7 +3209,7 @@ void MakeFinalPlots () {
       xax->SetTickLength (0.03);
       xax->SetLabelSize (0);
 
-      xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+      xax->SetRangeUser (xmin, xmax);
 
       yax->SetTitle ("(1/N_{Z}) (d^{2}N_{ch} / d#it{p}_{T} d#Delta#phi) [GeV^{-1}]");
       yax->SetTitleFont (43);
@@ -3498,21 +3228,29 @@ void MakeFinalPlots () {
     }
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
-      TGAE* g_pyth = (TGAE*) g_pythia_finepth_ptz[iPtZ]->Clone ();
-      SetMinErrors (g_pyth, 0.10, true);
+      TGAE* g = (TGAE*) g_pythia_finepth_ptz[iPtZ]->Clone ();
+      SetMinErrors (g, 0.10, true);
 
-      OffsetYAxis (g_pyth, pow (10, iPtZ-2), true);
-      RecenterGraph (g_pyth);
-      //ResetXErrors (g_pyth);
+      OffsetYAxis (g, pow (10, iPtZ-2), true);
+      RecenterGraph (g);
+      //ResetXErrors (g);
 
-      //g_pyth->SetMarkerSize (0);
-      //g_pyth->SetLineWidth (1);
-      //g_pyth->SetLineColor (finalColors[iPtZ-1]);
-      g_pyth->SetFillColorAlpha (finalFillColors[iPtZ-1], 0.3);
+      //g->SetMarkerSize (0);
+      //g->SetLineWidth (1);
+      //g->SetLineColor (finalColors[iPtZ-1]);
+      //g->SetFillColorAlpha (finalFillColors[iPtZ-1], 0.3);
 
-      ((TGAE*) g_pyth->Clone ())->Draw ("3");
+      //((TGAE*) g->Clone ())->Draw ("3");
+      //SaferDelete (&g);
 
-      SaferDelete (&g_pyth);
+      g->SetFillColorAlpha (finalFillColors[iPtZ-1], 0.3);
+      ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (finalFillColors[iPtZ-1]);
+      g->SetLineWidth (2);
+      ((TGAE*) g->Clone ())->Draw ("L");
+      SaferDelete (&g);
     }
 
     for (short iPtZ = 2; iPtZ < 5; iPtZ++) {
@@ -3593,12 +3331,21 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.730, 0.835, "60+ (#times 10^{2})");
     tl->DrawLatexNDC (0.730, 0.785, "30-60 (#times 10)");
     tl->DrawLatexNDC (0.730, 0.735, "15-30 (#times 1)");
-    myMarkerAndBoxAndLineText (0.72, 0.840, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], -1, 1.6, "", 0.036);
-    myMarkerAndBoxAndLineText (0.63, 0.840, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], FullToOpenMarker (markerStyles[2]), 2.2, "", 0.036);
-    myMarkerAndBoxAndLineText (0.72, 0.790, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], -1, 1.6, "", 0.036);
-    myMarkerAndBoxAndLineText (0.63, 0.790, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], FullToOpenMarker (markerStyles[1]), 1.6, "", 0.036);
-    myMarkerAndBoxAndLineText (0.72, 0.740, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], -1, 1.6, "", 0.036);
-    myMarkerAndBoxAndLineText (0.63, 0.740, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], FullToOpenMarker (markerStyles[0]), 1.6, "", 0.036);
+    myMarkerAndBoxAndLineText (0.72, 0.840-0.002, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], -1, 1.6, "", 0.036);
+    myMarkerAndBoxAndLineText (0.63, 0.840-0.002, 1.4, 1001, finalFillColors[3], 0.30, finalColors[3], FullToOpenMarker (markerStyles[2]), 2.2, "", 0.036);
+    myMarkerAndBoxAndLineText (0.72, 0.790-0.002, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], -1, 1.6, "", 0.036);
+    myMarkerAndBoxAndLineText (0.63, 0.790-0.002, 1.4, 1001, finalFillColors[2], 0.30, finalColors[2], FullToOpenMarker (markerStyles[1]), 1.6, "", 0.036);
+    myMarkerAndBoxAndLineText (0.72, 0.740-0.002, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], -1, 1.6, "", 0.036);
+    myMarkerAndBoxAndLineText (0.63, 0.740-0.002, 1.4, 1001, finalFillColors[1], 0.30, finalColors[1], FullToOpenMarker (markerStyles[0]), 1.6, "", 0.036);
+
+    l->SetLineStyle (1);
+    l->SetLineWidth (2);
+    l->SetLineColor (finalModelFillColors[3]);
+    l->DrawLineNDC (0.72 - (0.8*0.036) + 0.02 - (0.04*1.4), 0.840-0.002+(0.25*0.036), 0.72 - (0.8*0.036) + 0.02, 0.840-0.002+(0.25*0.036));
+    l->SetLineColor (finalModelFillColors[2]);
+    l->DrawLineNDC (0.72 - (0.8*0.036) + 0.02 - (0.04*1.4), 0.790-0.002+(0.25*0.036), 0.72 - (0.8*0.036) + 0.02, 0.790-0.002+(0.25*0.036));
+    l->SetLineColor (finalModelFillColors[1]);
+    l->DrawLineNDC (0.72 - (0.8*0.036) + 0.02 - (0.04*1.4), 0.740-0.002+(0.25*0.036), 0.72 - (0.8*0.036) + 0.02, 0.740-0.002+(0.25*0.036));
 
     tl->SetTextSize (22);
     tl->DrawLatexNDC (0.565, 0.885, "Data");
@@ -3610,7 +3357,7 @@ void MakeFinalPlots () {
     dPad->SetLogx ();
 
     {
-      TH1D* h = new TH1D ("", "", nPtchBins[nPtZBins-1], pTchBins[nPtZBins-1]);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
@@ -3621,7 +3368,7 @@ void MakeFinalPlots () {
       xax->SetTitleOffset (3.6);
       xax->SetTickLength (0.03 * (1.-dtMargin-dbMargin) / dPad->GetHNDC ());
       xax->SetLabelSize (0);
-      xax->SetRangeUser (pTchBins[nPtZBins-1][0], pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]]);
+      xax->SetRangeUser (xmin, xmax);
 
       yax->SetTitle ("MC / data");
       yax->SetTitleFont (43);
@@ -3657,7 +3404,7 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
-      TLine* line = new TLine (pTchBins[nPtZBins-1][0], 1., pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1.);
+      TLine* line = new TLine (xmin, 1, xmax, 1);
       line->SetLineColor (kBlack);
       line->SetLineStyle (2);
       line->Draw ("same");
@@ -3738,16 +3485,6 @@ void MakeFinalPlots () {
         g_ratio_stat_line->DrawLine (x, ylo, x, yhi);
       }
 
-      //ResetXErrors (g_ratio_stat);
-
-      //markerStyle = kDot;
-      //
-      //g_ratio_stat->SetMarkerStyle (markerStyle);
-      //g_ratio_stat->SetMarkerSize (markerSize);
-      //g_ratio_stat->SetMarkerColor (kBlack);
-
-      //((TGAE*) g_ratio_stat->Clone ())->Draw ("P");
-
       SaferDelete (&g_ratio_stat);
       SaferDelete (&g_ratio_stat_line);
 
@@ -3756,7 +3493,7 @@ void MakeFinalPlots () {
       SaferDelete (&g_pyth);
     }
 
-    c11->SaveAs ("../Plots/FinalPlots/yield_allptz_pTch_pythiaComp_onePlot.pdf");
+    c11->SaveAs (Form ("%s/FinalPlots/yield_allptz_pTch_pythiaComp_onePlot.pdf", plotPath.Data ()));
   }
 
 
@@ -3774,13 +3511,16 @@ void MakeFinalPlots () {
     c12->SetBottomMargin (bMargin);
     c12->SetTopMargin (tMargin);
 
+    c12->SetLogx ();
+    c12->SetLogy ();
+
     const short iPtZ = 3;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
+    const double xmin = pTchBins[iPtZ][0];
+    const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
 
+    {
       TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
 
       TAxis* xax = h->GetXaxis ();
@@ -3788,18 +3528,14 @@ void MakeFinalPlots () {
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
       yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
-      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      //yax->SetMoreLogLabels ();
       yax->SetLabelSize (0);
       const double ymin = 0.18;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
 
       h->SetLineWidth (0);
@@ -3826,12 +3562,9 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
-      const double xmin = pTchBins[iPtZ][0];
-      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
-
       tl->SetTextAlign (32);
 
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
       tl->DrawLatex (xoff, 0.2, "0.2");
       tl->DrawLatex (xoff, 0.3, "0.3");
       tl->DrawLatex (xoff, 0.4, "0.4");
@@ -3845,25 +3578,35 @@ void MakeFinalPlots () {
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     {
       TGAE* g = (TGAE*) g_hybrid_pth[iPtZ]->Clone ();
+      RecenterGraph (g);
       SetMinErrors (g, minModelUnc, true);
 
       g->SetFillColorAlpha (hybridColor, hybridAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (hybridColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
       TGAE* g = (TGAE*) g_scetg_pth[iPtZ]->Clone ();
-      SetMinErrors (g, minModelUnc, true);
   
       g->SetFillColorAlpha (scetgColor, scetgAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (scetgColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -3873,20 +3616,26 @@ void MakeFinalPlots () {
   
       g->SetFillColorAlpha (jewelColor, jewelAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (jewelColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
-      TGraph* g = (TGraph*) g_colbt_pth[iPtZ]->Clone ();
+      TGAE* g = (TGAE*) g_colbt_pth[iPtZ]->Clone ();
+      RecenterGraph (g);
+      ResetXErrors (g);
 
-      TGAE* matched = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
-      RecenterGraph (matched);
-      RecenterGraph (g, matched);
-      SaferDelete (&matched);
-
+      g->SetFillColorAlpha (colbtColor, colbtAlpha);
+      ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
       g->SetLineColor (colbtColor);
       g->SetLineWidth (4);
-      ((TGraph*) g->Clone ())->Draw ("L");
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -3895,12 +3644,10 @@ void MakeFinalPlots () {
 
       RecenterGraph (g_syst);
       ResetXErrors (g_syst);
-      SetConstantXErrors (g_syst, 0.060, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
 
       g_syst->SetMarkerSize (0);
       g_syst->SetLineWidth (1);
-      //g_syst->SetLineColor (kBlack);
-      //g_syst->SetFillColorAlpha (kGray, 0.3);
       g_syst->SetLineColor (finalColors[iPtZ-1]);
       g_syst->SetFillColorAlpha (finalFillColors[iPtZ-1], 0.3);
 
@@ -3974,23 +3721,24 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    //tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.50, 0.750, "30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->SetTextSize (25);
+    tl->DrawLatexNDC (0.43-0.009, 0.760-0.010, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->DrawLatexNDC (0.43-0.009, 0.715-0.010, "Hybrid Model");
+    tl->DrawLatexNDC (0.78-0.009, 0.715-0.010, "CoLBT-hydro");
+    tl->DrawLatexNDC (0.43-0.009, 0.670-0.010, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.78-0.009, 0.670-0.010, "JEWEL");
 
-    tl->SetTextSize (23);
-    tl->DrawLatexNDC (0.44-0.007, 0.760-0.009, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
-    tl->DrawLatexNDC (0.44-0.007, 0.715-0.009, "Hybrid Model");
-    tl->DrawLatexNDC (0.78-0.007, 0.715-0.009, "CoLBT-hydro");
-    tl->DrawLatexNDC (0.44-0.007, 0.670-0.009, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
-    tl->DrawLatexNDC (0.78-0.007, 0.670-0.009, "JEWEL");
-
-    MakeDataBox   (0.45, 0.760, finalFillColors[2], 0.30, markerStyles[1], 1.8);
-    MakeTheoryBox (0.45, 0.715, hybridColor, hybridAlpha);
+    MakeDataBox   (0.44, 0.760, finalFillColors[2], 0.30, markerStyles[1], 1.8);
+    MakeTheoryBox (0.44, 0.715, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.44, 0.715, hybridColor);
+    MakeTheoryBox (0.79, 0.715, colbtColor, colbtAlpha);
     MakeTheoryLine (0.79, 0.715, colbtColor);
-    MakeTheoryBox (0.45, 0.670, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.44, 0.670, scetgColor, scetgAlpha);
+    MakeTheoryLine (0.44, 0.670, scetgColor);
     MakeTheoryBox (0.79, 0.670, jewelColor, jewelAlpha);
+    MakeTheoryLine (0.79, 0.670, jewelColor);
 
-    c12->SaveAs ("../Plots/FinalPlots/iaa_pTch_theoryComp_iPtZ3.pdf");
+    c12->SaveAs (Form ("%s/FinalPlots/iaa_pTch_theoryComp_iPtZ3.pdf", plotPath.Data ()));
   }
 
 
@@ -4008,32 +3756,31 @@ void MakeFinalPlots () {
     c13->SetBottomMargin (bMargin);
     c13->SetTopMargin (tMargin);
 
+    c13->SetLogx ();
+    c13->SetLogy ();
+
     const short iPtZ = 4;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
+    const double xmin = pTchBins[iPtZ][0];
+    const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
 
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+    {
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
       yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
-      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      //yax->SetMoreLogLabels ();
       yax->SetLabelSize (0);
       const double ymin = 0.18;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
 
       h->SetLineWidth (0);
@@ -4046,7 +3793,6 @@ void MakeFinalPlots () {
       tl->SetTextAlign (21);
 
       const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      //const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
       tl->DrawLatex (1,  yoff, "1");
       tl->DrawLatex (2,  yoff, "2");
       tl->DrawLatex (3,  yoff, "3");
@@ -4060,12 +3806,9 @@ void MakeFinalPlots () {
       tl->DrawLatex (40, yoff, "40");
       tl->DrawLatex (60, yoff, "60");
 
-      const double xmin = pTchBins[iPtZ][0];
-      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
-
       tl->SetTextAlign (32);
 
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
       tl->DrawLatex (xoff, 0.2, "0.2");
       tl->DrawLatex (xoff, 0.3, "0.3");
       tl->DrawLatex (xoff, 0.4, "0.4");
@@ -4079,8 +3822,8 @@ void MakeFinalPlots () {
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     {
@@ -4089,15 +3832,24 @@ void MakeFinalPlots () {
 
       g->SetFillColorAlpha (hybridColor, hybridAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (hybridColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
       TGAE* g = (TGAE*) g_scetg_pth[iPtZ]->Clone ();
-      SetMinErrors (g, minModelUnc, true);
   
       g->SetFillColorAlpha (scetgColor, scetgAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (scetgColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -4107,20 +3859,26 @@ void MakeFinalPlots () {
   
       g->SetFillColorAlpha (jewelColor, jewelAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (jewelColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
-      TGraph* g = (TGraph*) g_colbt_pth[iPtZ]->Clone ();
+      TGAE* g = (TGAE*) g_colbt_pth[iPtZ]->Clone ();
+      RecenterGraph (g);
+      ResetXErrors (g);
 
-      TGAE* matched = (TGAE*) g_trk_pt_ptz_sub_syst[iPtZ][iCent]->Clone ();
-      RecenterGraph (matched);
-      RecenterGraph (g, matched);
-      SaferDelete (&matched);
-
+      g->SetFillColorAlpha (colbtColor, colbtAlpha);
+      ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
       g->SetLineColor (colbtColor);
       g->SetLineWidth (4);
-      ((TGraph*) g->Clone ())->Draw ("L");
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -4129,12 +3887,10 @@ void MakeFinalPlots () {
 
       RecenterGraph (g_syst);
       ResetXErrors (g_syst);
-      SetConstantXErrors (g_syst, 0.060, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
 
       g_syst->SetMarkerSize (0);
       g_syst->SetLineWidth (1);
-      //g_syst->SetLineColor (kBlack);
-      //g_syst->SetFillColorAlpha (kGray, 0.3);
       g_syst->SetLineColor (finalColors[iPtZ-1]);
       g_syst->SetFillColorAlpha (finalFillColors[iPtZ-1], 0.3);
 
@@ -4208,23 +3964,24 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    //tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.50, 0.750, "#it{p}_{T}^{Z} > 60 GeV");
+    tl->SetTextSize (25);
+    tl->DrawLatexNDC (0.43-0.007, 0.760-0.010, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.43-0.007, 0.715-0.010, "Hybrid Model");
+    tl->DrawLatexNDC (0.78-0.007, 0.715-0.010, "CoLBT-hydro");
+    tl->DrawLatexNDC (0.43-0.007, 0.670-0.010, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.78-0.007, 0.670-0.010, "JEWEL");
 
-    tl->SetTextSize (23);
-    tl->DrawLatexNDC (0.44-0.007, 0.760-0.009, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
-    tl->DrawLatexNDC (0.44-0.007, 0.715-0.009, "Hybrid Model");
-    tl->DrawLatexNDC (0.78-0.007, 0.715-0.009, "CoLBT-hydro");
-    tl->DrawLatexNDC (0.44-0.007, 0.670-0.009, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
-    tl->DrawLatexNDC (0.78-0.007, 0.670-0.009, "JEWEL");
-
-    MakeDataBox   (0.45, 0.760, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-    MakeTheoryBox (0.45, 0.715, hybridColor, hybridAlpha);
+    MakeDataBox   (0.44, 0.760, finalFillColors[3], 0.30, markerStyles[2], 2.4);
+    MakeTheoryBox (0.44, 0.715, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.44, 0.715, hybridColor);
+    MakeTheoryBox (0.79, 0.715, colbtColor, colbtAlpha);
     MakeTheoryLine (0.79, 0.715, colbtColor);
-    MakeTheoryBox (0.45, 0.670, scetgColor, scetgAlpha);
+    MakeTheoryBox (0.44, 0.670, scetgColor, scetgAlpha);
+    MakeTheoryLine (0.44, 0.670, scetgColor);
     MakeTheoryBox (0.79, 0.670, jewelColor, jewelAlpha);
+    MakeTheoryLine (0.79, 0.670, jewelColor);
 
-    c13->SaveAs ("../Plots/FinalPlots/iaa_pTch_theoryComp_iPtZ4.pdf");
+    c13->SaveAs (Form ("%s/FinalPlots/iaa_pTch_theoryComp_iPtZ4.pdf", plotPath.Data ()));
   }
 
 
@@ -4242,32 +3999,31 @@ void MakeFinalPlots () {
     c14->SetBottomMargin (bMargin);
     c14->SetTopMargin (tMargin);
 
+    c14->SetLogx ();
+    c14->SetLogy ();
+
     const short iPtZ = 3;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
+    const double xmin = xhZBins[iPtZ][0];
+    const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-      TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+    {
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
       yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
-      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      //yax->SetMoreLogLabels ();
       yax->SetLabelSize (0);
       const double ymin = 0.05;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
 
       h->SetLineWidth (0);
@@ -4280,7 +4036,6 @@ void MakeFinalPlots () {
       tl->SetTextAlign (21);
 
       const double yoff = ymin / exp (0.054 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      //const double yoff = ymin - 0.054 * (ymax-ymin) / (1.-tMargin-bMargin);
       if (iPtZ > 2) {
         if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
         tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
@@ -4290,12 +4045,9 @@ void MakeFinalPlots () {
       tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
       tl->DrawLatex (1,     yoff, "1");
 
-      const double xmin = xhZBins[iPtZ][0];
-      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
-
       tl->SetTextAlign (32);
 
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
       tl->DrawLatex (xoff, 0.1, "0.1");
       tl->DrawLatex (xoff, 0.2, "0.2");
       tl->DrawLatex (xoff, 0.3, "0.3");
@@ -4307,8 +4059,8 @@ void MakeFinalPlots () {
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (xhZBins[iPtZ][0], 1, xhZBins[iPtZ][nXhZBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     {
@@ -4317,15 +4069,24 @@ void MakeFinalPlots () {
 
       g->SetFillColorAlpha (hybridColor, hybridAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (hybridColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
       TGAE* g = (TGAE*) g_scetg_xhz[iPtZ]->Clone ();
-      SetMinErrors (g, minModelUnc, true);
   
       g->SetFillColorAlpha (scetgColor, scetgAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (scetgColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -4335,20 +4096,26 @@ void MakeFinalPlots () {
   
       g->SetFillColorAlpha (jewelColor, jewelAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (jewelColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
-      TGraph* g = (TGraph*) g_colbt_xhz[iPtZ]->Clone ();
+      TGAE* g = (TGAE*) g_colbt_xhz[iPtZ]->Clone ();
+      RecenterGraph (g);
+      ResetXErrors (g);
 
-      TGAE* matched = (TGAE*) g_trk_xhz_ptz_sub_syst[iPtZ][iCent]->Clone ();
-      RecenterGraph (matched);
-      RecenterGraph (g, matched);
-      SaferDelete (&matched);
-
+      g->SetFillColorAlpha (colbtColor, colbtAlpha);
+      ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
       g->SetLineColor (colbtColor);
       g->SetLineWidth (4);
-      ((TGraph*) g->Clone ())->Draw ("L");
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -4409,20 +4176,24 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    tl->SetTextSize (23);
-    tl->DrawLatexNDC (0.33-0.007, 0.294-0.009, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
-    tl->DrawLatexNDC (0.33-0.007, 0.247-0.009, "Hybrid Model");
-    tl->DrawLatexNDC (0.67-0.007, 0.247-0.009, "CoLBT-hydro");
-    tl->DrawLatexNDC (0.33-0.007, 0.200-0.009, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
-    tl->DrawLatexNDC (0.67-0.007, 0.200-0.009, "JEWEL");
+    tl->SetTextSize (25);
+    tl->DrawLatexNDC (0.32-0.007, 0.294-0.010, "ATLAS 0-10\%, 30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->DrawLatexNDC (0.32-0.007, 0.247-0.010, "Hybrid Model");
+    tl->DrawLatexNDC (0.69-0.007, 0.247-0.010, "CoLBT-hydro");
+    tl->DrawLatexNDC (0.32-0.007, 0.200-0.010, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.69-0.007, 0.200-0.010, "JEWEL");
 
-    MakeDataBox   (0.34, 0.294, finalFillColors[2], 0.30, markerStyles[1], 1.8);
-    MakeTheoryBox (0.34, 0.247, hybridColor, hybridAlpha);
-    MakeTheoryLine (0.68, 0.247, colbtColor);
-    MakeTheoryBox (0.34, 0.200, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.68, 0.200, jewelColor, jewelAlpha);
+    MakeDataBox   (0.33, 0.294, finalFillColors[2], 0.30, markerStyles[1], 1.8);
+    MakeTheoryBox (0.33, 0.247, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.33, 0.247, hybridColor);
+    MakeTheoryBox (0.70, 0.247, colbtColor, colbtAlpha);
+    MakeTheoryLine (0.70, 0.247, colbtColor);
+    MakeTheoryBox (0.33, 0.200, scetgColor, scetgAlpha);
+    MakeTheoryLine (0.33, 0.200, scetgColor);
+    MakeTheoryBox (0.70, 0.200, jewelColor, jewelAlpha);
+    MakeTheoryLine (0.70, 0.200, jewelColor);
 
-    c14->SaveAs ("../Plots/FinalPlots/iaa_xhZ_theoryComp_iPtZ3.pdf");
+    c14->SaveAs (Form ("%s/FinalPlots/iaa_xhZ_theoryComp_iPtZ3.pdf", plotPath.Data ()));
   }
 
 
@@ -4440,32 +4211,31 @@ void MakeFinalPlots () {
     c15->SetBottomMargin (bMargin);
     c15->SetTopMargin (tMargin);
 
+    c15->SetLogx ();
+    c15->SetLogy ();
+
     const short iPtZ = 4;
     const short iCent = 3;
 
-    {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
+    const double xmin = xhZBins[iPtZ][0];
+    const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
 
-      TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+    {
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
 
       xax->SetTitle ("#it{x}_{hZ} = #it{p}_{T}^{ch} #/#it{p}_{T}^{Z}");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
       yax->SetTitle ("#it{I}_{AA} (#it{x}_{hZ})");
       yax->SetTitleOffset (0.8 * yax->GetTitleOffset ());
-      //yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      //yax->SetMoreLogLabels ();
       yax->SetLabelSize (0);
       const double ymin = 0.05;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
 
       h->SetLineWidth (0);
@@ -4478,7 +4248,6 @@ void MakeFinalPlots () {
       tl->SetTextAlign (21);
 
       const double yoff = ymin / exp (0.054 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      //const double yoff = ymin - 0.054 * (ymax-ymin) / (1.-tMargin-bMargin);
       if (iPtZ > 2) {
         if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
         tl->DrawLatex (5e-2,  yoff, "5#times10^{-2}");
@@ -4488,12 +4257,9 @@ void MakeFinalPlots () {
       tl->DrawLatex (5e-1,  yoff, "5#times10^{-1}");
       tl->DrawLatex (1,     yoff, "1");
 
-      const double xmin = xhZBins[iPtZ][0];
-      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
-      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
-
       tl->SetTextAlign (32);
 
+      const double xoff = xmin / exp (0.01 * (log (xmax) - log (xmin)) / (1.-lMargin-rMargin));
       tl->DrawLatex (xoff, 0.1, "0.1");
       tl->DrawLatex (xoff, 0.2, "0.2");
       tl->DrawLatex (xoff, 0.3, "0.3");
@@ -4505,8 +4271,8 @@ void MakeFinalPlots () {
 
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (xhZBins[iPtZ][0], 1, xhZBins[iPtZ][nXhZBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
 
     {
@@ -4515,15 +4281,24 @@ void MakeFinalPlots () {
 
       g->SetFillColorAlpha (hybridColor, hybridAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (hybridColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
       TGAE* g = (TGAE*) g_scetg_xhz[iPtZ]->Clone ();
-      SetMinErrors (g, minModelUnc, true);
   
       g->SetFillColorAlpha (scetgColor, scetgAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (scetgColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -4533,20 +4308,26 @@ void MakeFinalPlots () {
   
       g->SetFillColorAlpha (jewelColor, jewelAlpha);
       ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
+      g->SetLineColor (jewelColor);
+      g->SetLineWidth (4);
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
     {
-      TGraph* g = (TGraph*) g_colbt_xhz[iPtZ]->Clone ();
+      TGAE* g = (TGAE*) g_colbt_xhz[iPtZ]->Clone ();
+      RecenterGraph (g);
+      ResetXErrors (g);
 
-      TGAE* matched = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
-      RecenterGraph (matched);
-      RecenterGraph (g, matched);
-      SaferDelete (&matched);
-
+      g->SetFillColorAlpha (colbtColor, colbtAlpha);
+      ((TGAE*) g->Clone ())->Draw ("3");
+      ResetTGAEErrors (g);
+      ResetXErrors (g);
       g->SetLineColor (colbtColor);
       g->SetLineWidth (4);
-      ((TGraph*) g->Clone ())->Draw ("L");
+      ((TGAE*) g->Clone ())->Draw ("L");
       SaferDelete (&g);
     }
 
@@ -4559,8 +4340,6 @@ void MakeFinalPlots () {
 
       g_syst->SetMarkerSize (0);
       g_syst->SetLineWidth (1);
-      //g_syst->SetLineColor (kBlack);
-      //g_syst->SetFillColorAlpha (kGray, 0.3);
       g_syst->SetLineColor (finalColors[iPtZ-1]);
       g_syst->SetFillColorAlpha (finalFillColors[iPtZ-1], 0.3);
 
@@ -4607,23 +4386,24 @@ void MakeFinalPlots () {
     tl->DrawLatexNDC (0.33, 0.845, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
     tl->DrawLatexNDC (0.33, 0.800, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
 
-    //tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.24, 0.335, "#it{p}_{T}^{Z} > 60 GeV");
+    tl->SetTextSize (25);
+    tl->DrawLatexNDC (0.32-0.007, 0.294-0.010, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.32-0.007, 0.247-0.010, "Hybrid Model");
+    tl->DrawLatexNDC (0.69-0.007, 0.247-0.010, "CoLBT-hydro");
+    tl->DrawLatexNDC (0.32-0.007, 0.200-0.010, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
+    tl->DrawLatexNDC (0.69-0.007, 0.200-0.010, "JEWEL");
 
-    tl->SetTextSize (23);
-    tl->DrawLatexNDC (0.33-0.007, 0.294-0.009, "ATLAS 0-10\%, #it{p}_{T}^{Z} > 60 GeV");
-    tl->DrawLatexNDC (0.33-0.007, 0.247-0.009, "Hybrid Model");
-    tl->DrawLatexNDC (0.67-0.007, 0.247-0.009, "CoLBT-hydro");
-    tl->DrawLatexNDC (0.33-0.007, 0.200-0.009, "SCET_{G} (#it{g}^{ }=^{ }2.0#pm0.2)");
-    tl->DrawLatexNDC (0.67-0.007, 0.200-0.009, "JEWEL");
+    MakeDataBox   (0.33, 0.294, finalFillColors[3], 0.30, markerStyles[2], 2.4);
+    MakeTheoryBox (0.33, 0.247, hybridColor, hybridAlpha);
+    MakeTheoryLine (0.33, 0.247, hybridColor);
+    MakeTheoryBox (0.70, 0.247, colbtColor, colbtAlpha);
+    MakeTheoryLine (0.70, 0.247, colbtColor);
+    MakeTheoryBox (0.33, 0.200, scetgColor, scetgAlpha);
+    MakeTheoryLine (0.33, 0.200, scetgColor);
+    MakeTheoryBox (0.70, 0.200, jewelColor, jewelAlpha);
+    MakeTheoryLine (0.70, 0.200, jewelColor);
 
-    MakeDataBox   (0.34, 0.294, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-    MakeTheoryBox (0.34, 0.247, hybridColor, hybridAlpha);
-    MakeTheoryLine (0.68, 0.247, colbtColor);
-    MakeTheoryBox (0.34, 0.200, scetgColor, scetgAlpha);
-    MakeTheoryBox (0.68, 0.200, jewelColor, jewelAlpha);
-
-    c15->SaveAs ("../Plots/FinalPlots/iaa_xhZ_theoryComp_iPtZ4.pdf");
+    c15->SaveAs (Form ("%s/FinalPlots/iaa_xhZ_theoryComp_iPtZ4.pdf", plotPath.Data ()));
   }
 
 
@@ -4640,20 +4420,23 @@ void MakeFinalPlots () {
     c16->SetBottomMargin (bMargin);
     c16->SetTopMargin (tMargin);
   
+    c16->SetLogx ();
+    c16->SetLogy ();
+
     short iPtZ = nPtZBins-1;
-  
+ 
+    const double xmin = pTchBins[iPtZ][0];
+    const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+
     {
-      gPad->SetLogx ();
-      gPad->SetLogy ();
-  
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
   
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
   
       xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
       xax->SetTitleOffset (0.9 * xax->GetTitleOffset ());
-      xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
   
       yax->SetTitle ("#it{I}_{AA} (#it{p}_{T}^{ch})");
@@ -4661,8 +4444,6 @@ void MakeFinalPlots () {
       yax->SetMoreLogLabels ();
       const double ymin = 0.18;
       const double ymax = 7;
-      //const double ymin = 0.;
-      //const double ymax = 3.6;
       yax->SetRangeUser (ymin, ymax);
   
       h->SetLineWidth (0);
@@ -4675,7 +4456,6 @@ void MakeFinalPlots () {
       tl->SetTextAlign (21);
   
       const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
-      //const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
       tl->DrawLatex (1,  yoff, "1");
       tl->DrawLatex (2,  yoff, "2");
       tl->DrawLatex (3,  yoff, "3");
@@ -4691,8 +4471,8 @@ void MakeFinalPlots () {
   
       l->SetLineStyle (2);
       l->SetLineWidth (2);
-      //l->SetLineColor (kPink-8);
-      l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (xmin, 1, xmax, 1);
     }
   
     TGAE* g = nullptr;
@@ -4721,7 +4501,7 @@ void MakeFinalPlots () {
     TGAE* g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][3]->Clone ();
     RecenterGraph (g_syst);
     ResetXErrors (g_syst);
-    SetConstantXErrors (g_syst, 0.060, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+    SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
   
     g_syst->SetMarkerSize (0);
     g_syst->SetMarkerColor (finalColors[3]);
@@ -4759,7 +4539,7 @@ void MakeFinalPlots () {
     g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst[iPtZ][2]->Clone ();
     RecenterGraph (g_syst);
     ResetXErrors (g_syst);
-    SetConstantXErrors (g_syst, 0.060, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+    SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
   
     g_syst->SetMarkerSize (0);
     g_syst->SetMarkerColor (finalColors[2]);
@@ -4814,14 +4594,15 @@ void MakeFinalPlots () {
     //image->Draw ();
 
 
-    c16->SaveAs ("../Plots/FinalPlots/iaa_pTch_cmsComp.pdf");
+    c16->SaveAs (Form ("%s/FinalPlots/iaa_pTch_cmsComp.pdf", plotPath.Data ()));
   }
 
 
 
 
   {
-    TCanvas* c17 = new TCanvas ("c17", "", 1600, 1200);
+    const char* canvasName = "c17";
+    TCanvas* c17 = new TCanvas (canvasName, "", 1600, 1200);
     const double llMargin = 0.17;
     const double lrMargin = 0.032;
     const double clMargin = 0.032;
@@ -4841,7 +4622,7 @@ void MakeFinalPlots () {
     const double xPadLCMiddle = a;
     const double xPadCRMiddle = a+b;
 
-    const double yPadMiddle = plotXhZ ? 0.5 : 0.0;
+    const double yPadMiddle = 0.50;
 
     TPad* luPad = nullptr;
     TPad* cuPad = nullptr;
@@ -4850,12 +4631,12 @@ void MakeFinalPlots () {
     TPad* cdPad = nullptr;
     TPad* rdPad = nullptr;
 
-    luPad = new TPad ("luPad", "", 0, yPadMiddle, xPadLCMiddle, 1);
-    cuPad = new TPad ("cuPad", "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
-    ruPad = new TPad ("ruPad", "", xPadCRMiddle, yPadMiddle, 1, 1);
-    ldPad = new TPad ("ldPad", "", 0, 0, xPadLCMiddle, yPadMiddle);
-    cdPad = new TPad ("cdPad", "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
-    rdPad = new TPad ("rdPad", "", xPadCRMiddle, 0, 1, yPadMiddle);
+    luPad = new TPad (Form ("%s_luPad", canvasName), "", 0, yPadMiddle, xPadLCMiddle, 1);
+    cuPad = new TPad (Form ("%s_cuPad", canvasName), "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
+    ruPad = new TPad (Form ("%s_ruPad", canvasName), "", xPadCRMiddle, yPadMiddle, 1, 1);
+    ldPad = new TPad (Form ("%s_ldPad", canvasName), "", 0, 0, xPadLCMiddle, yPadMiddle);
+    cdPad = new TPad (Form ("%s_cdPad", canvasName), "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
+    rdPad = new TPad (Form ("%s_rdPad", canvasName), "", xPadCRMiddle, 0, 1, yPadMiddle);
 
     luPad->SetLeftMargin (llMargin);
     luPad->SetRightMargin (lrMargin);
@@ -4887,6 +4668,9 @@ void MakeFinalPlots () {
       pads[i]->Draw ();
 
     for (short iPtZ : {3, 4}) {
+      const double xmin = pTchBins[iPtZ][0];
+      const double xmax = pTchBins[iPtZ][nPtchBins[iPtZ]];
+
       for (short iCent : {1, 2, 3}) {
   
         pads[iCent-1 + 3*(iPtZ-3)]->cd ();
@@ -4894,13 +4678,13 @@ void MakeFinalPlots () {
           gPad->SetLogx ();
           gPad->SetLogy ();
 
-          TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+          TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
           TAxis* xax = h->GetXaxis ();
           TAxis* yax = h->GetYaxis ();
 
           xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-          xax->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+          xax->SetRangeUser (xmin, xmax);
           xax->SetTitleFont (43);
           xax->SetTitleSize (30);
           xax->SetTitleOffset (2.5);
@@ -4926,7 +4710,7 @@ void MakeFinalPlots () {
           tl->SetTextFont (43);
           tl->SetTextSize (28);
           tl->SetTextAlign (21);
-          //const double yoff = 0.0009;
+
           const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
           tl->DrawLatex (1,  yoff, "1");
           tl->DrawLatex (2,  yoff, "2");
@@ -4943,8 +4727,8 @@ void MakeFinalPlots () {
 
           l->SetLineStyle (2);
           l->SetLineWidth (2);
-          //l->SetLineColor (kPink-8);
-          l->DrawLine (pTchBins[iPtZ][0], 1, pTchBins[iPtZ][nPtchBins[iPtZ]], 1);
+          l->SetLineColor (kBlack);
+          l->DrawLine (xmin, 1, xmax, 1);
         }
 
 
@@ -4970,7 +4754,7 @@ void MakeFinalPlots () {
   
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
-        deltaize (g_stat, 0.06, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        deltaize (g_stat, 0.06, true, xmin, xmax);
         ResetXErrors (g_stat);
   
         g_stat->SetMarkerStyle (markerStyles[2]);
@@ -4993,9 +4777,9 @@ void MakeFinalPlots () {
         g_syst = (TGAE*) g_trk_pt_ptz_iaa_syst_conf[iPtZ][iCent]->Clone ();
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
-        deltaize (g_syst, -0.06, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        deltaize (g_syst, -0.06, true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.060, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
   
         g_syst->SetMarkerSize (0);
         g_syst->SetMarkerColor (finalColors[1]);
@@ -5011,7 +4795,7 @@ void MakeFinalPlots () {
   
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
-        deltaize (g_stat, -0.06, true, pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+        deltaize (g_stat, -0.06, true, xmin, xmax);
         ResetXErrors (g_stat);
   
         g_stat->SetMarkerStyle (markerStyles[0]);
@@ -5082,14 +4866,15 @@ void MakeFinalPlots () {
     rdPad->cd ();
     myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "Final", 0.016 / (gPad->GetWNDC ()));
 
-    c17->SaveAs ("../Plots/FinalPlots/iaa_pTch_CONFComp.pdf");
+    c17->SaveAs (Form ("%s/FinalPlots/iaa_pTch_CONFComp.pdf", plotPath.Data ()));
   }
 
 
 
 
   {
-    TCanvas* c18 = new TCanvas ("c18", "", 1600, 1200);
+    const char* canvasName = "c18";
+    TCanvas* c18 = new TCanvas (canvasName, "", 1600, 1200);
     const double llMargin = 0.17;
     const double lrMargin = 0.032;
     const double clMargin = 0.032;
@@ -5109,7 +4894,7 @@ void MakeFinalPlots () {
     const double xPadLCMiddle = a;
     const double xPadCRMiddle = a+b;
 
-    const double yPadMiddle = plotXhZ ? 0.5 : 0.0;
+    const double yPadMiddle = 0.5;
 
     TPad* luPad = nullptr;
     TPad* cuPad = nullptr;
@@ -5118,12 +4903,12 @@ void MakeFinalPlots () {
     TPad* cdPad = nullptr;
     TPad* rdPad = nullptr;
 
-    luPad = new TPad ("luPad", "", 0, yPadMiddle, xPadLCMiddle, 1);
-    cuPad = new TPad ("cuPad", "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
-    ruPad = new TPad ("ruPad", "", xPadCRMiddle, yPadMiddle, 1, 1);
-    ldPad = new TPad ("ldPad", "", 0, 0, xPadLCMiddle, yPadMiddle);
-    cdPad = new TPad ("cdPad", "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
-    rdPad = new TPad ("rdPad", "", xPadCRMiddle, 0, 1, yPadMiddle);
+    luPad = new TPad (Form ("%s_luPad", canvasName), "", 0, yPadMiddle, xPadLCMiddle, 1);
+    cuPad = new TPad (Form ("%s_cuPad", canvasName), "", xPadLCMiddle, yPadMiddle, xPadCRMiddle, 1);
+    ruPad = new TPad (Form ("%s_ruPad", canvasName), "", xPadCRMiddle, yPadMiddle, 1, 1);
+    ldPad = new TPad (Form ("%s_ldPad", canvasName), "", 0, 0, xPadLCMiddle, yPadMiddle);
+    cdPad = new TPad (Form ("%s_cdPad", canvasName), "", xPadLCMiddle, 0, xPadCRMiddle, yPadMiddle);
+    rdPad = new TPad (Form ("%s_rdPad", canvasName), "", xPadCRMiddle, 0, 1, yPadMiddle);
 
     luPad->SetLeftMargin (llMargin);
     luPad->SetRightMargin (lrMargin);
@@ -5155,6 +4940,9 @@ void MakeFinalPlots () {
       pads[i]->Draw ();
 
     for (short iPtZ : {3, 4}) {
+      const double xmin = xhZBins[iPtZ][0];
+      const double xmax = xhZBins[iPtZ][nXhZBins[iPtZ]];
+
       for (short iCent : {1, 2, 3}) {
   
         pads[iCent-1 + 3*(iPtZ-3)]->cd ();
@@ -5162,13 +4950,13 @@ void MakeFinalPlots () {
           gPad->SetLogx ();
           gPad->SetLogy ();
 
-          TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+          TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
           TAxis* xax = h->GetXaxis ();
           TAxis* yax = h->GetYaxis ();
 
           xax->SetTitle ("#it{x}_{hZ}");
-          xax->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+          xax->SetRangeUser (xmin, xmax);
           xax->SetTitleFont (43);
           xax->SetTitleSize (30);
           xax->SetTitleOffset (2.5);
@@ -5194,7 +4982,7 @@ void MakeFinalPlots () {
           tl->SetTextFont (43);
           tl->SetTextSize (28);
           tl->SetTextAlign (21);
-          //const double yoff = 0.0009;
+
           const double yoff = ymin / exp (0.05 * (log (ymax) - log (ymin)) / (1.-tMargin-bMargin));
           if (iPtZ > 2) {
             if (iPtZ > 3) tl->DrawLatex (2e-2,  yoff, "2#times10^{-2}");
@@ -5207,8 +4995,8 @@ void MakeFinalPlots () {
 
           l->SetLineStyle (2);
           l->SetLineWidth (2);
-          //l->SetLineColor (kPink-8);
-          l->DrawLine (xhZBins[iPtZ][0], 1, xhZBins[iPtZ][nXhZBins[iPtZ]], 1);
+          l->SetLineColor (kBlack);
+          l->DrawLine (xmin, 1, xmax, 1);
         }
 
 
@@ -5216,9 +5004,9 @@ void MakeFinalPlots () {
         TGAE* g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst[iPtZ][iCent]->Clone ();
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
-        deltaize (g_syst, 0.06, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+        deltaize (g_syst, 0.06, true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.060, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+        SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
   
         g_syst->SetMarkerSize (0);
         g_syst->SetMarkerColor (finalColors[3]);
@@ -5234,7 +5022,7 @@ void MakeFinalPlots () {
   
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
-        deltaize (g_stat, 0.06, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+        deltaize (g_stat, 0.06, true, xmin, xmax);
         ResetXErrors (g_stat);
   
         g_stat->SetMarkerStyle (markerStyles[2]);
@@ -5257,9 +5045,9 @@ void MakeFinalPlots () {
         g_syst = (TGAE*) g_trk_xhz_ptz_iaa_syst_conf[iPtZ][iCent]->Clone ();
         RecenterGraph (g_syst);
         ResetXErrors (g_syst);
-        deltaize (g_syst, -0.06, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+        deltaize (g_syst, -0.06, true, xmin, xmax);
         ResetXErrors (g_syst);
-        SetConstantXErrors (g_syst, 0.060, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+        SetConstantXErrors (g_syst, 0.060, true, xmin, xmax);
   
         g_syst->SetMarkerSize (0);
         g_syst->SetMarkerColor (finalColors[1]);
@@ -5275,7 +5063,7 @@ void MakeFinalPlots () {
   
         RecenterGraph (g_stat);
         ResetXErrors (g_stat);
-        deltaize (g_stat, -0.06, true, xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
+        deltaize (g_stat, -0.06, true, xmin, xmax);
         ResetXErrors (g_stat);
   
         g_stat->SetMarkerStyle (markerStyles[0]);
@@ -5346,60 +5134,86 @@ void MakeFinalPlots () {
     rdPad->cd ();
     myMarkerAndBoxAndLineText (0.22, 0.220, 3.0, 1001, finalFillColors[3], 0.30, finalColors[3], markerStyles[2], 2.4, "Final", 0.016 / (gPad->GetWNDC ()));
 
-    c18->SaveAs ("../Plots/FinalPlots/iaa_xhZ_CONFComp.pdf");
+    c18->SaveAs (Form ("%s/FinalPlots/iaa_xhZ_CONFComp.pdf", plotPath.Data ()));
   }
 
 
 
 
   {
-    TCanvas* c19 = new TCanvas ("c19", "", 1400, 1400);
+    const char* canvasName = "c19";
+    TCanvas* c19 = new TCanvas (canvasName, "", 1400, 1400);
     c19->cd ();
 
     const double lMargin = 0.15*4./7.;
     const double rMargin = 0.04*4./7.;
-    const double bMargin = 0.15*4./7.;
-    const double tMargin = 0.05;
+    const double bMargin = 0.22;
+    const double tMargin = 0.13;
+
+    const double deltaD = (1. - bMargin);
+    const double deltaC = (1.);
+    const double deltaU = (1. - tMargin);
+
+    const double a = (double) (deltaU * deltaC / (deltaD*deltaU + deltaC*deltaU + deltaD*deltaC));
+    const double b = (double) (deltaU * deltaD / (deltaD*deltaU + deltaC*deltaU + deltaD*deltaC));
+
+    const double yPadDCMiddle = a;
+    const double yPadCUMiddle = a+b;
 
     const double padX = 0.5*(1.+lMargin-rMargin);
-    const double padY = 0.5*(1.-tMargin+bMargin);
 
-    TPad* ulPad = new TPad ("c19_ulPad", "", 0, padY, padX, 1);
-    TPad* urPad = new TPad ("c19_urPad", "", padX, padY, 1, 1);
-    TPad* dlPad = new TPad ("c19_dlPad", "", 0, 0, padX, padY);
-    TPad* drPad = new TPad ("c19_drPad", "", padX, 0, 1, padY);
+    TPad* ulPad = new TPad (Form ("%s_ulPad", canvasName), "", 0, yPadCUMiddle, padX, 1);
+    TPad* urPad = new TPad (Form ("%s_urPad", canvasName), "", padX, yPadCUMiddle, 1, 1);
+    TPad* clPad = new TPad (Form ("%s_clPad", canvasName), "", 0, yPadDCMiddle, padX, yPadCUMiddle);
+    TPad* crPad = new TPad (Form ("%s_crPad", canvasName), "", padX, yPadDCMiddle, 1, yPadCUMiddle);
+    TPad* dlPad = new TPad (Form ("%s_dlPad", canvasName), "", 0, 0, padX, yPadDCMiddle);
+    TPad* drPad = new TPad (Form ("%s_drPad", canvasName), "", padX, 0, 1, yPadDCMiddle);
 
     ulPad->SetLeftMargin (lMargin/padX);
     ulPad->SetRightMargin (0);
     urPad->SetLeftMargin (0);
     urPad->SetRightMargin (rMargin/(1.-padX));
     ulPad->SetBottomMargin (0);
-    ulPad->SetTopMargin (tMargin/(1.-padY));
+    ulPad->SetTopMargin (tMargin);
     urPad->SetBottomMargin (0);
-    urPad->SetTopMargin (tMargin/(1.-padY));
+    urPad->SetTopMargin (tMargin);
+    clPad->SetLeftMargin (lMargin/padX);
+    clPad->SetRightMargin (0);
+    crPad->SetLeftMargin (0);
+    crPad->SetRightMargin (rMargin/(1.-padX));
+    clPad->SetBottomMargin (0);
+    clPad->SetTopMargin (0);
+    crPad->SetBottomMargin (0);
+    crPad->SetTopMargin (0);
     dlPad->SetLeftMargin (lMargin/padX);
     dlPad->SetRightMargin (0);
     drPad->SetLeftMargin (0);
     drPad->SetRightMargin (rMargin/(1.-padX));
-    dlPad->SetBottomMargin (bMargin/padY);
+    dlPad->SetBottomMargin (bMargin);
     dlPad->SetTopMargin (0);
-    drPad->SetBottomMargin (bMargin/padY);
+    drPad->SetBottomMargin (bMargin);
     drPad->SetTopMargin (0);
 
     ulPad->Draw ();
     urPad->Draw ();
+    clPad->Draw ();
+    crPad->Draw ();
     dlPad->Draw ();
     drPad->Draw ();
 
-    std::vector <TPad*> pads = {ulPad, urPad, dlPad, drPad};
-    std::vector <TH1D***> hists = {h_trk_dphi_ptz_lt4_sub_stat, h_trk_dphi_ptz_gt4_sub_stat};
+    std::vector <TPad*> pads = {ulPad, urPad, clPad, crPad, dlPad, drPad};
+    std::vector <TH1D***> stats = {h_trk_dphi_ptz_lt4_sub_stat, h_trk_dphi_ptz_gt4_sub_stat};
+    std::vector <TGAE***> systs = {g_trk_dphi_ptz_lt4_sub_syst, g_trk_dphi_ptz_gt4_sub_syst};
 
-    for (short iPad = 0; iPad < 4; iPad++) {
-      const short iPtZ = (iPad < 2 ? 4 : 2);
+    const double xmin = 0;
+    const double xmax = pi;
+
+    for (short iPad = 0; iPad < 6; iPad++) {
+      const short iPtZ = (iPad < 2 ? 4 : (iPad < 4 ? 3 : 2));
 
       pads[iPad]->cd ();
 
-      TH1D* h = new TH1D ("", "", 1, 0, pi);
+      TH1D* h = new TH1D ("", "", 1, xmin, xmax);
 
       TAxis* xax = h->GetXaxis ();
       TAxis* yax = h->GetYaxis ();
@@ -5408,19 +5222,23 @@ void MakeFinalPlots () {
       xax->SetTitle ("#Delta#phi_{hZ}");
       xax->SetTitleFont (43);
       xax->SetTitleSize (40);
-      xax->SetTitleOffset (1.6 * xax->GetTitleOffset ());
-      xax->SetRangeUser (0, pi);
+      xax->SetTitleOffset (2.0 * xax->GetTitleOffset ());
+      xax->SetRangeUser (xmin, xmax);
       xax->SetLabelSize (0);
 
-      yax->SetTitle ("(1/N_{Z}) (dN_{ch} / d#Delta#phi)");
-      yax->SetTitleFont (43);
-      yax->SetTitleSize (40);
-      yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
-      const double ymin = (iPtZ == 4 ? -1.3 : (iPtZ == 3 ? -0.5 : -0.25));
-      const double ymax = (iPtZ == 4 ? 11 : (iPtZ == 3 ? 3 : 1.35));
+      if (pads[iPad] == ulPad) {
+        yax->SetTitle ("(1/N_{Z}) (dN_{ch} / d#Delta#phi)");
+        yax->SetTitleFont (43);
+        yax->SetTitleSize (40);
+        yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
+      }
+      else 
+        yax->SetTitleSize (0);
+      yax->SetLabelSize (0);
+      const double ymin = (iPtZ == 4 ? -1.4 : (iPtZ == 3 ? -0.8 : -0.25));
+      const double ymax = (iPtZ == 4 ? 11 : (iPtZ == 3 ? 3.8 : 1.35));
       yax->SetRangeUser (ymin, ymax);
+      yax->SetNdivisions (805);
 
       h->SetLineWidth (0);
 
@@ -5441,19 +5259,70 @@ void MakeFinalPlots () {
       tl->DrawLatex (2.5,  yoff, "2.5");
       tl->DrawLatex (3,  yoff, "3");
 
+      tl->SetTextAlign (32);
+      const double xmin = 0;
+      const double xmax = pi;
+      const double xoff = xmin - 0.01 * (xmax - xmin) / (1.-lMargin);
+      if (iPtZ == 2) {
+        tl->DrawLatex (xoff, -0.2, "-0.2");
+        tl->DrawLatex (xoff, 0, "0");
+        tl->DrawLatex (xoff, 0.2, "0.2");
+        tl->DrawLatex (xoff, 0.4, "0.4");
+        tl->DrawLatex (xoff, 0.6, "0.6");
+        tl->DrawLatex (xoff, 0.8, "0.8");
+        tl->DrawLatex (xoff, 1.0, "1");
+        tl->DrawLatex (xoff, 1.2, "1.2");
+      }
+      else if (iPtZ == 3) {
+        tl->DrawLatex (xoff, 0, "0");
+        tl->DrawLatex (xoff, 1, "1");
+        tl->DrawLatex (xoff, 2, "2");
+        tl->DrawLatex (xoff, 3, "3");
+        tl->DrawLatex (xoff, 4, "4");
+      }
+      else {
+        tl->DrawLatex (xoff, 0, "0");
+        tl->DrawLatex (xoff, 2, "2");
+        tl->DrawLatex (xoff, 4, "4");
+        tl->DrawLatex (xoff, 6, "6");
+        tl->DrawLatex (xoff, 8, "8");
+        tl->DrawLatex (xoff, 10, "10");
+      }
+
+      l->SetLineStyle (7);
+      l->SetLineWidth (1);
+      l->SetLineColor (kBlack);
+      l->DrawLine (3.*pi/4., ymin, 3.*pi/4., ymax);
       l->SetLineStyle (2);
-      l->SetLineWidth (2);
-      l->DrawLine (3.*pi/4., ymin, 3.*pi/4., 0.71*ymax);
+      l->DrawLine (xmin, 0, xmax, 0);
+
+      TBox* shadedBox = new TBox (3.*pi/4., ymin, pi, ymax);
+      shadedBox->SetFillColorAlpha (kGray, 0.3);
+      shadedBox->Draw ();
     } // end loop over iPad
     
 
-    for (short iPad = 0; iPad < 4; iPad++) {
-      const short iPtZ = (iPad < 2 ? 4 : 2);
+    for (short iPad = 0; iPad < 6; iPad++) {
+      const short iPtZ = (iPad < 2 ? 4 : (iPad < 4 ? 3 : 2));
 
       pads[iPad]->cd ();
 
-      for (short iCent : {0, 4}) {
-        TGAE* g_stat = make_graph (hists[iPad%2][iPtZ][iCent]);
+      for (short iCent : {0, numCentBins}) {
+        TGAE* g_syst = (TGAE*) systs[iPad%2][iPtZ][iCent]->Clone ();
+
+        g_syst->SetMarkerSize (0);
+        g_syst->SetLineWidth (1);
+        g_syst->SetMarkerColor (iCent == 0 ? kBlack : finalColors[iPtZ-1]);
+        g_syst->SetLineColor (iCent == 0 ? kBlack : finalColors[iPtZ-1]);
+        g_syst->SetFillColorAlpha (iCent == 0 ? kBlack : finalFillColors[iPtZ-1], 0.3);
+
+        ((TGAE*) g_syst->Clone ())->Draw ("5P");
+
+        SaferDelete (&g_syst);
+      } // end loop over iCent
+
+      for (short iCent : {0, numCentBins}) {
+        TGAE* g_stat = make_graph (stats[iPad%2][iPtZ][iCent]);
 
         Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iPtZ-2]);
         float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
@@ -5485,49 +5354,51 @@ void MakeFinalPlots () {
     tl->SetTextAlign (22);
     tl->SetTextSize (34);
     ulPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.+lMargin/padX), 0.950, "2 < #it{p}_{T}^{ch} < 4 GeV");
+    tl->DrawLatexNDC (0.5*(1.+lMargin/padX), 0.938, "2 < #it{p}_{T}^{ch} < 4 GeV");
     urPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.-rMargin/(1.-padX)), 0.950, "#it{p}_{T}^{ch} > 4 GeV");
+    tl->DrawLatexNDC (0.5*(1.-rMargin/(1.-padX)), 0.938, "#it{p}_{T}^{ch} > 4 GeV");
 
     tl->SetTextAlign (11);
 
     ulPad->cd ();
     tl->SetTextSize (40);
-    tl->DrawLatexNDC (0.23, 0.790, "#bf{#it{ATLAS}} Internal");
+    tl->DrawLatexNDC (0.23, 0.750, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.23, 0.720, "#it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.23, 0.660, "#it{p}_{T}^{Z} > 60 GeV");
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.32, 0.665-0.015, "#it{pp}");
-    tl->DrawLatexNDC (0.32, 0.610-0.015, "0-30% Pb+Pb");
-    MakeDataBox   (0.33, 0.665, finalFillColors[0], 0.30, kOpenCircle, 1.8);
-    MakeDataBox   (0.33, 0.610, finalFillColors[3], 0.30, markerStyles[2], 2.4);
+    tl->DrawLatexNDC (0.32, (0.580-0.020), "#it{pp}");
+    tl->DrawLatexNDC (0.32, (0.500-0.020), "0-30% Pb+Pb");
+    MakeDataBox   (0.33, (0.580), finalFillColors[0], 0.30, kOpenCircle, 1.8, 1., 0.6/(1.-yPadCUMiddle));
+    MakeDataBox   (0.33, (0.500), finalFillColors[3], 0.30, markerStyles[2], 2.4, 1., 0.6/(1.-yPadCUMiddle));
+
+    clPad->cd ();
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.23, (0.660+0.09)/(1.-tMargin), "30 < #it{p}_{T}^{Z} < 60 GeV");
+    tl->SetTextSize (32);
+    tl->DrawLatexNDC (0.32, (0.580-0.020+0.09)/(1.-tMargin), "#it{pp}");
+    tl->DrawLatexNDC (0.32, (0.500-0.020+0.09)/(1.-tMargin), "0-30% Pb+Pb");
+    MakeDataBox   (0.33, (0.580+0.09)/(1.-tMargin), finalFillColors[0], 0.30, kOpenCircle, 1.8, 1., 0.6/(yPadCUMiddle-yPadDCMiddle));
+    MakeDataBox   (0.33, (0.500+0.09)/(1.-tMargin), finalFillColors[2], 0.30, markerStyles[1], 1.8, 1., 0.6/(yPadCUMiddle-yPadDCMiddle));
 
     dlPad->cd ();
-    //tl->SetTextSize (38);
-    //tl->DrawLatexNDC (0.23, 0.855, "#bf{#it{ATLAS}} Internal");
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.23, 0.790+tMargin/(1.-padY), "15 < #it{p}_{T}^{Z} < 30 GeV");
+    tl->DrawLatexNDC (0.23, (0.660+0.09)/(1.-tMargin) * (1.-bMargin) + bMargin, "15 < #it{p}_{T}^{Z} < 30 GeV");
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.32, 0.730-0.015+tMargin/(1.-padY), "#it{pp}");
-    tl->DrawLatexNDC (0.32, 0.675-0.015+tMargin/(1.-padY), "0-30% Pb+Pb");
-    MakeDataBox   (0.33, 0.730+tMargin/(1.-padY), finalFillColors[0], 0.30, kOpenCircle, 1.8);
-    MakeDataBox   (0.33, 0.675+tMargin/(1.-padY), finalFillColors[1], 0.30, markerStyles[0], 1.8);
+    tl->DrawLatexNDC (0.32, (0.580-0.020+0.09)/(1.-tMargin) * (1.-bMargin) + bMargin, "#it{pp}");
+    tl->DrawLatexNDC (0.32, (0.500-0.020+0.09)/(1.-tMargin) * (1.-bMargin) + bMargin, "0-30% Pb+Pb");
+    MakeDataBox   (0.33, (0.580+0.09)/(1.-tMargin) * (1.-bMargin) + bMargin, finalFillColors[0], 0.30, kOpenCircle, 1.8, 1., 0.6/yPadDCMiddle);
+    MakeDataBox   (0.33, (0.500+0.09)/(1.-tMargin) * (1.-bMargin) + bMargin, finalFillColors[1], 0.30, markerStyles[0], 1.8, 1., 0.6/yPadDCMiddle);
 
     urPad->cd ();
     tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.07, 0.800, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.07, 0.730, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    //tl->SetTextSize (32);
-    //tl->DrawLatexNDC (0.07, 0.725, "#it{p}_{T}^{Z} > 60 GeV");
+    tl->DrawLatexNDC (0.07, 0.760, "#it{pp}, #sqrt{s} = 5.02 TeV");
+    tl->DrawLatexNDC (0.07, 0.660, "260 pb^{-1}");
 
-    drPad->cd ();
-    tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.07, 0.885, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    ////tl->DrawLatexNDC (0.07, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    //tl->SetTextSize (32);
-    //tl->DrawLatexNDC (0.07, 0.725, "15 < #it{p}_{T}^{Z} < 30 GeV");
+    crPad->cd ();
+    tl->DrawLatexNDC (0.07, 0.760/(1.-tMargin), "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV");
+    tl->DrawLatexNDC (0.07, 0.660/(1.-tMargin), "1.4-1.7 nb^{-1}");
 
-    c19->SaveAs ("../Plots/FinalPlots/yield_dphi_iCent4.pdf");
+    c19->SaveAs (Form ("%s/FinalPlots/yield_dphi_allptz.pdf", plotPath.Data ()));
 
   }
 
@@ -5535,491 +5406,394 @@ void MakeFinalPlots () {
 
 
   {
-    TCanvas* c20 = new TCanvas ("c20", "", 1400, 1400);
-    c20->cd ();
 
-    const double lMargin = 0.15*4./7.;
-    const double rMargin = 0.04*4./7.;
-    const double bMargin = 0.15*4./7.;
-    const double tMargin = 0.05;
-
-    const double padX = 0.5*(1.+lMargin-rMargin);
-    const double padY = 0.5*(1.-tMargin+bMargin);
-
-    TPad* ulPad = new TPad ("c20_ulPad", "", 0, padY, padX, 1);
-    TPad* urPad = new TPad ("c20_urPad", "", padX, padY, 1, 1);
-    TPad* dlPad = new TPad ("c20_dlPad", "", 0, 0, padX, padY);
-    TPad* drPad = new TPad ("c20_drPad", "", padX, 0, 1, padY);
-
-    ulPad->SetLeftMargin (lMargin/padX);
-    ulPad->SetRightMargin (0);
-    urPad->SetLeftMargin (0);
-    urPad->SetRightMargin (rMargin/(1.-padX));
-    ulPad->SetBottomMargin (0);
-    ulPad->SetTopMargin (tMargin/(1.-padY));
-    urPad->SetBottomMargin (0);
-    urPad->SetTopMargin (tMargin/(1.-padY));
-    dlPad->SetLeftMargin (lMargin/padX);
-    dlPad->SetRightMargin (0);
-    drPad->SetLeftMargin (0);
-    drPad->SetRightMargin (rMargin/(1.-padX));
-    dlPad->SetBottomMargin (bMargin/padY);
-    dlPad->SetTopMargin (0);
-    drPad->SetBottomMargin (bMargin/padY);
-    drPad->SetTopMargin (0);
-
-    ulPad->Draw ();
-    urPad->Draw ();
-    dlPad->Draw ();
-    drPad->Draw ();
-
-    std::vector <TPad*> pads = {ulPad, urPad, dlPad, drPad};
-    std::vector <TH1D***> hists = {h_trk_dphi_ptz_lt4_sub_stat, h_trk_dphi_ptz_gt4_sub_stat};
-
-    for (short iPad = 0; iPad < 4; iPad++) {
-      const short iPtZ = (iPad < 2 ? 4 : 2);
-
-      pads[iPad]->cd ();
-
-      TH1D* h = new TH1D ("", "", 1, 0, pi);
-
-      TAxis* xax = h->GetXaxis ();
-      TAxis* yax = h->GetYaxis ();
-
-      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetTitle ("#Delta#phi_{hZ}");
-      xax->SetTitleFont (43);
-      xax->SetTitleSize (40);
-      xax->SetTitleOffset (1.6 * xax->GetTitleOffset ());
-      xax->SetRangeUser (0, pi);
-      xax->SetLabelSize (0);
-
-      yax->SetTitle ("(1/N_{Z}) (dN_{ch} / d#Delta#phi)");
-      yax->SetTitleFont (43);
-      yax->SetTitleSize (40);
-      yax->SetTitleOffset (1.8 * yax->GetTitleOffset ());
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
-      const double ymin = (iPtZ == 4 ? -1.3 : (iPtZ == 3 ? -0.5 : -0.25));
-      const double ymax = (iPtZ == 4 ? 11 : (iPtZ == 3 ? 3 : 1.35));
-      yax->SetRangeUser (ymin, ymax);
-
-      h->SetLineWidth (0);
-
-      h->DrawCopy ("");
-      SaferDelete (&h);
-
-      tl->SetTextFont (43);
-      tl->SetTextSize (36);
-      tl->SetTextAlign (21);
-
-      const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
-      if (pads[iPad] == ulPad || pads[iPad] == dlPad)
-        tl->DrawLatex (0,  yoff, "0");
-      tl->DrawLatex (0.5,  yoff, "0.5");
-      tl->DrawLatex (1,  yoff, "1");
-      tl->DrawLatex (1.5,  yoff, "1.5");
-      tl->DrawLatex (2,  yoff, "2");
-      tl->DrawLatex (2.5,  yoff, "2.5");
-      tl->DrawLatex (3,  yoff, "3");
-
-      l->SetLineStyle (2);
-      l->SetLineWidth (2);
-      l->DrawLine (3.*pi/4., ymin, 3.*pi/4., 0.71*ymax);
-    } // end loop over iPad
-    
-
-    for (short iPad = 0; iPad < 4; iPad++) {
-      const short iPtZ = (iPad < 2 ? 4 : 2);
-
-      pads[iPad]->cd ();
-
-      for (short iCent : {0, 3}) {
-        TGAE* g_stat = make_graph (hists[iPad%2][iPtZ][iCent]);
-
-        Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iPtZ-2]);
-        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        g_stat->SetLineWidth (3);
-        g_stat->SetMarkerColor (iCent == 0 ? kBlack : finalColors[iPtZ-1]);
-        g_stat->SetLineColor (iCent == 0 ? kBlack : finalColors[iPtZ-1]);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        markerStyle = FullToOpenMarker (markerStyle);
-        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-        
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        if (iCent > 0) g_stat->SetLineWidth (0);
-        g_stat->SetMarkerColor (kBlack);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        SaferDelete (&g_stat);
-      } // end loop over iCent
-    } // end loop over iPad
-
-    tl->SetTextColor (kBlack);
-
-    tl->SetTextAlign (22);
-    tl->SetTextSize (34);
-    ulPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.+lMargin/padX), 0.950, "2 < #it{p}_{T}^{ch} < 4 GeV");
-    urPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.-rMargin/(1.-padX)), 0.950, "#it{p}_{T}^{ch} > 4 GeV");
-
-    tl->SetTextAlign (11);
-
-    ulPad->cd ();
-    tl->SetTextSize (40);
-    tl->DrawLatexNDC (0.23, 0.790, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.23, 0.720, "#it{p}_{T}^{Z} > 60 GeV");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.32, 0.665-0.015, "#it{pp}");
-    tl->DrawLatexNDC (0.32, 0.610-0.015, "0-10% Pb+Pb");
-    MakeDataBox   (0.33, 0.665, finalFillColors[0], 0.30, kOpenCircle, 1.8);
-    MakeDataBox   (0.33, 0.610, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-
-    dlPad->cd ();
-    //tl->SetTextSize (38);
-    //tl->DrawLatexNDC (0.23, 0.855, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.23, 0.790+tMargin/(1.-padY), "15 < #it{p}_{T}^{Z} < 30 GeV");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.32, 0.730-0.015+tMargin/(1.-padY), "#it{pp}");
-    tl->DrawLatexNDC (0.32, 0.675-0.015+tMargin/(1.-padY), "0-10% Pb+Pb");
-    MakeDataBox   (0.33, 0.730+tMargin/(1.-padY), finalFillColors[0], 0.30, kOpenCircle, 1.8);
-    MakeDataBox   (0.33, 0.675+tMargin/(1.-padY), finalFillColors[1], 0.30, markerStyles[0], 1.8);
-
-    urPad->cd ();
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.07, 0.800, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.07, 0.730, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    //tl->SetTextSize (32);
-    //tl->DrawLatexNDC (0.07, 0.725, "#it{p}_{T}^{Z} > 60 GeV");
-
-    drPad->cd ();
-    tl->SetTextSize (28);
-    //tl->DrawLatexNDC (0.07, 0.885, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    ////tl->DrawLatexNDC (0.07, 0.840, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    //tl->SetTextSize (32);
-    //tl->DrawLatexNDC (0.07, 0.725, "15 < #it{p}_{T}^{Z} < 30 GeV");
-
-    c20->SaveAs ("../Plots/FinalPlots/yield_dphi_iCent3.pdf");
-
-  }
-    
-
-
-
-  {
-    TCanvas* c21 = new TCanvas ("c21", "", 1400, 800);
-    c21->cd ();
-
-    const double lMargin = 0.15*4./7.;
-    const double rMargin = 0.04*4./7.;
-    const double bMargin = 0.15;
-    const double tMargin = 0.05*7./4.;
-
-    const double padX = 0.5*(1.+lMargin-rMargin);
-    const double padY = 0.5*(1.-tMargin+bMargin);
-
-    TPad* lPad = new TPad ("c21_lPad", "", 0, 0, padX, 1);
-    TPad* rPad = new TPad ("c21_rPad", "", padX, 0, 1, 1);
-
-    lPad->SetLeftMargin (lMargin/padX);
-    lPad->SetRightMargin (0);
-    rPad->SetLeftMargin (0);
-    rPad->SetRightMargin (rMargin/(1.-padX));
-    lPad->SetBottomMargin (bMargin);
-    lPad->SetTopMargin (tMargin);
-    rPad->SetBottomMargin (bMargin);
-    rPad->SetTopMargin (tMargin);
-
-    lPad->Draw ();
-    rPad->Draw ();
-
-    std::vector <TPad*> pads = {lPad, rPad};
-    std::vector <TH1D***> hists = {h_trk_dphi_ptz_lt4_sub_stat, h_trk_dphi_ptz_gt4_sub_stat};
-
-    for (short iPad = 0; iPad < 2; iPad++) {
-      const short iPtZ = 4;
-
-      pads[iPad]->cd ();
-
-      TH1D* h = new TH1D ("", "", 1, 0, pi);
-
-      TAxis* xax = h->GetXaxis ();
-      TAxis* yax = h->GetYaxis ();
-
-      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetTitle ("#Delta#phi_{hZ}");
-      xax->SetTitleFont (43);
-      xax->SetTitleSize (40);
-      xax->SetTitleOffset (1.6 * 4./7. * xax->GetTitleOffset ());
-      xax->SetRangeUser (0, pi);
-      xax->SetLabelSize (0);
-
-      yax->SetTitle ("(1/N_{Z}) (dN_{ch} / d#Delta#phi)");
-      yax->SetTitleFont (43);
-      yax->SetTitleSize (40);
-      yax->SetTitleOffset (1.8 * 4./7. * yax->GetTitleOffset ());
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
-      const double ymin = (iPtZ == 4 ? -1.3 : (iPtZ == 3 ? -0.5 : -0.25));
-      const double ymax = (iPtZ == 4 ? 11 : (iPtZ == 3 ? 3 : 1.35));
-      yax->SetRangeUser (ymin, ymax);
-
-      h->SetLineWidth (0);
-
-      h->DrawCopy ("");
-      SaferDelete (&h);
-
-      tl->SetTextFont (43);
-      tl->SetTextSize (36);
-      tl->SetTextAlign (21);
-
-      const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
-      if (pads[iPad] == lPad)
-        tl->DrawLatex (0,  yoff, "0");
-      tl->DrawLatex (0.5,  yoff, "0.5");
-      tl->DrawLatex (1,  yoff, "1");
-      tl->DrawLatex (1.5,  yoff, "1.5");
-      tl->DrawLatex (2,  yoff, "2");
-      tl->DrawLatex (2.5,  yoff, "2.5");
-      tl->DrawLatex (3,  yoff, "3");
-
-      l->SetLineStyle (2);
-      l->SetLineWidth (2);
-      l->DrawLine (3.*pi/4., ymin, 3.*pi/4., 0.71*ymax);
-    } // end loop over iPad
-    
-
-    for (short iPad = 0; iPad < 2; iPad++) {
-      const short iPtZ = 4;
-
-      pads[iPad]->cd ();
-
-      for (short iCent : {0, 4}) {
-        TGAE* g_stat = make_graph (hists[iPad][iPtZ][iCent]);
-
-        Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iPtZ-2]);
-        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        g_stat->SetLineWidth (3);
-        g_stat->SetMarkerColor (iCent == 0 ? kBlack : finalColors[iPtZ-1]);
-        g_stat->SetLineColor (iCent == 0 ? kBlack : finalColors[iPtZ-1]);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        markerStyle = FullToOpenMarker (markerStyle);
-        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-        
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        if (iCent > 0) g_stat->SetLineWidth (0);
-        g_stat->SetMarkerColor (kBlack);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        SaferDelete (&g_stat);
-      } // end loop over iCent
-    } // end loop over iPad
-
-    tl->SetTextColor (kBlack);
-
-    tl->SetTextAlign (22);
-    tl->SetTextSize (34);
-    lPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.+lMargin/padX), 0.950, "2 < #it{p}_{T}^{ch} < 4 GeV");
-    rPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.-rMargin/(1.-padX)), 0.950, "#it{p}_{T}^{ch} > 4 GeV");
-
-    tl->SetTextAlign (11);
-
-    lPad->cd ();
-    tl->SetTextSize (40);
-    tl->DrawLatexNDC (0.23, 0.790, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.23, 0.720, "#it{p}_{T}^{Z} > 60 GeV");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.32, 0.665-0.015, "#it{pp}");
-    tl->DrawLatexNDC (0.32, 0.610-0.015, "0-30% Pb+Pb");
-    MakeDataBox   (0.33, 0.665, finalFillColors[0], 0.30, kOpenCircle, 1.8);
-    MakeDataBox   (0.33, 0.610, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-
-    rPad->cd ();
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.07, 0.800, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.07, 0.730, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    //tl->SetTextSize (32);
-    //tl->DrawLatexNDC (0.07, 0.725, "#it{p}_{T}^{Z} > 60 GeV");
-
-    c21->SaveAs ("../Plots/FinalPlots/yield_dphi_iPtZ4.pdf");
-
+    ofstream table1File;
+    table1File.open (Form ("%s/table1.tex", tablesPath.Data ()));
+  
+    double x, y, x_err, y_stat, y_syst;
+
+    table1File << "\\begin{table}[!ht]" << endl;
+    table1File << "\\begin{center}" << endl;
+    table1File << "\\hspace*{-0.75cm}" << endl;
+    table1File << "\\renewcommand{\\arraystretch}{1.2}" << endl;
+    table1File << "\\begin{tabular}{|l|l|l|l|l|}" << endl;
+
+    table1File << "\\hline" << endl;
+    table1File << "\\multicolumn{1}{|c|}{\\multirow{2}{*}{\\ptch [\\GeV]}} & \\multicolumn{4}{c|}{$(1/N_\\mathrm{Z})(d^2N_\\mathrm{ch}/d\\ptch d\\Delta\\phi)$ $\\pm$ (Stat. Unc.) $\\pm$ (Syst. Unc.) [\\GeV$^{-1}$]} \\\\ \\cline{2-5}" << endl;
+    table1File << " & \\multicolumn{1}{c|}{\\small \\pp} & \\multicolumn{1}{c|}{\\small 30-80\\% \\PbPb} & \\multicolumn{1}{c|}{\\small 10-30\\% \\PbPb} & \\multicolumn{1}{c|}{\\small 0-10\\% \\PbPb} \\\\ \\hline \\hline" << endl;
+      
+    for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+
+      const char* ptzStr = (iPtZ == nPtZBins-1 ? Form ("{$\\ptz > \\SI{%g}{\\GeV}$}", zPtBins[iPtZ]) : Form ("{%g < \\ptz < $\\SI{%g}{\\GeV}$}", zPtBins[iPtZ], zPtBins[iPtZ+1]));
+
+      table1File << "\\multicolumn{5}{|c|}{\\small " << ptzStr << "} \\\\ \\hline" << endl;
+
+      for (int i = 0; i < nPtchBins[iPtZ]; i++) {
+        for (short iCent = 0; iCent < numCentBins; iCent++) {
+          TGAE* g_syst = g_trk_pt_ptz_sub_syst[iPtZ][iCent];
+          TH1D* h_stat = h_trk_pt_ptz_sub_stat[iPtZ][iCent];
+          x_err = g_syst->GetErrorX (i);
+          y_syst = g_syst->GetErrorY (i);
+          x = h_stat->GetBinCenter (i+1);
+          y = h_stat->GetBinContent (i+1);
+          y_stat = h_stat->GetBinError (i+1);
+
+          string s_y = to_string (y);
+          string s_y_stat = to_string (y_stat);
+          string s_y_syst = to_string (y_syst);
+
+          FormatMeasurement (s_y, s_y_stat, s_y_syst, 2);
+
+          if (iCent == 0) table1File << "\\footnotesize {$" << x-x_err << " - " << x+x_err << "$} & ";
+          table1File << "\\scriptsize {$" << s_y << " \\pm " << s_y_stat << " \\pm " << s_y_syst << "$} ";
+          if (iCent < numCentBins-1) table1File << " & ";
+        } // end loop over iCent
+        table1File << " \\\\" << endl;
+      }
+      table1File << "\\hline";
+      if (iPtZ < nPtZBins-1) table1File << " \\hline" << endl;
+    } // end loop over iPtZ
+
+    table1File << endl << "\\end{tabular}" << endl;
+    table1File << "\\caption{Summary of UE subtracted per-\\Zboson charged particle yields $(1/N_\\mathrm{Z})(d^2N_\\mathrm{ch}/d\\ptch d\\Delta\\phi)$, with total statistical and systematic uncertainties.}" << endl;
+    table1File << "\\label{tab1}" << endl;
+    table1File << "\\end{center}" << endl;
+    table1File << "\\end{table}" << endl;
+
+    table1File.close ();
   }
 
 
 
 
   {
-    TCanvas* c22 = new TCanvas ("c22", "", 1400, 800);
-    c22->cd ();
 
-    const double lMargin = 0.15*4./7.;
-    const double rMargin = 0.04*4./7.;
-    const double bMargin = 0.15;
-    const double tMargin = 0.05*7./4.;
+    ofstream table2File;
+    table2File.open (Form ("%s/table2.tex", tablesPath.Data ()));
+  
+    double x, y, x_err, y_stat, y_syst;
 
-    const double padX = 0.5*(1.+lMargin-rMargin);
-    const double padY = 0.5*(1.-tMargin+bMargin);
+    table2File << "\\begin{table}[!ht]" << endl;
+    table2File << "\\begin{center}" << endl;
+    table2File << "\\renewcommand{\\arraystretch}{1.2}" << endl;
+    table2File << "\\begin{tabular}{|l|l|l|l|l|}" << endl;
 
-    TPad* lPad = new TPad ("c22_lPad", "", 0, 0, padX, 1);
-    TPad* rPad = new TPad ("c22_rPad", "", padX, 0, 1, 1);
+    table2File << "\\hline" << endl;
+    table2File << "\\multicolumn{1}{|c|}{\\multirow{2}{*}{\\xhz}} & \\multicolumn{4}{c|}{$(1/N_\\mathrm{Z})(d^2N_\\mathrm{ch}/d\\xhz d\\Delta\\phi)$ $\\pm$ (Stat. Unc.) $\\pm$ (Syst. Unc.)} \\\\ \\cline{2-5}" << endl;
+    table2File << " & \\multicolumn{1}{c|}{\\small \\pp} & \\multicolumn{1}{c|}{\\small 30-80\\% \\PbPb} & \\multicolumn{1}{c|}{\\small 10-30\\% \\PbPb} & \\multicolumn{1}{c|}{\\small 0-10\\% \\PbPb} \\\\ \\hline \\hline" << endl;
+      
+    for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
 
-    lPad->SetLeftMargin (lMargin/padX);
-    lPad->SetRightMargin (0);
-    rPad->SetLeftMargin (0);
-    rPad->SetRightMargin (rMargin/(1.-padX));
-    lPad->SetBottomMargin (bMargin);
-    lPad->SetTopMargin (tMargin);
-    rPad->SetBottomMargin (bMargin);
-    rPad->SetTopMargin (tMargin);
+      const char* ptzStr = (iPtZ == nPtZBins-1 ? Form ("{$\\ptz > \\SI{%g}{\\GeV}$}", zPtBins[iPtZ]) : Form ("{%g < \\ptz < $\\SI{%g}{\\GeV}$}", zPtBins[iPtZ], zPtBins[iPtZ+1]));
 
-    lPad->Draw ();
-    rPad->Draw ();
+      table2File << "\\multicolumn{5}{|c|}{\\small " << ptzStr << "} \\\\ \\hline" << endl;
 
-    std::vector <TPad*> pads = {lPad, rPad};
-    std::vector <TH1D***> hists = {h_trk_dphi_ptz_lt4_sub_stat, h_trk_dphi_ptz_gt4_sub_stat};
+      for (int i = 0; i < nXhZBins[iPtZ] - (iPtZ == 2 ? 1 : 0); i++) {
+        for (short iCent = 0; iCent < numCentBins; iCent++) {
+          TGAE* g_syst = g_trk_xhz_ptz_sub_syst[iPtZ][iCent];
+          TH1D* h_stat = h_trk_xhz_ptz_sub_stat[iPtZ][iCent];
 
-    for (short iPad = 0; iPad < 2; iPad++) {
-      const short iPtZ = 4;
+          x_err = g_syst->GetErrorX (i);
+          y_syst = g_syst->GetErrorY (i);
+          x = h_stat->GetBinCenter (i+1);
+          y = h_stat->GetBinContent (i+1);
+          y_stat = h_stat->GetBinError (i+1);
 
-      pads[iPad]->cd ();
+          string s_y = to_string (y);
+          string s_y_stat = to_string (y_stat);
+          string s_y_syst = to_string (y_syst);
 
-      TH1D* h = new TH1D ("", "", 1, 0, pi);
+          FormatMeasurement (s_y, s_y_stat, s_y_syst, 2);
 
-      TAxis* xax = h->GetXaxis ();
-      TAxis* yax = h->GetYaxis ();
+          int xlo = round (1./(x-x_err));
+          int xhi = round (1./(x+x_err));
 
-      xax->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-      xax->SetTitle ("#Delta#phi_{hZ}");
-      xax->SetTitleFont (43);
-      xax->SetTitleSize (40);
-      xax->SetTitleOffset (1.6 * 4./7. * xax->GetTitleOffset ());
-      xax->SetRangeUser (0, pi);
-      xax->SetLabelSize (0);
+          if (iCent == 0) {
+            table2File << "\\footnotesize {$1/" << xlo;
+            if (xhi > 1) table2File << " - 1/";
+            else table2File << " - ";
+            table2File << xhi << "$} & ";
+          }
 
-      yax->SetTitle ("(1/N_{Z}) (dN_{ch} / d#Delta#phi)");
-      yax->SetTitleFont (43);
-      yax->SetTitleSize (40);
-      yax->SetTitleOffset (1.8 * 4./7. * yax->GetTitleOffset ());
-      yax->SetLabelOffset (1.8 * yax->GetLabelOffset ());
-      yax->SetMoreLogLabels ();
-      const double ymin = (iPtZ == 4 ? -1.3 : (iPtZ == 3 ? -0.5 : -0.25));
-      const double ymax = (iPtZ == 4 ? 11 : (iPtZ == 3 ? 3 : 1.35));
-      yax->SetRangeUser (ymin, ymax);
+          table2File << "\\scriptsize {$" << s_y << " \\pm " << s_y_stat << " \\pm " << s_y_syst << "$} ";
+          if (iCent < numCentBins-1) table2File << " & ";
+        } // end loop over iCent
+        table2File << " \\\\" << endl;
+      }
+      table2File << "\\hline";
+      if (iPtZ < nPtZBins-1) table2File << " \\hline" << endl;
+    } // end loop over iPtZ
 
-      h->SetLineWidth (0);
+    table2File << endl << "\\end{tabular}" << endl;
+    table2File << "\\caption{Summary of UE subtracted per-\\Zboson charged particle yields $(1/N_\\mathrm{Z})(d^2N_\\mathrm{ch}/d\\xhz d\\Delta\\phi)$, with total statistical and systematic uncertainties.}" << endl;
+    table2File << "\\label{tab2}" << endl;
+    table2File << "\\end{center}" << endl;
+    table2File << "\\end{table}" << endl;
 
-      h->DrawCopy ("");
-      SaferDelete (&h);
-
-      tl->SetTextFont (43);
-      tl->SetTextSize (36);
-      tl->SetTextAlign (21);
-
-      const double yoff = ymin - 0.05 * (ymax-ymin) / (1.-tMargin-bMargin);
-      if (pads[iPad] == lPad)
-        tl->DrawLatex (0,  yoff, "0");
-      tl->DrawLatex (0.5,  yoff, "0.5");
-      tl->DrawLatex (1,  yoff, "1");
-      tl->DrawLatex (1.5,  yoff, "1.5");
-      tl->DrawLatex (2,  yoff, "2");
-      tl->DrawLatex (2.5,  yoff, "2.5");
-      tl->DrawLatex (3,  yoff, "3");
-
-      l->SetLineStyle (2);
-      l->SetLineWidth (2);
-      l->DrawLine (3.*pi/4., ymin, 3.*pi/4., 0.71*ymax);
-    } // end loop over iPad
-    
-
-    for (short iPad = 0; iPad < 2; iPad++) {
-      const short iPtZ = 4;
-
-      pads[iPad]->cd ();
-
-      for (short iCent : {0, 1, 2, 3}) {
-        TGAE* g_stat = make_graph (hists[iPad][iPtZ][iCent]);
-
-        Style_t markerStyle = (iCent == 0 ? kOpenCircle : markerStyles[iCent-1]);
-        float markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        g_stat->SetLineWidth (3);
-        g_stat->SetMarkerColor (iCent == 0 ? kBlack : finalColors[iCent]);
-        g_stat->SetLineColor (iCent == 0 ? kBlack : finalColors[iCent]);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        markerStyle = FullToOpenMarker (markerStyle);
-        markerSize = (markerStyle == kFullDiamond || markerStyle == kOpenDiamond ? 2.4 : 1.8);
-        
-        g_stat->SetMarkerStyle (markerStyle);
-        g_stat->SetMarkerSize (markerSize);
-        if (iCent > 0) g_stat->SetLineWidth (0);
-        g_stat->SetMarkerColor (kBlack);
-
-        ((TGAE*) g_stat->Clone ())->Draw ("P");
-
-        SaferDelete (&g_stat);
-      } // end loop over iCent
-    } // end loop over iPad
-
-    tl->SetTextColor (kBlack);
-
-    tl->SetTextAlign (22);
-    tl->SetTextSize (34);
-    lPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.+lMargin/padX), 0.950, "2 < #it{p}_{T}^{ch} < 4 GeV");
-    rPad->cd ();
-    tl->DrawLatexNDC (0.5*(1.-rMargin/(1.-padX)), 0.950, "#it{p}_{T}^{ch} > 4 GeV");
-
-    tl->SetTextAlign (11);
-
-    lPad->cd ();
-    tl->SetTextSize (40);
-    tl->DrawLatexNDC (0.23, 0.790, "#bf{#it{ATLAS}} Internal");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.23, 0.720, "#it{p}_{T}^{Z} > 60 GeV");
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.32, 0.665-0.015, "#it{pp}");
-    tl->DrawLatexNDC (0.32, 0.610-0.015, "30-80% Pb+Pb");
-    tl->DrawLatexNDC (0.32, 0.555-0.015, "10-30% Pb+Pb");
-    tl->DrawLatexNDC (0.32, 0.500-0.015, "0-10% Pb+Pb");
-    MakeDataBox   (0.33, 0.665, finalFillColors[0], 0.30, kOpenCircle, 1.8);
-    MakeDataBox   (0.33, 0.610, finalFillColors[1], 0.30, markerStyles[0], 1.8);
-    MakeDataBox   (0.33, 0.555, finalFillColors[2], 0.30, markerStyles[1], 1.8);
-    MakeDataBox   (0.33, 0.500, finalFillColors[3], 0.30, markerStyles[2], 2.4);
-
-    rPad->cd ();
-    tl->SetTextSize (32);
-    tl->DrawLatexNDC (0.07, 0.800, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}");
-    tl->DrawLatexNDC (0.07, 0.730, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}");
-    //tl->SetTextSize (32);
-    //tl->DrawLatexNDC (0.07, 0.725, "#it{p}_{T}^{Z} > 60 GeV");
-
-    c22->SaveAs ("../Plots/FinalPlots/yield_dphi.pdf");
-
+    table2File.close ();
   }
+
+
+
+
+  {
+    ofstream table3File;
+    table3File.open (Form ("%s/table3.tex", tablesPath.Data ()));
+
+    double x, y, x_err, y_stat, y_syst;
+
+    table3File << "\\begin{table}[!ht]" << endl;
+    table3File << "\\begin{center}" << endl;
+    table3File << "\\renewcommand{\\arraystretch}{1.2}" << endl;
+    table3File << "\\begin{tabular}{|l|l|l|l|}" << endl;
+
+    table3File << "\\hline" << endl;
+    table3File << "\\multicolumn{1}{|c|}{\\multirow{2}{*}{\\ptch [\\GeV]}} & \\multicolumn{3}{c|}{\\IAA $\\pm$ (Stat. Unc.) $\\pm$ (Syst. Unc.)} \\\\ \\cline{2-4}" << endl;
+    table3File << " & \\multicolumn{1}{c|}{\\small 30-80\\% \\PbPb \\,/ \\pp} & \\multicolumn{1}{c|}{\\small 10-30\\% \\PbPb \\,/ \\pp} & \\multicolumn{1}{c|}{\\small 0-10\\% \\PbPb \\,/ \\pp} \\\\ \\hline \\hline" << endl;
+      
+    for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+
+      const char* ptzStr = (iPtZ == nPtZBins-1 ? Form ("{$\\ptz > \\SI{%g}{\\GeV}$}", zPtBins[iPtZ]) : Form ("{%g < \\ptz < $\\SI{%g}{\\GeV}$}", zPtBins[iPtZ], zPtBins[iPtZ+1]));
+
+      table3File << "\\multicolumn{4}{|c|}{\\small " << ptzStr << "} \\\\ \\hline" << endl;
+
+      for (int i = 0; i < nPtchBins[iPtZ]; i++) {
+        for (short iCent = 1; iCent < numCentBins; iCent++) {
+          TGAE* g_syst = g_trk_pt_ptz_iaa_syst[iPtZ][iCent];
+          TH1D* h_stat = h_trk_pt_ptz_iaa_stat[iPtZ][iCent];
+          x_err = g_syst->GetErrorX (i);
+          y_syst = g_syst->GetErrorY (i);
+          x = h_stat->GetBinCenter (i+1);
+          y = h_stat->GetBinContent (i+1);
+          y_stat = h_stat->GetBinError (i+1);
+
+          string s_y = to_string (y);
+          string s_y_stat = to_string (y_stat);
+          string s_y_syst = to_string (y_syst);
+
+          FormatMeasurement (s_y, s_y_stat, s_y_syst, 2);
+
+          if (iCent == 1) table3File << "\\footnotesize {$" << x-x_err << " - " << x+x_err << "$} & ";
+          table3File << "\\footnotesize {$" << s_y << " \\pm " << s_y_stat << " \\pm " << s_y_syst << "$} ";
+          if (iCent < numCentBins-1) table3File << " & ";
+        } // end loop over iCent
+        table3File << " \\\\" << endl;
+      }
+      table3File << "\\hline";
+      if (iPtZ < nPtZBins-1) table3File << " \\hline" << endl;
+    } // end loop over iPtZ
+
+    table3File << endl << "\\end{tabular}" << endl;
+    table3File << "\\caption{Summary of \\PbPb to \\pp ratios of UE subtracted per-\\Zboson charged particle yields $\\IAA (\\ptch)$, with total statistical and systematic uncertainties.}" << endl;
+    table3File << "\\label{tab3}" << endl;
+    table3File << "\\end{center}" << endl;
+    table3File << "\\end{table}" << endl;
+
+    table3File.close ();
+  }
+
+
+
+
+  {
+    ofstream table4File;
+    table4File.open (Form ("%s/table4.tex", tablesPath.Data ()));
+
+    double x, y, x_err, y_stat, y_syst;
+
+    table4File << "\\begin{table}[!ht]" << endl;
+    table4File << "\\begin{center}" << endl;
+    table4File << "\\renewcommand{\\arraystretch}{1.2}" << endl;
+    table4File << "\\begin{tabular}{|l|l|l|l|}" << endl;
+
+    table4File << "\\hline" << endl;
+    table4File << "\\multicolumn{1}{|c|}{\\multirow{2}{*}{\\xhz}} & \\multicolumn{3}{c|}{\\IAA $\\pm$ (Stat. Unc.) $\\pm$ (Syst. Unc.)} \\\\ \\cline{2-4}" << endl;
+    table4File << " & \\multicolumn{1}{c|}{\\small 30-80\\% \\PbPb \\,/ \\pp} & \\multicolumn{1}{c|}{\\small 10-30\\% \\PbPb \\,/ \\pp} & \\multicolumn{1}{c|}{\\small 0-10\\% \\PbPb \\,/ \\pp} \\\\ \\hline \\hline" << endl;
+      
+    for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+
+      const char* ptzStr = (iPtZ == nPtZBins-1 ? Form ("{$\\ptz > \\SI{%g}{\\GeV}$}", zPtBins[iPtZ]) : Form ("{%g < \\ptz < $\\SI{%g}{\\GeV}$}", zPtBins[iPtZ], zPtBins[iPtZ+1]));
+
+      table4File << "\\multicolumn{4}{|c|}{\\small " << ptzStr << "} \\\\ \\hline" << endl;
+
+      for (int i = 0; i < nXhZBins[iPtZ] - (iPtZ == 2 ? 1 : 0); i++) {
+        for (short iCent = 1; iCent < numCentBins; iCent++) {
+          TGAE* g_syst = g_trk_xhz_ptz_iaa_syst[iPtZ][iCent];
+          TH1D* h_stat = h_trk_xhz_ptz_iaa_stat[iPtZ][iCent];
+
+          x_err = g_syst->GetErrorX (i);
+          y_syst = g_syst->GetErrorY (i);
+          x = h_stat->GetBinCenter (i+1);
+          y = h_stat->GetBinContent (i+1);
+          y_stat = h_stat->GetBinError (i+1);
+
+          string s_y = to_string (y);
+          string s_y_stat = to_string (y_stat);
+          string s_y_syst = to_string (y_syst);
+
+          FormatMeasurement (s_y, s_y_stat, s_y_syst, 2);
+
+          int xlo = round (1./(x-x_err));
+          int xhi = round (1./(x+x_err));
+
+          if (iCent == 1) {
+            table4File << "\\footnotesize {$1/" << xlo;
+            if (xhi > 1) table4File << " - 1/";
+            else table4File << " - ";
+            table4File << xhi << "$} & ";
+          }
+          table4File << "\\footnotesize {$" << s_y << " \\pm " << s_y_stat << " \\pm " << s_y_syst << "$} ";
+          if (iCent < numCentBins-1) table4File << " & ";
+        } // end loop over iCent
+        table4File << " \\\\" << endl;
+      }
+      table4File << "\\hline";
+      if (iPtZ < nPtZBins-1) table4File << " \\hline" << endl;
+    } // end loop over iPtZ
+
+    table4File << endl << "\\end{tabular}" << endl;
+    table4File << "\\caption{Summary of \\PbPb to \\pp ratios of UE subtracted per-\\Zboson charged particle yields $\\IAA (\\xhz)$, with total statistical and systematic uncertainties.}" << endl;
+    table4File << "\\label{tab4}" << endl;
+    table4File << "\\end{center}" << endl;
+    table4File << "\\end{table}" << endl;
+
+    table4File.close ();
+  }
+
+
+
+
+  {
+    ofstream table5File;
+    table5File.open (Form ("%s/table5.tex", tablesPath.Data ()));
+
+    double x, ntrk, x_err, ntrk_stat, ntrk_syst, ptch, ptch_stat, ptch_syst, xhz, xhz_stat, xhz_syst;
+
+    table5File << "\\begin{table}[!ht]" << endl;
+    table5File << "\\begin{center}" << endl;
+    table5File << "\\renewcommand{\\arraystretch}{1.2}" << endl;
+    table5File << "\\begin{tabular}{|l|l|l|l|}" << endl;
+    table5File << "\\hline" << endl;      
+    table5File << "\\multirow{2}{*}{$\\left<\\ptz\\right>\\pm$ (Stat. Unc.) [\\GeV]} & \\multicolumn{3}{c|}{$\\left<\\text{Value}\\right>$ $\\pm$ (Stat. Unc.) $\\pm$ (Syst. Unc.)}" << " \\\\ \\cline{2-4}" << endl;
+    table5File << "& \\multicolumn{1}{c|}{$N_\\mathrm{ch}$} & \\multicolumn{1}{c|}{\\ptch [\\GeV]} & \\multicolumn{1}{c|}{\\xhz} \\\\" << endl;
+    for (short iCent = 0; iCent < numCentBins; iCent++) {
+
+      const char* centStr = (iCent == 0 ? "\\pp" : Form ("%i-%i\\%% \\PbPb", (int)centCuts[iCent], (int)centCuts[iCent-1]));
+      table5File << "\\hline \\hline \\multicolumn{4}{|c|}{" << centStr << "} \\\\ \\hline" << endl;
+      for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+
+        TGAE* g_ntrk_stat = g_avg_ntrk_ptz_stat[iCent];
+        TGAE* g_ntrk_syst = g_avg_ntrk_ptz_syst[iCent];
+        TGAE* g_ptch_stat = g_trk_avg_pt_ptz_stat[iCent];
+        TGAE* g_ptch_syst = g_trk_avg_pt_ptz_syst[iCent];
+        TGAE* g_xhz_stat = g_trk_avg_xhz_ptz_stat[iCent];
+        TGAE* g_xhz_syst = g_trk_avg_xhz_ptz_syst[iCent];
+
+        g_ntrk_stat->GetPoint (iPtZ-2, x, ntrk);
+        x_err = g_ntrk_stat->GetErrorX (iPtZ-2);
+        ntrk_stat = g_ntrk_stat->GetErrorY (iPtZ-2);
+        ntrk_syst = g_ntrk_syst->GetErrorY (iPtZ-2);
+        g_ptch_stat->GetPoint (iPtZ-2, x, ptch);
+        ptch_stat = g_ptch_stat->GetErrorY (iPtZ-2);
+        ptch_syst = g_ptch_syst->GetErrorY (iPtZ-2);
+        g_xhz_stat->GetPoint (iPtZ-2, x, xhz);
+        xhz_stat = g_xhz_stat->GetErrorY (iPtZ-2);
+        xhz_syst = g_xhz_syst->GetErrorY (iPtZ-2);
+
+        string s_x = to_string (x);
+        string s_x_err = to_string (x_err);
+        string dummy = to_string (x_err); FormatMeasurement (s_x, s_x_err, dummy, 2);
+
+        string s_ntrk = to_string (ntrk);
+        string s_ntrk_stat = to_string (ntrk_stat);
+        string s_ntrk_syst = to_string (ntrk_syst);
+        string s_ptch = to_string (ptch);
+        string s_ptch_stat = to_string (ptch_stat);
+        string s_ptch_syst = to_string (ptch_syst);
+        string s_xhz = to_string (xhz);
+        string s_xhz_stat = to_string (xhz_stat);
+        string s_xhz_syst = to_string (xhz_syst);
+
+        FormatMeasurement (s_ntrk, s_ntrk_stat, s_ntrk_syst, 2);
+        FormatMeasurement (s_ptch, s_ptch_stat, s_ptch_syst, 2);
+        FormatMeasurement (s_xhz, s_xhz_stat, s_xhz_syst, 2);
+
+        table5File << "{\\footnotesize $" << s_x << " \\pm " << s_x_err << "$} & \\footnotesize {$" << s_ntrk << " \\pm " << s_ntrk_stat << " \\pm " << s_ntrk_syst << "$} ";
+        table5File << "& \\footnotesize {$" << s_ptch << " \\pm " << s_ptch_stat << " \\pm " << s_ptch_syst << "$} ";
+        table5File << "& \\footnotesize {$" << s_xhz << " \\pm " << s_xhz_stat << " \\pm " << s_xhz_syst << "$} ";
+        table5File << " \\\\" << endl;
+      } // end loop over iPtZ
+    } // end loop over iCent
+
+    table5File << "\\hline" << endl;
+    table5File << "\\end{tabular}" << endl;
+    table5File << "\\caption{Summary of mean number of charged particles $N_\\mathrm{ch}$, \\ptch, and \\xhz, with total statistical and systematic uncertainties, for each collision system \\& centrality.}" << endl;
+    table5File << "\\label{tab5}" << endl;
+    table5File << "\\end{center}" << endl;
+    table5File << "\\end{table}" << endl;
+
+    table5File.close ();
+  }
+
+
+
+
+  //{
+
+  //  ofstream table6File;
+  //  table6File.open (Form ("%s/table6.tex", tablesPath.Data ()));
+  //
+  //  double x, y, x_err, y_stat, y_syst;
+
+  //  table6File << "\\hline" << endl;
+  //  table6File << "\\multicolumn{1}{|c|}{\\multirow{2}{*}{$\\Delta\\phi_\\mathrm{hZ}$}} & \\multicolumn{2}{c|}{$(1/N_\\mathrm{Z})(dN_\\mathrm{ch}/dd\\Delta\\phi_\\mathrm{hZ})$ $\\pm$ (Stat. Unc.) $\\pm$ (Syst. Unc.) [\\GeV$^{-1}$]} \\\\ \\cline{2-5}" << endl;
+  //  table6File << " & \\multicolumn{1}{c|}{\\small \\pp} & \\multicolumn{1}{c|}{\\small 0-30\\% \\PbPb} \\\\ \\hline \\hline" << endl;
+  //    
+  //  for (short iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+
+  //    const char* ptzStr = (iPtZ == nPtZBins-1 ? Form ("{$\\ptz > \\SI{%g}{\\GeV}$}", zPtBins[iPtZ]) : Form ("{%g < \\ptz < $\\SI{%g}{\\GeV}$}", zPtBins[iPtZ], zPtBins[iPtZ+1]));
+
+  //    table6File << "\\multicolumn{3}{|c|}{\\small " << ptzStr << "} \\\\ \\hline" << endl;
+
+  //    for (int i = 0; i < g_trk_dphi_ptz_gt4_sub_syst[iPtZ][0]->GetN (); i++) {
+  //      for (short iCent : {0, numCentBins}) {
+  //        TGAE* g_syst = g_trk_dphi_ptz_gt4_sub_syst[iPtZ][iCent];
+  //        TH1D* h_stat = h_trk_dphi_ptz_gt4_sub_stat[iPtZ][iCent];
+  //        x_err = g_syst->GetErrorX (i);
+  //        y_syst = g_syst->GetErrorY (i);
+  //        x = h_stat->GetBinCenter (i+1);
+  //        y = h_stat->GetBinContent (i+1);
+  //        y_stat = h_stat->GetBinError (i+1);
+
+  //        string s_y = to_string (y);
+  //        string s_y_stat = to_string (y_stat);
+  //        string s_y_syst = to_string (y_syst);
+
+  //        double x_lo = round (20.*(x-x_err)/pi)/20.;
+  //        double x_hi = round (20.*(x+x_err)/pi)/20.;
+
+  //        string s_x_lo = (x_lo == 0 ? "0" : to_string (x_lo));
+  //        string s_x_hi = (x_hi == 1. ? "" : to_string (x_hi));
+  //        while (s_x_lo.back () == '0' && s_x_lo.length () > 1)
+  //          s_x_lo.pop_back ();
+  //        while (s_x_hi.back () == '0' && s_x_hi.length () > 1)
+  //          s_x_hi.pop_back ();
+  //        s_x_hi = s_x_hi + "\\pi";
+
+  //        FormatMeasurement (s_y, s_y_stat, s_y_syst, 2);
+
+  //        if (iCent == 0) table6File << "\\footnotesize {$" << s_x_lo << " - " << s_x_hi << "$} & ";
+  //        table6File << "\\scriptsize {$" << s_y << " \\pm " << s_y_stat << " \\pm " << s_y_syst << "$} ";
+  //        if (iCent < numCentBins-1) table6File << " & ";
+  //      } // end loop over iCent
+  //      table6File << " \\\\" << endl;
+  //    }
+  //    table6File << "\\hline";
+  //    if (iPtZ < nPtZBins-1) table6File << " \\hline" << endl;
+  //  } // end loop over iPtZ
+  //  table6File.close ();
+  //}
+
 } // end of macro
 
 #endif

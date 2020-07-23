@@ -301,6 +301,7 @@ void FullAnalysis :: LoadHists (const char* histFileName, const bool _finishHist
     CombineFullHists ();
     ScaleHists ();
     SetVariances ();
+    MakeSummaryCorrelations ();
   }
 
   _gDirectory->cd ();

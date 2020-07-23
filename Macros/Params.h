@@ -57,6 +57,7 @@ extern int mixingFraction;
 
 const TString rootPath = TString (std::getenv ("ZHADRONS_DATA_PATH")) + "/rootFiles/";
 const TString plotPath = TString (std::getenv ("ZHADRONS_PATH")) + "/Plots/";
+const TString tablesPath = TString (std::getenv ("ZHADRONS_PATH")) + "/Tables/";
 
 const double etaTrkBins[6] = {0, 0.5, 1.0, 1.5, 2.0, 2.5};
 const int numEtaTrkBins = sizeof (etaTrkBins) / sizeof (etaTrkBins[0]) - 1;
@@ -809,13 +810,13 @@ short GetRunGroup (int rn) {
 }
 
 
-void MakeTheoryBox (const double x, const double y, const Color_t color, const double colorAlpha, const double boxMultiplier = 1.) {
+void MakeTheoryBox (const double x, const double y, const Color_t color, const double colorAlpha, const double boxMultiplierX = 1., const double boxMultiplierY = 1.) {
   const double ytsize = 0.07;
   const double xtsize = 0.18;
-  const double y1 = y - 0.25*ytsize;
-  const double y2 = y + 0.25*ytsize;
+  const double y1 = y - 0.25*ytsize*boxMultiplierY;
+  const double y2 = y + 0.25*ytsize*boxMultiplierY;
   const double x2 = x - 0.15*xtsize;
-  const double x1 = x - 0.55*xtsize*boxMultiplier;
+  const double x1 = x - 0.55*xtsize*boxMultiplierX;
   TPave *mbox = new TPave (x1, y1, x2, y2, 0, "NDC");
   mbox->SetFillColorAlpha (color, colorAlpha);
   mbox->SetFillStyle (1001);
@@ -849,8 +850,8 @@ void MakeTheoryLine (const double x, const double y, const Color_t color, const 
 }
 
 
-void MakeDataBox (const double x, const double y, const Color_t color, const double colorAlpha, const Style_t mstyle, const double msize) {
-  MakeTheoryBox (x, y, color, colorAlpha);
+void MakeDataBox (const double x, const double y, const Color_t color, const double colorAlpha, const Style_t mstyle, const double msize, const double bmx = 1., const double bmy = 1.) {
+  MakeTheoryBox (x, y, color, colorAlpha, bmx, bmy);
 
   const double ytsize = 0.07;
   const double xtsize = 0.18;
