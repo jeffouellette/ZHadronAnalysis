@@ -18,6 +18,7 @@
 #include "NonClosureVariation.h"
 
 const bool doSys = true;
+const bool execMode = true;
 int mixingFraction = 0;
 
 // nominal analyses
@@ -122,29 +123,32 @@ void Run () {
   //  mcBkg_statDownVar       = new MixingAnalysis ("mcBkg_statDownVar");
   //}
 
-  //data18->Execute   ("DataAnalysis/Nominal/data18hi.root",   "DataAnalysis/Nominal/data18hi_hists.root");
+  if (execMode) {
+    data18->Execute   ("DataAnalysis/Nominal/data18hi.root",   "DataAnalysis/Nominal/data18hi_hists.root");
 
-  //if (doSys) {
-  //  data_leptonRejVar       = new PhysicsAnalysis ("data_leptonRejVar");
-  //  data_leptonRejVar->doLeptonRejVar = true;
-  //  data_leptonRejVar->Execute      ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/LeptonRejVariation/data18hi_hists.root");
+    if (doSys) {
+      data_leptonRejVar       = new PhysicsAnalysis ("data_leptonRejVar");
+      data_leptonRejVar->doLeptonRejVar = true;
+      data_leptonRejVar->Execute      ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/LeptonRejVariation/data18hi_hists.root");
 
-  //  data_trackHItight       = new PhysicsAnalysis ("data_trackHITightVar");
-  //  data_trackHItight->useHITight = true;
-  //  data_trackHItight->Execute      ("DataAnalysis/Variations/TrackHITightWPVariation/data18hi.root",      "DataAnalysis/Variations/TrackHITightWPVariation/data18hi_hists.root");
+      data_trackHItight       = new PhysicsAnalysis ("data_trackHITightVar");
+      data_trackHItight->useHITight = true;
+      data_trackHItight->Execute      ("DataAnalysis/Variations/TrackHITightWPVariation/data18hi.root",      "DataAnalysis/Variations/TrackHITightWPVariation/data18hi_hists.root");
 
-  //  data_partComp        = new PhysicsAnalysis ("data_trackEffVar");
-  //  data_partComp->doTrackEffVar = true;
-  //  data_partComp->Execute          ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackEffPionsVariation/data18hi_hists.root");
+      data_partComp        = new PhysicsAnalysis ("data_trackEffVar");
+      data_partComp->doTrackEffVar = true;
+      data_partComp->Execute          ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackEffPionsVariation/data18hi_hists.root");
 
-  //  data_trkPurUpVar      = new PhysicsAnalysis ("data_trkPurUpVar");
-  //  data_trkPurUpVar->doTrackPurVar = true; data_trkPurUpVar->trkPurNSigma = 1;
-  //  data_trkPurUpVar->Execute       ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackPurityUpVariation/data18hi_hists.root");
+      data_trkPurUpVar      = new PhysicsAnalysis ("data_trkPurUpVar");
+      data_trkPurUpVar->doTrackPurVar = true; data_trkPurUpVar->trkPurNSigma = 1;
+      data_trkPurUpVar->Execute       ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackPurityUpVariation/data18hi_hists.root");
 
-  //  data_trkPurDownVar    = new PhysicsAnalysis ("data_trkPurDownVar");
-  //  data_trkPurDownVar->doTrackPurVar = true; data_trkPurDownVar->trkPurNSigma = -1;
-  //  data_trkPurDownVar->Execute     ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackPurityDownVariation/data18hi_hists.root");
-  //}
+      data_trkPurDownVar    = new PhysicsAnalysis ("data_trkPurDownVar");
+      data_trkPurDownVar->doTrackPurVar = true; data_trkPurDownVar->trkPurNSigma = -1;
+      data_trkPurDownVar->Execute     ("DataAnalysis/Nominal/data18hi.root",                                 "DataAnalysis/Variations/TrackPurityDownVariation/data18hi_hists.root");
+    }
+    return;
+  }
 
   mc->LoadHists ("MCAnalysis/Nominal/savedHists.root");
   mc->CombineHists (); // necessary for calculating electron & muon ES systematics in the combined channel result

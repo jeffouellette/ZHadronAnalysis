@@ -310,7 +310,7 @@ int main (int argc, char** argv) {
     //  mixingFraction = 5;
     if ((!isPbPb && !doPPMBMixVar))
       mixingFraction = 1;
-    else if (!isPbPb && !doPPMBMixVar) {
+    else if (!isPbPb && doPPMBMixVar) {
       bkg->doPPMBMixing = true;
       mixingFraction = 40;
     }

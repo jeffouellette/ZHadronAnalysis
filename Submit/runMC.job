@@ -6,7 +6,7 @@ GetEnv = True
 InitialDir = /atlasgpfs01/usatlas/workarea/jeff/ZHadronAnalysis/Macros
 accounting_group = group_atlas.boulder
 
-sysFlags = false none
+sysFlags = false doElectronPtDownVar
 
 
 Arguments = mc CombinedTrees/pp_all.root 0 Histograms/pp_all_hists.root 0 false $(sysFlags)
