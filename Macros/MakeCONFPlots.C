@@ -12,6 +12,7 @@
 #include <TGraphAsymmErrors.h>
 #include <TCanvas.h>
 #include <TLine.h>
+#include <TLatex.h>
 #include <TColor.h>
 
 #include <iostream>
@@ -134,7 +135,7 @@ void MakeCONFPlots () {
     vector<double> xarr (0);
     vector<double> yarr_g1_8 (0), yarr_g2_0 (0), yarr_g2_2 (0);
 
-    string modelFileName = "../VitevModel/R_SigZ0Had5020_010.g1.8LOZ30-60";
+    string modelFileName = "../SCETg_QM2019/R_SigZ0Had5020_010.g1.8LOZ30-60";
     f.open (modelFileName.c_str ());
     while (f) {
       f >> x >> y;
@@ -143,7 +144,7 @@ void MakeCONFPlots () {
     }
     f.close ();
 
-    modelFileName = "../VitevModel/R_SigZ0Had5020_010.g2.0LOZ30-60";
+    modelFileName = "../SCETg_QM2019/R_SigZ0Had5020_010.g2.0LOZ30-60";
     f.open (modelFileName.c_str ());
     while (f) {
       f >> x >> y;
@@ -151,7 +152,7 @@ void MakeCONFPlots () {
     }
     f.close ();
 
-    modelFileName = "../VitevModel/R_SigZ0Had5020_010.g2.2LOZ30-60";
+    modelFileName = "../SCETg_QM2019/R_SigZ0Had5020_010.g2.2LOZ30-60";
     f.open (modelFileName.c_str ());
     while (f) {
       f >> x >> y;
@@ -174,7 +175,7 @@ void MakeCONFPlots () {
     yarr_g2_0.clear ();
     yarr_g2_2.clear ();
     
-    modelFileName = "../VitevModel/R_SigZ0Had5020_010.g1.8LOZ60-300";
+    modelFileName = "../SCETg_QM2019/R_SigZ0Had5020_010.g1.8LOZ60-300";
     f.open (modelFileName.c_str ());
     while (f) {
       f >> x >> y;
@@ -183,7 +184,7 @@ void MakeCONFPlots () {
     }
     f.close ();
 
-    modelFileName = "../VitevModel/R_SigZ0Had5020_010.g2.0LOZ60-300";
+    modelFileName = "../SCETg_QM2019/R_SigZ0Had5020_010.g2.0LOZ60-300";
     f.open (modelFileName.c_str ());
     while (f) {
       f >> x >> y;
@@ -191,7 +192,7 @@ void MakeCONFPlots () {
     }
     f.close ();
 
-    modelFileName = "../VitevModel/R_SigZ0Had5020_010.g2.2LOZ60-300";
+    modelFileName = "../SCETg_QM2019/R_SigZ0Had5020_010.g2.2LOZ60-300";
     f.open (modelFileName.c_str ());
     while (f) {
       f >> x >> y;
@@ -209,25 +210,25 @@ void MakeCONFPlots () {
   }
 
 
-  TGAE** g_jewel_xhz = Get1DArray <TGAE*> (nPtZBins);
-  TGAE** g_jewel_pth = Get1DArray <TGAE*> (nPtZBins);
-  {
-    TFile* jewelFile = new TFile ("../rootFiles/Jewel/hists.root", "read");
-    for (int iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
-      TH1D* h_num = (TH1D*) jewelFile->Get (Form ("h_z_trk_pth_medium_iSpc2_iPtZ%i", iPtZ));
-      TH1D* h_den = (TH1D*) jewelFile->Get (Form ("h_z_trk_pth_vacuum_iSpc2_iPtZ%i", iPtZ));
+  //TGAE** g_jewel_xhz = Get1DArray <TGAE*> (nPtZBins);
+  //TGAE** g_jewel_pth = Get1DArray <TGAE*> (nPtZBins);
+  //{
+  //  TFile* jewelFile = new TFile ("../rootFiles/Jewel/hists.root", "read");
+  //  for (int iPtZ = 2; iPtZ < nPtZBins; iPtZ++) {
+  //    TH1D* h_num = (TH1D*) jewelFile->Get (Form ("h_z_trk_pth_medium_iSpc2_iPtZ%i", iPtZ));
+  //    TH1D* h_den = (TH1D*) jewelFile->Get (Form ("h_z_trk_pth_vacuum_iSpc2_iPtZ%i", iPtZ));
 
-      h_num->Divide (h_den);
-      g_jewel_pth[iPtZ] = make_graph (h_num);
+  //    h_num->Divide (h_den);
+  //    g_jewel_pth[iPtZ] = make_graph (h_num);
 
-      h_num = (TH1D*) jewelFile->Get (Form ("h_z_trk_xhz_medium_iSpc2_iPtZ%i", iPtZ));
-      h_den = (TH1D*) jewelFile->Get (Form ("h_z_trk_xhz_vacuum_iSpc2_iPtZ%i", iPtZ));
+  //    h_num = (TH1D*) jewelFile->Get (Form ("h_z_trk_xhz_medium_iSpc2_iPtZ%i", iPtZ));
+  //    h_den = (TH1D*) jewelFile->Get (Form ("h_z_trk_xhz_vacuum_iSpc2_iPtZ%i", iPtZ));
 
-      h_num->Divide (h_den);
-      g_jewel_xhz[iPtZ] = make_graph (h_num);
-    }
-    jewelFile->Close ();
-  }
+  //    h_num->Divide (h_den);
+  //    g_jewel_xhz[iPtZ] = make_graph (h_num);
+  //  }
+  //  jewelFile->Close ();
+  //}
 
 
 
@@ -280,8 +281,8 @@ void MakeCONFPlots () {
     luPad->cd ();
     luPad->SetLogx ();
 
-    TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], ptTrkBins[iPtZ]);
-    h->GetXaxis ()->SetRangeUser (ptTrkBins[iPtZ][0], 1.);
+    TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+    h->GetXaxis ()->SetRangeUser (pTchBins[iPtZ][0], 1.);
     h->GetYaxis ()->SetRangeUser (0, 3.1);
 
     //h->GetXaxis ()->SetMoreLogLabels ();
@@ -371,8 +372,8 @@ void MakeCONFPlots () {
     ldPad->cd ();
     ldPad->SetLogx ();
 
-    h = new TH1D ("", "", nPtchBins[iPtZ], ptTrkBins[iPtZ]);
-    h->GetXaxis ()->SetRangeUser (ptTrkBins[iPtZ][0], 1.);
+    h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+    h->GetXaxis ()->SetRangeUser (pTchBins[iPtZ][0], 1.);
     h->GetYaxis ()->SetRangeUser (0, 3.8);
 
     //h->GetXaxis ()->SetMoreLogLabels ();
@@ -458,7 +459,7 @@ void MakeCONFPlots () {
     ruPad->cd ();
     ruPad->SetLogx ();
 
-    h = new TH1D ("", "", nXHZBins[iPtZ], xhZBins[iPtZ]);
+    h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
     h->GetXaxis ()->SetRangeUser (xhZBins[iPtZ][0], 1.);
     h->GetYaxis ()->SetRangeUser (0, 3.1);
     h->GetYaxis ()->SetLabelOffset (h->GetYaxis ()->GetLabelOffset () * 5.);
@@ -539,7 +540,7 @@ void MakeCONFPlots () {
     rdPad->cd ();
     rdPad->SetLogx ();
 
-    h = new TH1D ("", "", nXHZBins[iPtZ], xhZBins[iPtZ]);
+    h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
     h->GetXaxis ()->SetRangeUser (xhZBins[iPtZ][0], 1.);
     h->GetYaxis ()->SetRangeUser (0, 3.8);
     h->GetYaxis ()->SetLabelOffset (h->GetYaxis ()->GetLabelOffset () * 5.);
@@ -757,13 +758,13 @@ void MakeCONFPlots () {
     const double  hybridAlpha = 0.5;
     const Color_t vitevColor = kGreen-2;
     const double  vitevAlpha = 0.5;
-    const Color_t jewelColor = kirchCol->GetColor (255, 153, 0);
-    const double  jewelAlpha = 0.5;
+    //const Color_t jewelColor = kirchCol->GetColor (255, 153, 0);
+    //const double  jewelAlpha = 0.5;
 
     for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
       pads[iPtZ-3]->cd ();
 
-      TH1D* h = new TH1D ("", "", nXHZBins[iPtZ], xhZBins[iPtZ]);
+      TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
       h->GetXaxis ()->SetRangeUser (xhZBins[iPtZ][0], 1.);
       h->GetYaxis ()->SetRangeUser (0, 2.5);
 
@@ -811,14 +812,14 @@ void MakeCONFPlots () {
       g->Draw ("3");
     }
 
-    for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
-      pads[iPtZ-3]->cd ();
+    //for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
+    //  pads[iPtZ-3]->cd ();
 
-      TGAE* g = g_jewel_xhz[iPtZ];
+    //  TGAE* g = g_jewel_xhz[iPtZ];
   
-      g->SetFillColorAlpha (jewelColor, jewelAlpha);
-      g->Draw ("3");
-    }
+    //  g->SetFillColorAlpha (jewelColor, jewelAlpha);
+    //  g->Draw ("3");
+    //}
 
     for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
       pads[iPtZ-3]->cd ();
@@ -874,7 +875,7 @@ void MakeCONFPlots () {
     myText             (-0.05+0.56,  0.05+0.800-0.0130, kBlack, "ATLAS 0-10\% Pb+Pb", 0.048);
     myText             (-0.05+0.56,  0.05+0.745-0.0130, kBlack, "Hybrid Model", 0.048);
     myText             (-0.05+0.56,  0.05+0.690-0.0130, kBlack, "Li & Vitev", 0.048);
-    myText             (-0.05+0.56,  0.05+0.635-0.0130, kBlack, "JEWEL", 0.048);
+    //myText             (-0.05+0.56,  0.05+0.635-0.0130, kBlack, "JEWEL", 0.048);
     //myOnlyBoxText      (-0.05+0.550, 0.05+0.800, 1.2,   kGray, kBlack, 0, "", 0.050, 1001, 0.30);
     //myMarkerTextNoLine (-0.05+0.54,  0.05+0.800+0.0001, kBlack, kOpenCircle, "", 1.1 * 1.5, 0.040);
     myOnlyBoxText      (-0.05+0.460, 0.05+0.800, 1.2,   fillColors[1], colors[1], 0, "", 0.070, 1001, 0.30);
@@ -940,32 +941,32 @@ void MakeCONFPlots () {
       mline.DrawLineNDC(x2,y1,x2,y2);
     }
 
-    {
-      const double x = -0.015+0.53;
-      const double y = 0.05+0.635;
-      const double ytsize = 0.07;
-      const double xtsize = 0.18;
-      const double y1=y-0.25*ytsize;
-      const double y2=y+0.25*ytsize;
-      const double x2=x-0.15*xtsize;
-      const double x1=x-0.95*xtsize;
-      TPave *mbox= new TPave(x1, y1, x2, y2, 0, "NDC");
-      mbox->SetFillColorAlpha(jewelColor, jewelAlpha);
-      mbox->SetFillStyle(1001);
-      mbox->Draw();
+    //{
+    //  const double x = -0.015+0.53;
+    //  const double y = 0.05+0.635;
+    //  const double ytsize = 0.07;
+    //  const double xtsize = 0.18;
+    //  const double y1=y-0.25*ytsize;
+    //  const double y2=y+0.25*ytsize;
+    //  const double x2=x-0.15*xtsize;
+    //  const double x1=x-0.95*xtsize;
+    //  TPave *mbox= new TPave(x1, y1, x2, y2, 0, "NDC");
+    //  mbox->SetFillColorAlpha(jewelColor, jewelAlpha);
+    //  mbox->SetFillStyle(1001);
+    //  mbox->Draw();
 
-      TLine mline;
-      mline.SetLineWidth(1);
-      mline.SetLineColor(jewelColor);
-      //mline.SetLineStyle(lstyle);
-      mline.SetLineStyle(0);
-      Double_t y_new=(y1+y2)/2.;
-      //mline.DrawLineNDC(x1,y_new,x2,y_new);
-      mline.DrawLineNDC(x1,y1,x2,y1);
-      mline.DrawLineNDC(x1,y2,x2,y2);
-      mline.DrawLineNDC(x1,y1,x1,y2);
-      mline.DrawLineNDC(x2,y1,x2,y2);
-    }
+    //  TLine mline;
+    //  mline.SetLineWidth(1);
+    //  mline.SetLineColor(jewelColor);
+    //  //mline.SetLineStyle(lstyle);
+    //  mline.SetLineStyle(0);
+    //  Double_t y_new=(y1+y2)/2.;
+    //  //mline.DrawLineNDC(x1,y_new,x2,y_new);
+    //  mline.DrawLineNDC(x1,y1,x2,y1);
+    //  mline.DrawLineNDC(x1,y2,x2,y2);
+    //  mline.DrawLineNDC(x1,y1,x1,y2);
+    //  mline.DrawLineNDC(x2,y1,x2,y2);
+    //}
 
     l = new TLine (1./60., 1, 1, 1);
     l->SetLineStyle (2);
@@ -984,7 +985,7 @@ void MakeCONFPlots () {
     short iPtZ = nPtZBins-1;
     const short iCent = 3;
 
-    TH1D* h = new TH1D ("", "", nXHZBins[iPtZ], xhZBins[iPtZ]);
+    TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
     h->GetXaxis ()->SetRangeUser (xhZBins[iPtZ][0], 1.);
     h->GetYaxis ()->SetRangeUser (0.1, 5.8);
     //h->GetYaxis ()->SetRangeUser (0.0, 2.5);
@@ -1147,8 +1148,8 @@ void MakeCONFPlots () {
       gPad->SetLogx ();
       gPad->SetLogy ();
 
-      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], ptTrkBins[iPtZ]);
-      h->GetXaxis ()->SetRangeUser (ptTrkBins[iPtZ][0], ptTrkBins[iPtZ][nPtchBins[iPtZ]]);
+      TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+      h->GetXaxis ()->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
       h->GetYaxis ()->SetRangeUser (6e-4, 20);
 
       //if (gPad == ruPad)
@@ -1251,8 +1252,8 @@ void MakeCONFPlots () {
       gPad->SetLogx ();
       gPad->SetLogy ();
 
-      TH1D* h = new TH1D ("", "", nXHZBins[iPtZ], xhZBins[iPtZ]);
-      h->GetXaxis ()->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXHZBins[iPtZ]]);
+      TH1D* h = new TH1D ("", "", nXhZBins[iPtZ], xhZBins[iPtZ]);
+      h->GetXaxis ()->SetRangeUser (xhZBins[iPtZ][0], xhZBins[iPtZ][nXhZBins[iPtZ]]);
       h->GetYaxis ()->SetRangeUser (5e-3, 1e3);
 
       if (gPad == rdPad)
@@ -1451,8 +1452,8 @@ void MakeCONFPlots () {
 
     //const Color_t vitevColor = kCyan+3;
 
-    TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], ptTrkBins[iPtZ]);
-    h->GetXaxis ()->SetRangeUser (ptTrkBins[iPtZ][0], ptTrkBins[iPtZ][nPtchBins[iPtZ]]);
+    TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+    h->GetXaxis ()->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
     h->GetYaxis ()->SetRangeUser (0, 3.8);
 
     h->GetXaxis ()->SetMoreLogLabels ();
@@ -1518,7 +1519,7 @@ void MakeCONFPlots () {
     myMarkerTextNoLine (0.05-0.050+0.54,   -0.08+0.74+0.0001, colors[2], markerStyles[1], "", 1.3 * 1.5, 0.036);
     myMarkerTextNoLine (0.05-0.133+0.54,   -0.08+0.74+0.0001, colors[1], markerStyles[0], "", 1.3 * 1.5, 0.036);
 
-    TLine* l = new TLine (ptTrkBins[nPtZBins-1][0], 1, ptTrkBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
+    TLine* l = new TLine (pTchBins[nPtZBins-1][0], 1, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
     l->SetLineStyle (2);
     l->SetLineWidth (2);
     //l->SetLineColor (kPink-8);
@@ -1529,88 +1530,88 @@ void MakeCONFPlots () {
 
 
 
-  {
-    TCanvas* c8 = new TCanvas ("c8", "", 1200, 1200);
-    c8->SetLogx ();
-    //c8->Divide (2, 1);
-    short iPtZ = 4;
-    const short iCent = 3;
+  //{
+  //  TCanvas* c8 = new TCanvas ("c8", "", 1200, 1200);
+  //  c8->SetLogx ();
+  //  //c8->Divide (2, 1);
+  //  short iPtZ = 4;
+  //  const short iCent = 3;
 
-    //const Color_t vitevColor = kCyan+3;
+  //  //const Color_t vitevColor = kCyan+3;
 
-    TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], ptTrkBins[iPtZ]);
-    h->GetXaxis ()->SetRangeUser (ptTrkBins[iPtZ][0], ptTrkBins[iPtZ][nPtchBins[iPtZ]]);
-    h->GetYaxis ()->SetRangeUser (0, 3.8);
+  //  TH1D* h = new TH1D ("", "", nPtchBins[iPtZ], pTchBins[iPtZ]);
+  //  h->GetXaxis ()->SetRangeUser (pTchBins[iPtZ][0], pTchBins[iPtZ][nPtchBins[iPtZ]]);
+  //  h->GetYaxis ()->SetRangeUser (0, 3.8);
 
-    h->GetXaxis ()->SetMoreLogLabels ();
+  //  h->GetXaxis ()->SetMoreLogLabels ();
 
-    h->GetXaxis ()->SetTitle ("#it{p}_{T}^{ch} [GeV]");
-    h->GetYaxis ()->SetTitle ("#it{I}_{AA}");
-    h->Draw ("");
+  //  h->GetXaxis ()->SetTitle ("#it{p}_{T}^{ch} [GeV]");
+  //  h->GetYaxis ()->SetTitle ("#it{I}_{AA}");
+  //  h->Draw ("");
 
-    for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
-      c8->cd (iPtZ-3+1);
-      gPad->SetLogx ();
+  //  for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
+  //    c8->cd (iPtZ-3+1);
+  //    gPad->SetLogx ();
 
-      TGAE* g = g_jewel_pth[iPtZ];
+  //    TGAE* g = g_jewel_pth[iPtZ];
 
-      g->SetFillColorAlpha (modelFillColors[iPtZ-2], 0.8);
-      g->Draw ("3");
-    }
+  //    g->SetFillColorAlpha (modelFillColors[iPtZ-2], 0.8);
+  //    g->Draw ("3");
+  //  }
 
-    for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
-      //c8->cd (iPtZ-3+1);
-      TGAE* g_syst = (TGAE*) g_ztrk_pt_iaa_syst[iPtZ][iCent]->Clone ();
+  //  for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
+  //    //c8->cd (iPtZ-3+1);
+  //    TGAE* g_syst = (TGAE*) g_ztrk_pt_iaa_syst[iPtZ][iCent]->Clone ();
 
-      g_syst->SetMarkerSize (0);
-      g_syst->SetLineWidth (1);
-      g_syst->SetLineColor (colors[iPtZ-2]);
-      g_syst->SetFillColorAlpha (fillColors[iPtZ-2], 0.3);
+  //    g_syst->SetMarkerSize (0);
+  //    g_syst->SetLineWidth (1);
+  //    g_syst->SetLineColor (colors[iPtZ-2]);
+  //    g_syst->SetFillColorAlpha (fillColors[iPtZ-2], 0.3);
 
-      g_syst->Draw ("5P");
-    }
+  //    g_syst->Draw ("5P");
+  //  }
 
-    for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
-      //c8->cd (iPtZ-3+1);
-      TGAE* g_stat = make_graph (h_ztrk_pt_iaa_stat[iPtZ][iCent]);
+  //  for (iPtZ = nPtZBins-1; iPtZ >= 3; iPtZ--) {
+  //    //c8->cd (iPtZ-3+1);
+  //    TGAE* g_stat = make_graph (h_ztrk_pt_iaa_stat[iPtZ][iCent]);
 
-      RecenterGraph (g_stat);
-      ResetXErrors (g_stat);
-      deltaize (g_stat, 1 + 0.030*(iPtZ - 3.5), true);
+  //    RecenterGraph (g_stat);
+  //    ResetXErrors (g_stat);
+  //    deltaize (g_stat, 1 + 0.030*(iPtZ - 3.5), true);
 
-      g_stat->SetMarkerStyle (markerStyles[iPtZ-3]);
-      g_stat->SetMarkerSize (2.3);
-      g_stat->SetLineWidth (2);
-      g_stat->SetMarkerColor (colors[iPtZ-2]);
-      g_stat->SetLineColor (colors[iPtZ-2]);
+  //    g_stat->SetMarkerStyle (markerStyles[iPtZ-3]);
+  //    g_stat->SetMarkerSize (2.3);
+  //    g_stat->SetLineWidth (2);
+  //    g_stat->SetMarkerColor (colors[iPtZ-2]);
+  //    g_stat->SetLineColor (colors[iPtZ-2]);
 
-      g_stat->Draw ("P");
-    }
+  //    g_stat->Draw ("P");
+  //  }
 
-    c8->cd (1);
-    myText (0.32, 0.880, kBlack, "#bf{#it{ATLAS}} Preliminary", 0.055);
-    myText (0.32, 0.830, kBlack, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}", 0.040);
-    myText (0.32, 0.780, kBlack, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}", 0.040);
+  //  c8->cd (1);
+  //  myText (0.32, 0.880, kBlack, "#bf{#it{ATLAS}} Preliminary", 0.055);
+  //  myText (0.32, 0.830, kBlack, "#it{pp}, #sqrt{s} = 5.02 TeV, 260 pb^{-1}", 0.040);
+  //  myText (0.32, 0.780, kBlack, "Pb+Pb, #sqrt{s_{NN}} = 5.02 TeV, 1.4-1.7 nb^{-1}", 0.040);
 
-    c8->cd (2);
-    myText             (0.05-0.150+0.50,   -0.08+0.80-0.01, kBlack, "30-60", 0.036);
-    myText             (0.05-0.050+0.50,   -0.08+0.80-0.01, kBlack, "60+", 0.036);
-    myText             (0.05-0.050+0.58,   -0.08+0.80-0.01, kBlack, "#it{p}_{T}^{Z} [GeV]", 0.036);
-    myText             (0.05-0.050+0.58,   -0.08+0.74-0.01, kBlack, "ATLAS 0-10\% Pb+Pb", 0.036);
-    myText             (0.05-0.050+0.58,   -0.08+0.68-0.01, kBlack, "JEWEL", 0.036);
-    myOnlyBoxText      (0.05-0.050+0.5566, -0.08+0.74, 1.2, fillColors[2], colors[2], 0, "", 0.060, 1001, 0.36);
-    myOnlyBoxText      (0.05-0.133+0.5566, -0.08+0.74, 1.2, fillColors[1], colors[1], 0, "", 0.060, 1001, 0.46);
-    myOnlyBoxText      (0.05-0.050+0.5566, -0.08+0.68, 1.2, modelFillColors[2], modelFillColors[2], 0, "", 0.060, 1001, 0.80);
-    myOnlyBoxText      (0.05-0.133+0.5566, -0.08+0.68, 1.2, modelFillColors[1], modelFillColors[1], 0, "", 0.060, 1001, 0.80);
-    myMarkerTextNoLine (0.05-0.050+0.54,   -0.08+0.74+0.0001, colors[2], markerStyles[1], "", 1.3 * 1.5, 0.036);
-    myMarkerTextNoLine (0.05-0.133+0.54,   -0.08+0.74+0.0001, colors[1], markerStyles[0], "", 1.3 * 1.5, 0.036);
+  //  c8->cd (2);
+  //  myText             (0.05-0.150+0.50,   -0.08+0.80-0.01, kBlack, "30-60", 0.036);
+  //  myText             (0.05-0.050+0.50,   -0.08+0.80-0.01, kBlack, "60+", 0.036);
+  //  myText             (0.05-0.050+0.58,   -0.08+0.80-0.01, kBlack, "#it{p}_{T}^{Z} [GeV]", 0.036);
+  //  myText             (0.05-0.050+0.58,   -0.08+0.74-0.01, kBlack, "ATLAS 0-10\% Pb+Pb", 0.036);
+  //  myText             (0.05-0.050+0.58,   -0.08+0.68-0.01, kBlack, "JEWEL", 0.036);
+  //  myOnlyBoxText      (0.05-0.050+0.5566, -0.08+0.74, 1.2, fillColors[2], colors[2], 0, "", 0.060, 1001, 0.36);
+  //  myOnlyBoxText      (0.05-0.133+0.5566, -0.08+0.74, 1.2, fillColors[1], colors[1], 0, "", 0.060, 1001, 0.46);
+  //  myOnlyBoxText      (0.05-0.050+0.5566, -0.08+0.68, 1.2, modelFillColors[2], modelFillColors[2], 0, "", 0.060, 1001, 0.80);
+  //  myOnlyBoxText      (0.05-0.133+0.5566, -0.08+0.68, 1.2, modelFillColors[1], modelFillColors[1], 0, "", 0.060, 1001, 0.80);
+  //  myMarkerTextNoLine (0.05-0.050+0.54,   -0.08+0.74+0.0001, colors[2], markerStyles[1], "", 1.3 * 1.5, 0.036);
+  //  myMarkerTextNoLine (0.05-0.133+0.54,   -0.08+0.74+0.0001, colors[1], markerStyles[0], "", 1.3 * 1.5, 0.036);
 
-    TLine* l = new TLine (ptTrkBins[nPtZBins-1][0], 1, ptTrkBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
-    l->SetLineStyle (2);
-    l->SetLineWidth (2);
-    //l->SetLineColor (kPink-8);
-    l->Draw ("same");
-  }
+  //  TLine* l = new TLine (pTchBins[nPtZBins-1][0], 1, pTchBins[nPtZBins-1][nPtchBins[nPtZBins-1]], 1);
+  //  l->SetLineStyle (2);
+  //  l->SetLineWidth (2);
+  //  //l->SetLineColor (kPink-8);
+  //  l->Draw ("same");
+  //}
 
 
 }

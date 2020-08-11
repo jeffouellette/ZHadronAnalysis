@@ -859,7 +859,7 @@ void MakeDataBox (const double x, const double y, const Color_t color, const dou
   const double y1 = y - 0.25*ytsize;
   const double y2 = y + 0.25*ytsize;
   const double x2 = x - 0.15*xtsize;
-  const double x1 = x - 0.55*xtsize;
+  const double x1 = x - 0.55*xtsize*bmx;
 
   TLine* ml = new TLine ();
   ml->SetNDC();
@@ -870,7 +870,7 @@ void MakeDataBox (const double x, const double y, const Color_t color, const dou
   ml->DrawLineNDC (0.9*x1+0.1*x2, 0.5*(y1+y2), 0.1*x1+0.9*x2, 0.5*(y1+y2));
   ml->DrawLineNDC (0.5*(x1+x2), 0.9*y1+0.1*y2, 0.5*(x1+x2), 0.1*y1+0.9*y2);
 
-  TMarker* marker = new TMarker (x-0.35*0.18, y, 0);
+  TMarker* marker = new TMarker (0.5*(x1+x2), y, 0);
   marker->SetNDC();
   marker->SetMarkerColor (color);
   marker->SetMarkerStyle (mstyle);
@@ -878,7 +878,7 @@ void MakeDataBox (const double x, const double y, const Color_t color, const dou
   marker->Draw ();
 
   if (IsFullMarker (mstyle)) {
-    TMarker* marker2 = new TMarker (x-0.35*0.18, y, 0);
+    TMarker* marker2 = new TMarker (0.5*(x1+x2), y, 0);
     marker2->SetNDC();
     marker2->SetMarkerColor (kBlack);
     marker2->SetMarkerStyle (FullToOpenMarker (mstyle));
