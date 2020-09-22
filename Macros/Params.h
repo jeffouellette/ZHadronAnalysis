@@ -810,17 +810,13 @@ short GetRunGroup (int rn) {
 }
 
 
-void MakeTheoryBox (const double x, const double y, const Color_t color, const double colorAlpha, const double boxMultiplierX = 1., const double boxMultiplierY = 1.) {
+void MakeBoxOutline (const double x, const double y, const Color_t color, const double boxMultiplierX = 1., const double boxMultiplierY = 1.) {
   const double ytsize = 0.07;
   const double xtsize = 0.18;
   const double y1 = y - 0.25*ytsize*boxMultiplierY;
   const double y2 = y + 0.25*ytsize*boxMultiplierY;
   const double x2 = x - 0.15*xtsize;
   const double x1 = x - 0.55*xtsize*boxMultiplierX;
-  TPave *mbox = new TPave (x1, y1, x2, y2, 0, "NDC");
-  mbox->SetFillColorAlpha (color, colorAlpha);
-  mbox->SetFillStyle (1001);
-  mbox->Draw ();
 
   TLine mline;
   mline.SetLineWidth (1);
@@ -833,6 +829,32 @@ void MakeTheoryBox (const double x, const double y, const Color_t color, const d
   mline.DrawLineNDC (x1, y2, x2, y2);
   mline.DrawLineNDC (x1, y1, x1, y2);
   mline.DrawLineNDC (x2, y1, x2, y2);
+}
+
+
+void MakeTheoryBox (const double x, const double y, const Color_t color, const double colorAlpha, const double boxMultiplierX = 1., const double boxMultiplierY = 1.) {
+  const double ytsize = 0.07;
+  const double xtsize = 0.18;
+  const double y1 = y - 0.25*ytsize*boxMultiplierY;
+  const double y2 = y + 0.25*ytsize*boxMultiplierY;
+  const double x2 = x - 0.15*xtsize;
+  const double x1 = x - 0.55*xtsize*boxMultiplierX;
+  TPave *mbox = new TPave (x1, y1, x2, y2, 0, "NDC");
+  mbox->SetFillColorAlpha (color, colorAlpha);
+  mbox->SetFillStyle (1001);
+  mbox->Draw ();
+
+  //TLine mline;
+  //mline.SetLineWidth (1);
+  //mline.SetLineColor (color);
+  ////mline.SetLineStyle (lstyle);
+  //mline.SetLineStyle (0);
+  ////Double_t y_new = (y1+y2)/2.;
+  ////mline.DrawLineNDC (x1, y_new, x2, y_new);
+  //mline.DrawLineNDC (x1, y1, x2, y1);
+  //mline.DrawLineNDC (x1, y2, x2, y2);
+  //mline.DrawLineNDC (x1, y1, x1, y2);
+  //mline.DrawLineNDC (x2, y1, x2, y2);
   return;
 }
 
@@ -852,6 +874,7 @@ void MakeTheoryLine (const double x, const double y, const Color_t color, const 
 
 void MakeDataBox (const double x, const double y, const Color_t color, const double colorAlpha, const Style_t mstyle, const double msize, const double bmx = 1., const double bmy = 1.) {
   MakeTheoryBox (x, y, color, colorAlpha, bmx, bmy);
+  MakeBoxOutline (x, y, color, bmx, bmy);
 
   const double ytsize = 0.07;
   const double xtsize = 0.18;
